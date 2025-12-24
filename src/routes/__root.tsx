@@ -14,7 +14,11 @@ const queryClient = new QueryClient({
   },
 });
 
-const theme = createTheme();
+const theme = createTheme({
+  typography: {
+    fontFamily: '"Nunito", "Helvetica", "Arial", sans-serif',
+  },
+});
 
 export const Route = createRootRoute({
   component: () => (
