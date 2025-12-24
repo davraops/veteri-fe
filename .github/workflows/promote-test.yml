@@ -1,5 +1,6 @@
 name: Promote to Test
 
+# Este workflow se ejecuta SOLO manualmente desde GitHub Actions
 on:
   workflow_dispatch:
     inputs:

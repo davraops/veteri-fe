@@ -1,5 +1,7 @@
 name: Promote to Prod
 
+# Este workflow se ejecuta SOLO manualmente desde GitHub Actions
+# Requiere aprobación manual si está configurado en el environment de GitHub
 on:
   workflow_dispatch:
     inputs:
