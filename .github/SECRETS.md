@@ -17,8 +17,8 @@ Los secrets de AWS deben configurarse como **Environment Secrets**, NO como Repo
 
 1. Ve a **Settings > Environments** en tu repositorio
 2. Crea los siguientes environments si no existen:
-   - `development` (para Dev)
-   - `test` (para Test)
+   - `DEV` (para Dev)
+   - `TEST` (para Test)
    - `PROD` (para Production)
 3. En cada environment, ve a **Secrets and variables** y agrega los secrets correspondientes
 
@@ -43,7 +43,7 @@ Estas variables se usan durante el build de Vite. Configúralas como **Variables
 **Configura estos secrets como Environment Secrets en cada environment correspondiente.**
 
 ### AWS Credentials - Dev Environment
-**Environment: `development`**
+**Environment: `DEV`**
 
 - `AWS_ACCESS_KEY_ID_DEV` - Access Key ID para el ambiente de desarrollo
 - `AWS_SECRET_ACCESS_KEY_DEV` - Secret Access Key para el ambiente de desarrollo
@@ -52,7 +52,7 @@ Estas variables se usan durante el build de Vite. Configúralas como **Variables
 - `AWS_REGION` - Región de AWS (ej: `us-east-1`, `eu-west-1`). Si no se configura, usa `us-east-1` por defecto.
 
 ### AWS Credentials - Test Environment
-**Environment: `test`**
+**Environment: `TEST`**
 
 - `AWS_ACCESS_KEY_ID_TEST` - Access Key ID para el ambiente de test
 - `AWS_SECRET_ACCESS_KEY_TEST` - Secret Access Key para el ambiente de test
