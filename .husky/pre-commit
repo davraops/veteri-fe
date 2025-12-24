@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+npx lint-staged
+npm run lint
+# Solo ejecutar tests si hay archivos de test
+if [ -n "$(find src -name '*.test.*' -o -name '*.spec.*' 2>/dev/null)" ]; then
+  npm run test
+fi
