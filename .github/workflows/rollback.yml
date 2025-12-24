@@ -8,8 +8,8 @@ on:
         required: true
         type: choice
         options:
-          - test
-          - production
+          - TEST
+          - PROD
       release_tag:
         description: 'Release tag to rollback to'
         required: true
@@ -33,21 +33,21 @@ jobs:
       - run: npm ci
       - name: Build with environment variables
         env:
-          VITE_API_URL: ${{ github.event.inputs.environment == 'production' && vars.VITE_API_URL_PROD || vars.VITE_API_URL_TEST }}
+          VITE_API_URL: ${{ github.event.inputs.environment == 'PROD' && vars.VITE_API_URL_PROD || vars.VITE_API_URL_TEST }}
           VITE_APP_NAME: ${{ vars.VITE_APP_NAME }}
-          VITE_ENVIRONMENT: ${{ github.event.inputs.environment }}
+          VITE_ENVIRONMENT: ${{ github.event.inputs.environment == 'PROD' && 'production' || 'test' }}
         run: npm run build
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ github.event.inputs.environment == 'production' && secrets.AWS_ACCESS_KEY_ID_PROD || secrets.AWS_ACCESS_KEY_ID_TEST }}
-          aws-secret-access-key: ${{ github.event.inputs.environment == 'production' && secrets.AWS_SECRET_ACCESS_KEY_PROD || secrets.AWS_SECRET_ACCESS_KEY_TEST }}
+          aws-access-key-id: ${{ github.event.inputs.environment == 'PROD' && secrets.AWS_ACCESS_KEY_ID_PROD || secrets.AWS_ACCESS_KEY_ID_TEST }}
+          aws-secret-access-key: ${{ github.event.inputs.environment == 'PROD' && secrets.AWS_SECRET_ACCESS_KEY_PROD || secrets.AWS_SECRET_ACCESS_KEY_TEST }}
           aws-region: ${{ secrets.AWS_REGION || 'us-east-1' }}
 
       - name: Deploy to S3
         run: |
-          if [ "${{ github.event.inputs.environment }}" == "production" ]; then
+          if [ "${{ github.event.inputs.environment }}" == "PROD" ]; then
             aws s3 sync dist/ s3://${{ secrets.AWS_S3_BUCKET_PROD }} --delete
           else
             aws s3 sync dist/ s3://${{ secrets.AWS_S3_BUCKET_TEST }} --delete
@@ -55,7 +55,7 @@ jobs:
 
       - name: Invalidate CloudFront (if configured)
         run: |
-          if [ "${{ github.event.inputs.environment }}" == "production" ]; then
+          if [ "${{ github.event.inputs.environment }}" == "PROD" ]; then
             if [ -n "${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID_PROD }}" ]; then
               aws cloudfront create-invalidation \
                 --distribution-id ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID_PROD }} \
