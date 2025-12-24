@@ -18,7 +18,13 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run type-check
-      - run: npm run test:run
+      - name: Run tests (if any)
+        run: |
+          if [ -n "$(find src -name '*.test.*' -o -name '*.spec.*' 2>/dev/null)" ]; then
+            npm run test:run
+          else
+            echo "No test files found, skipping tests"
+          fi
       - name: Build with environment variables
         env:
           VITE_API_URL: ${{ vars.VITE_API_URL_DEV }}
