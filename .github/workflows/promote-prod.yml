@@ -38,10 +38,11 @@ jobs:
         run: |
           if [ -z "${{ secrets.AWS_ACCESS_KEY_ID_PROD }}" ] || [ -z "${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}" ] || [ -z "${{ secrets.AWS_S3_BUCKET_PROD }}" ]; then
             echo "❌ Error: AWS secrets no están configurados en GitHub"
-            echo "Por favor, configura los siguientes secrets en Settings > Secrets and variables > Actions:"
+            echo "Por favor, configura los siguientes secrets como Environment Secrets en el environment 'PROD':"
             echo "  - AWS_ACCESS_KEY_ID_PROD"
             echo "  - AWS_SECRET_ACCESS_KEY_PROD"
             echo "  - AWS_S3_BUCKET_PROD"
+            echo "Ve a Settings > Environments > PROD > Secrets and variables"
             echo "Ver .github/SECRETS.md para más información"
             exit 1
           fi

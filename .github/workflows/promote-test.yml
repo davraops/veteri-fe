@@ -12,6 +12,7 @@ on:
 jobs:
   promote:
     runs-on: ubuntu-latest
+    environment: test
     steps:
       - uses: actions/checkout@v4
         with:
@@ -34,10 +35,11 @@ jobs:
         run: |
           if [ -z "${{ secrets.AWS_ACCESS_KEY_ID_TEST }}" ] || [ -z "${{ secrets.AWS_SECRET_ACCESS_KEY_TEST }}" ] || [ -z "${{ secrets.AWS_S3_BUCKET_TEST }}" ]; then
             echo "❌ Error: AWS secrets no están configurados en GitHub"
-            echo "Por favor, configura los siguientes secrets en Settings > Secrets and variables > Actions:"
+            echo "Por favor, configura los siguientes secrets como Environment Secrets en el environment 'test':"
             echo "  - AWS_ACCESS_KEY_ID_TEST"
             echo "  - AWS_SECRET_ACCESS_KEY_TEST"
             echo "  - AWS_S3_BUCKET_TEST"
+            echo "Ve a Settings > Environments > test > Secrets and variables"
             echo "Ver .github/SECRETS.md para más información"
             exit 1
           fi

@@ -11,6 +11,19 @@ Ve a: **Settings > Secrets and variables > Actions** en tu repositorio de GitHub
 - **Secrets**: Para información sensible (credenciales AWS)
 - **Variables**: Para información no sensible (URLs de API, nombres de app)
 
+### ⚠️ IMPORTANTE: Environment Secrets vs Repository Secrets
+
+Los secrets de AWS deben configurarse como **Environment Secrets**, NO como Repository Secrets.
+
+1. Ve a **Settings > Environments** en tu repositorio
+2. Crea los siguientes environments si no existen:
+   - `development` (para Dev)
+   - `test` (para Test)
+   - `PROD` (para Production)
+3. En cada environment, ve a **Secrets and variables** y agrega los secrets correspondientes
+
+**Variables** (como `VITE_API_URL_DEV`, etc.) se configuran como **Repository Variables** en **Settings > Secrets and variables > Actions > Variables**.
+
 ## Variables Requeridas (Variables, no Secrets)
 
 Estas variables se usan durante el build de Vite. Configúralas como **Variables** (no Secrets):
@@ -27,29 +40,33 @@ Estas variables se usan durante el build de Vite. Configúralas como **Variables
 
 ## Secrets Requeridos
 
+**Configura estos secrets como Environment Secrets en cada environment correspondiente.**
+
 ### AWS Credentials - Dev Environment
+**Environment: `development`**
 
 - `AWS_ACCESS_KEY_ID_DEV` - Access Key ID para el ambiente de desarrollo
 - `AWS_SECRET_ACCESS_KEY_DEV` - Secret Access Key para el ambiente de desarrollo
 - `AWS_S3_BUCKET_DEV` - Nombre del bucket S3 para Dev (ej: `my-app-dev`)
 - `AWS_CLOUDFRONT_DISTRIBUTION_ID_DEV` - (Opcional) ID de distribución CloudFront para Dev
+- `AWS_REGION` - Región de AWS (ej: `us-east-1`, `eu-west-1`). Si no se configura, usa `us-east-1` por defecto.
 
 ### AWS Credentials - Test Environment
+**Environment: `test`**
 
 - `AWS_ACCESS_KEY_ID_TEST` - Access Key ID para el ambiente de test
 - `AWS_SECRET_ACCESS_KEY_TEST` - Secret Access Key para el ambiente de test
 - `AWS_S3_BUCKET_TEST` - Nombre del bucket S3 para Test (ej: `my-app-test`)
 - `AWS_CLOUDFRONT_DISTRIBUTION_ID_TEST` - (Opcional) ID de distribución CloudFront para Test
+- `AWS_REGION` - Región de AWS (ej: `us-east-1`, `eu-west-1`). Si no se configura, usa `us-east-1` por defecto.
 
 ### AWS Credentials - Production Environment
+**Environment: `PROD`**
 
 - `AWS_ACCESS_KEY_ID_PROD` - Access Key ID para producción
 - `AWS_SECRET_ACCESS_KEY_PROD` - Secret Access Key para producción
 - `AWS_S3_BUCKET_PROD` - Nombre del bucket S3 para Prod (ej: `my-app-prod`)
 - `AWS_CLOUDFRONT_DISTRIBUTION_ID_PROD` - (Opcional) ID de distribución CloudFront para Prod
-
-### AWS Region (Común para todos)
-
 - `AWS_REGION` - Región de AWS (ej: `us-east-1`, `eu-west-1`). Si no se configura, usa `us-east-1` por defecto.
 
 ## Notas
