@@ -1191,7 +1191,10 @@ function Dashboard() {
                 if (e.key === 'Enter' && queryValue.trim()) {
                   navigate({
                     to: '/consultant',
-                    search: { query: queryValue.trim() },
+                    search: {
+                      query: queryValue.trim(),
+                      conversationId: undefined,
+                    },
                   });
                 }
               }}
@@ -1500,7 +1503,10 @@ function Dashboard() {
                     if (queryValue.trim()) {
                       navigate({
                         to: '/consultant',
-                        search: { query: queryValue.trim() },
+                        search: {
+                          query: queryValue.trim(),
+                          conversationId: undefined,
+                        },
                       });
                     }
                   }}

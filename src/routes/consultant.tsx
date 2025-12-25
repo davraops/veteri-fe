@@ -46,8 +46,8 @@ export const Route = createFileRoute('/consultant')({
   component: Consultant,
   validateSearch: (search: Record<string, unknown>) => {
     return {
-      query: (search.query as string) || '',
-      conversationId: (search.conversationId as string) || '',
+      query: (search.query as string) || undefined,
+      conversationId: (search.conversationId as string) || undefined,
     };
   },
 });
@@ -69,7 +69,7 @@ interface ConversationMessage {
 }
 
 function Consultant() {
-  const { query, conversationId } = Route.useSearch();
+  const { query = '', conversationId = '' } = Route.useSearch();
   const navigate = useNavigate();
   const [menuAnchor, setMenuAnchor] = useState<{
     [key: string]: HTMLElement | null;
@@ -312,13 +312,14 @@ function Consultant() {
       !query
     ) {
       // Select first consultation by default if no query or conversationId
-      navigate(
-        {
-          to: '/consultant',
-          search: { conversationId: consultations[0].conversationId },
+      navigate({
+        to: '/consultant',
+        search: {
+          query: undefined,
+          conversationId: consultations[0].conversationId,
         },
-        { replace: true }
-      );
+        replace: true,
+      });
     }
 
     // Cleanup function
@@ -581,6 +582,7 @@ function Consultant() {
                           navigate({
                             to: '/consultant',
                             search: {
+                              query: undefined,
                               conversationId: consultation.conversationId,
                             },
                           });
@@ -783,7 +785,10 @@ function Consultant() {
                   if (e.key === 'Enter' && newQueryValue.trim()) {
                     navigate({
                       to: '/consultant',
-                      search: { query: newQueryValue.trim() },
+                      search: {
+                        query: newQueryValue.trim(),
+                        conversationId: undefined,
+                      },
                     });
                     setShowNewConsultation(false);
                     setNewQueryValue('');
@@ -1104,7 +1109,10 @@ function Consultant() {
                       if (newQueryValue.trim()) {
                         navigate({
                           to: '/consultant',
-                          search: { query: newQueryValue.trim() },
+                          search: {
+                            query: newQueryValue.trim(),
+                            conversationId: undefined,
+                          },
                         });
                         setShowNewConsultation(false);
                         setNewQueryValue('');
