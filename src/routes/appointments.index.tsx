@@ -45,9 +45,9 @@ function Appointments() {
   const [viewType, setViewType] = useState<ViewType>('week');
   const [organizationFilter, setOrganizationFilter] = useState<string>('all');
   const [typeFilter, setTypeFilter] = useState<string>('all');
-  // Initialize to a date that has appointments (January 15, 2025)
+  // Initialize to a date that has appointments (January 15, 2026)
   const [selectedDate, setSelectedDate] = useState<Date>(() => {
-    const date = new Date(2025, 0, 15); // January 15, 2025 (month is 0-indexed)
+    const date = new Date(2026, 0, 15); // January 15, 2026 (month is 0-indexed)
     return date;
   });
 

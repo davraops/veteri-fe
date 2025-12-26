@@ -5,7 +5,6 @@ import {
   Typography,
   Paper,
   Avatar,
-  Divider,
   Button,
   Chip,
   Grid,
@@ -161,13 +160,13 @@ function SurgeryDetail() {
     ? (assignedToArray
         .map((userId) => organization.members.find((m) => m.userId === userId))
         .filter((member) => member !== undefined) as NonNullable<
-        typeof organization
+        (typeof mockOrganizations)[0]
       >['members'])
     : [];
 
   // Get role label based on position in team
   const getRoleLabel = (
-    member: NonNullable<typeof organization>['members'][0],
+    member: NonNullable<(typeof mockOrganizations)[0]>['members'][0],
     _index: number
   ) => {
     if (!member) return 'Unknown';
@@ -217,30 +216,14 @@ function SurgeryDetail() {
           flexGrow: 1,
           backgroundColor: '#f6f8fa',
           padding: 3,
+          width: '100%',
         }}
       >
         <Box
           sx={{
-            maxWidth: 1200,
-            margin: '0 auto',
+            width: '100%',
           }}
         >
-          {/* Back Button */}
-          <Button
-            startIcon={<ArrowBackIcon />}
-            onClick={() => navigate({ to: '/surgeries' })}
-            sx={{
-              textTransform: 'none',
-              marginBottom: 3,
-              color: '#dc2626',
-              '&:hover': {
-                backgroundColor: '#f6f8fa',
-              },
-            }}
-          >
-            Back to Surgeries
-          </Button>
-
           {/* Header */}
           <Paper
             sx={{
@@ -333,546 +316,563 @@ function SurgeryDetail() {
           </Paper>
 
           {/* Main Content Grid */}
-          <Grid container spacing={3}>
-            {/* Left Column - Main Details */}
-            <Grid item xs={12} md={8}>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                {/* Date & Time */}
-                <Paper
+          <Grid container spacing={2} sx={{ width: '100%' }}>
+            {/* First Row: Schedule (larger) and Organization (smaller) */}
+            <Grid item xs={12} md={8} sx={{ display: 'flex' }}>
+              <Paper
+                sx={{
+                  padding: 2.5,
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #d0d7de',
+                  borderRadius: '8px',
+                  height: '100%',
+                  width: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                }}
+              >
+                <Box
                   sx={{
-                    padding: 3,
-                    backgroundColor: '#ffffff',
-                    border: '1px solid #d0d7de',
-                    borderRadius: '8px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1.5,
+                    marginBottom: 1.5,
                   }}
                 >
-                  <Box
+                  <CalendarTodayIcon
+                    sx={{ color: orgColor, fontSize: '18px' }}
+                  />
+                  <Typography
                     sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 1.5,
-                      marginBottom: 2,
+                      fontSize: '13px',
+                      fontWeight: 600,
+                      color: '#57606a',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.5px',
                     }}
                   >
-                    <CalendarTodayIcon
-                      sx={{ color: orgColor, fontSize: '20px' }}
-                    />
-                    <Typography
-                      sx={{
-                        fontSize: '14px',
-                        fontWeight: 600,
-                        color: '#57606a',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.5px',
-                      }}
-                    >
-                      Schedule
-                    </Typography>
-                  </Box>
-                  <Grid container spacing={2}>
-                    <Grid item xs={12} sm={6}>
-                      <Box>
-                        <Typography
-                          sx={{
-                            fontSize: '14px',
-                            color: '#57606a',
-                            marginBottom: 0.5,
-                          }}
-                        >
-                          Start
-                        </Typography>
-                        <Typography
-                          sx={{
-                            fontSize: '16px',
-                            fontWeight: 600,
-                            color: '#24292f',
-                          }}
-                        >
-                          {startDateTime.date}
-                        </Typography>
-                        <Typography
-                          sx={{
-                            fontSize: '14px',
-                            color: '#57606a',
-                          }}
-                        >
-                          {startDateTime.time}
-                        </Typography>
-                      </Box>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <Box>
-                        <Typography
-                          sx={{
-                            fontSize: '14px',
-                            color: '#57606a',
-                            marginBottom: 0.5,
-                          }}
-                        >
-                          End
-                        </Typography>
-                        <Typography
-                          sx={{
-                            fontSize: '16px',
-                            fontWeight: 600,
-                            color: '#24292f',
-                          }}
-                        >
-                          {endDateTime.date}
-                        </Typography>
-                        <Typography
-                          sx={{
-                            fontSize: '14px',
-                            color: '#57606a',
-                          }}
-                        >
-                          {endDateTime.time}
-                        </Typography>
-                      </Box>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Divider sx={{ marginY: 2 }} />
-                      <Box>
-                        <Typography
-                          sx={{
-                            fontSize: '14px',
-                            color: '#57606a',
-                            marginBottom: 0.5,
-                          }}
-                        >
-                          Duration
-                        </Typography>
-                        <Typography
-                          sx={{
-                            fontSize: '16px',
-                            fontWeight: 600,
-                            color: '#24292f',
-                          }}
-                        >
-                          {durationHours > 0
-                            ? `${durationHours} hour${durationHours > 1 ? 's' : ''} ${durationMins > 0 ? `and ${durationMins} minute${durationMins > 1 ? 's' : ''}` : ''}`
-                            : `${durationMins} minute${durationMins > 1 ? 's' : ''}`}
-                        </Typography>
-                      </Box>
-                    </Grid>
-                  </Grid>
-                </Paper>
-
-                {/* Surgical Team */}
-                <Paper
-                  sx={{
-                    padding: 3,
-                    backgroundColor: '#ffffff',
-                    border: '1px solid #d0d7de',
-                    borderRadius: '8px',
-                  }}
-                >
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 1.5,
-                      marginBottom: 2,
-                    }}
-                  >
-                    <PersonIcon sx={{ color: orgColor, fontSize: '20px' }} />
-                    <Typography
-                      sx={{
-                        fontSize: '14px',
-                        fontWeight: 600,
-                        color: '#57606a',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.5px',
-                      }}
-                    >
-                      Surgical Team ({assignedTeam.length} member
-                      {assignedTeam.length !== 1 ? 's' : ''})
-                    </Typography>
-                  </Box>
-                  <Grid container spacing={2}>
-                    {assignedTeam.map((member, index) => (
-                      <Grid item xs={12} sm={6} key={member.userId}>
-                        <Box
-                          sx={{
-                            padding: 2,
-                            backgroundColor: '#f6f8fa',
-                            borderRadius: '6px',
-                            border: '1px solid #e1e4e8',
-                          }}
-                        >
-                          <Box
-                            sx={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: 1.5,
-                              marginBottom: 1,
-                            }}
-                          >
-                            <Avatar
-                              sx={{
-                                width: 40,
-                                height: 40,
-                                backgroundColor: orgColor,
-                                fontSize: '16px',
-                              }}
-                            >
-                              {member.firstName.charAt(0)}
-                              {member.lastName.charAt(0)}
-                            </Avatar>
-                            <Box sx={{ flexGrow: 1 }}>
-                              <Typography
-                                sx={{
-                                  fontSize: '15px',
-                                  fontWeight: 600,
-                                  color: '#24292f',
-                                }}
-                              >
-                                {member.firstName} {member.lastName}
-                              </Typography>
-                              <Typography
-                                sx={{
-                                  fontSize: '13px',
-                                  fontWeight: 500,
-                                  color: orgColor,
-                                }}
-                              >
-                                {getRoleLabel(member, index)}
-                              </Typography>
-                            </Box>
-                          </Box>
-                          <Typography
-                            sx={{
-                              fontSize: '12px',
-                              color: '#57606a',
-                            }}
-                          >
-                            {member.email}
-                          </Typography>
-                        </Box>
-                      </Grid>
-                    ))}
-                  </Grid>
-                </Paper>
-
-                {/* Pet Information */}
-                {pet && (
-                  <Paper
-                    sx={{
-                      padding: 3,
-                      backgroundColor: '#ffffff',
-                      border: '1px solid #d0d7de',
-                      borderRadius: '8px',
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 1.5,
-                        marginBottom: 2,
-                      }}
-                    >
-                      <PetsIcon sx={{ color: orgColor, fontSize: '20px' }} />
+                    Schedule
+                  </Typography>
+                </Box>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={4}>
+                    <Box>
                       <Typography
                         sx={{
-                          fontSize: '14px',
-                          fontWeight: 600,
+                          fontSize: '12px',
                           color: '#57606a',
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.5px',
+                          marginBottom: 0.5,
                         }}
                       >
-                        Pet Information
+                        Start
                       </Typography>
-                    </Box>
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 2,
-                        cursor: 'pointer',
-                        marginBottom: 2,
-                      }}
-                      onClick={() => {
-                        navigate({
-                          to: '/pets/$petId',
-                          params: { petId: String(pet.id) },
-                        });
-                      }}
-                    >
-                      <Avatar
-                        sx={{
-                          width: 56,
-                          height: 56,
-                          backgroundColor: orgColor,
-                          fontSize: '20px',
-                          borderRadius: '8px',
-                        }}
-                      >
-                        {pet.name.charAt(0)}
-                        {pet.lastName.charAt(0)}
-                      </Avatar>
-                      <Box sx={{ flexGrow: 1 }}>
-                        <Typography
-                          sx={{
-                            fontSize: '18px',
-                            fontWeight: 600,
-                            color: '#24292f',
-                            marginBottom: 0.5,
-                          }}
-                        >
-                          {pet.name} {pet.lastName}
-                        </Typography>
-                        <Typography
-                          sx={{
-                            fontSize: '14px',
-                            color: '#57606a',
-                          }}
-                        >
-                          {pet.type} • {pet.breed}
-                        </Typography>
-                      </Box>
-                    </Box>
-                  </Paper>
-                )}
-
-                {/* Notes */}
-                {surgery.notes && (
-                  <Paper
-                    sx={{
-                      padding: 3,
-                      backgroundColor: '#ffffff',
-                      border: '1px solid #d0d7de',
-                      borderRadius: '8px',
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 1.5,
-                        marginBottom: 2,
-                      }}
-                    >
-                      <NoteIcon sx={{ color: orgColor, fontSize: '20px' }} />
                       <Typography
                         sx={{
-                          fontSize: '14px',
+                          fontSize: '15px',
                           fontWeight: 600,
-                          color: '#57606a',
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.5px',
+                          color: '#24292f',
                         }}
                       >
-                        Notes
+                        {startDateTime.date}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: '13px',
+                          color: '#57606a',
+                        }}
+                      >
+                        {startDateTime.time}
                       </Typography>
                     </Box>
-                    <Typography
-                      sx={{
-                        fontSize: '14px',
-                        color: '#24292f',
-                        whiteSpace: 'pre-wrap',
-                      }}
-                    >
-                      {surgery.notes}
-                    </Typography>
-                  </Paper>
-                )}
-              </Box>
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <Box>
+                      <Typography
+                        sx={{
+                          fontSize: '12px',
+                          color: '#57606a',
+                          marginBottom: 0.5,
+                        }}
+                      >
+                        End
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: '15px',
+                          fontWeight: 600,
+                          color: '#24292f',
+                        }}
+                      >
+                        {endDateTime.date}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: '13px',
+                          color: '#57606a',
+                        }}
+                      >
+                        {endDateTime.time}
+                      </Typography>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <Box>
+                      <Typography
+                        sx={{
+                          fontSize: '12px',
+                          color: '#57606a',
+                          marginBottom: 0.5,
+                        }}
+                      >
+                        Duration
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: '15px',
+                          fontWeight: 600,
+                          color: '#24292f',
+                        }}
+                      >
+                        {durationHours > 0
+                          ? `${durationHours} hour${durationHours > 1 ? 's' : ''} ${durationMins > 0 ? `and ${durationMins} minute${durationMins > 1 ? 's' : ''}` : ''}`
+                          : `${durationMins} minute${durationMins > 1 ? 's' : ''}`}
+                      </Typography>
+                    </Box>
+                  </Grid>
+                </Grid>
+              </Paper>
             </Grid>
 
-            {/* Right Column - Sidebar Info */}
-            <Grid item xs={12} md={4}>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                {/* Owner Information */}
-                {owner && (
-                  <Paper
+            <Grid item xs={12} md={4} sx={{ display: 'flex' }}>
+              {organization && (
+                <Paper
+                  sx={{
+                    padding: 2,
+                    backgroundColor: '#ffffff',
+                    border: '1px solid #d0d7de',
+                    borderRadius: '8px',
+                    height: '100%',
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                  }}
+                >
+                  <Box
                     sx={{
-                      padding: 3,
-                      backgroundColor: '#ffffff',
-                      border: '1px solid #d0d7de',
-                      borderRadius: '8px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 1,
+                      marginBottom: 1.5,
                     }}
                   >
-                    <Box
+                    <BusinessIcon sx={{ color: orgColor, fontSize: '16px' }} />
+                    <Typography
                       sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 1.5,
-                        marginBottom: 2,
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        color: '#57606a',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.5px',
                       }}
                     >
-                      <PersonIcon sx={{ color: orgColor, fontSize: '20px' }} />
+                      Organization
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 1.5,
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => {
+                      navigate({
+                        to: '/organization/$organizationId',
+                        params: {
+                          organizationId: String(organization.organizationId),
+                        },
+                      });
+                    }}
+                  >
+                    <Avatar
+                      sx={{
+                        width: 40,
+                        height: 40,
+                        backgroundColor: orgColor,
+                        fontSize: '16px',
+                        borderRadius: '6px',
+                      }}
+                    >
+                      {organization.name.charAt(0)}
+                    </Avatar>
+                    <Box sx={{ flexGrow: 1, minWidth: 0 }}>
                       <Typography
                         sx={{
                           fontSize: '14px',
                           fontWeight: 600,
-                          color: '#57606a',
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.5px',
+                          color: '#24292f',
+                          marginBottom: 0.25,
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
                         }}
                       >
-                        Owner Information
+                        {organization.name}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: '12px',
+                          color: '#57606a',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {organization.city}
                       </Typography>
                     </Box>
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 2,
-                        cursor: 'pointer',
-                        marginBottom: 2,
-                      }}
-                      onClick={() => {
-                        navigate({
-                          to: '/owners/$ownerId',
-                          params: { ownerId: String(owner.id) },
-                        });
-                      }}
-                    >
-                      <Avatar
-                        sx={{
-                          width: 56,
-                          height: 56,
-                          backgroundColor: orgColor,
-                          fontSize: '20px',
-                          borderRadius: '8px',
-                        }}
-                      >
-                        {owner.firstName.charAt(0)}
-                        {owner.lastName.charAt(0)}
-                      </Avatar>
-                      <Box sx={{ flexGrow: 1 }}>
-                        <Typography
-                          sx={{
-                            fontSize: '18px',
-                            fontWeight: 600,
-                            color: '#24292f',
-                            marginBottom: 0.5,
-                          }}
-                        >
-                          {owner.firstName} {owner.lastName}
-                        </Typography>
-                        <Typography
-                          sx={{
-                            fontSize: '14px',
-                            color: '#57606a',
-                          }}
-                        >
-                          {owner.email}
-                        </Typography>
-                      </Box>
-                    </Box>
-                    {owner.phones.length > 0 && (
+                  </Box>
+                </Paper>
+              )}
+            </Grid>
+
+            {/* Second Row: Surgical Team - Full Width */}
+            <Grid item xs={12}>
+              <Paper
+                sx={{
+                  padding: 2.5,
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #d0d7de',
+                  borderRadius: '8px',
+                }}
+              >
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1.5,
+                    marginBottom: 1.5,
+                  }}
+                >
+                  <PersonIcon sx={{ color: orgColor, fontSize: '18px' }} />
+                  <Typography
+                    sx={{
+                      fontSize: '13px',
+                      fontWeight: 600,
+                      color: '#57606a',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.5px',
+                    }}
+                  >
+                    Surgical Team ({assignedTeam.length} member
+                    {assignedTeam.length !== 1 ? 's' : ''})
+                  </Typography>
+                </Box>
+                <Grid container spacing={2}>
+                  {assignedTeam.map((member, index) => (
+                    <Grid item xs={12} sm={6} md={4} key={member.userId}>
                       <Box
                         sx={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: 1,
-                          marginTop: 2,
+                          padding: 2,
+                          backgroundColor: '#f6f8fa',
+                          borderRadius: '6px',
+                          border: '1px solid #e1e4e8',
                         }}
                       >
-                        <PhoneIcon
-                          sx={{ fontSize: '16px', color: '#57606a' }}
-                        />
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 1.5,
+                            marginBottom: 1,
+                          }}
+                        >
+                          <Avatar
+                            sx={{
+                              width: 40,
+                              height: 40,
+                              backgroundColor: orgColor,
+                              fontSize: '16px',
+                            }}
+                          >
+                            {member.firstName.charAt(0)}
+                            {member.lastName.charAt(0)}
+                          </Avatar>
+                          <Box sx={{ flexGrow: 1 }}>
+                            <Typography
+                              sx={{
+                                fontSize: '15px',
+                                fontWeight: 600,
+                                color: '#24292f',
+                              }}
+                            >
+                              {member.firstName} {member.lastName}
+                            </Typography>
+                            <Typography
+                              sx={{
+                                fontSize: '13px',
+                                fontWeight: 500,
+                                color: orgColor,
+                              }}
+                            >
+                              {getRoleLabel(member, index)}
+                            </Typography>
+                          </Box>
+                        </Box>
                         <Typography
                           sx={{
-                            fontSize: '14px',
+                            fontSize: '12px',
                             color: '#57606a',
                           }}
                         >
-                          {owner.phones[0]}
+                          {member.email}
                         </Typography>
                       </Box>
-                    )}
-                  </Paper>
-                )}
+                    </Grid>
+                  ))}
+                </Grid>
+              </Paper>
+            </Grid>
 
-                {/* Organization */}
-                {organization && (
-                  <Paper
+            {/* Third Row: Pet and Owner Information */}
+            {pet && (
+              <Grid item xs={12} md={6} sx={{ display: 'flex' }}>
+                <Paper
+                  sx={{
+                    padding: 2.5,
+                    backgroundColor: '#ffffff',
+                    border: '1px solid #d0d7de',
+                    borderRadius: '8px',
+                    height: '100%',
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                  }}
+                >
+                  <Box
                     sx={{
-                      padding: 3,
-                      backgroundColor: '#ffffff',
-                      border: '1px solid #d0d7de',
-                      borderRadius: '8px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 1.5,
+                      marginBottom: 1.5,
                     }}
                   >
+                    <PetsIcon sx={{ color: orgColor, fontSize: '18px' }} />
+                    <Typography
+                      sx={{
+                        fontSize: '13px',
+                        fontWeight: 600,
+                        color: '#57606a',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.5px',
+                      }}
+                    >
+                      Pet Information
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 2,
+                      cursor: 'pointer',
+                      marginBottom: 2,
+                    }}
+                    onClick={() => {
+                      navigate({
+                        to: '/pets/$petId',
+                        params: { petId: String(pet.id) },
+                      });
+                    }}
+                  >
+                    <Avatar
+                      sx={{
+                        width: 48,
+                        height: 48,
+                        backgroundColor: orgColor,
+                        fontSize: '18px',
+                        borderRadius: '6px',
+                      }}
+                    >
+                      {pet.name.charAt(0)}
+                      {pet.lastName.charAt(0)}
+                    </Avatar>
+                    <Box sx={{ flexGrow: 1 }}>
+                      <Typography
+                        sx={{
+                          fontSize: '16px',
+                          fontWeight: 600,
+                          color: '#24292f',
+                          marginBottom: 0.5,
+                        }}
+                      >
+                        {pet.name} {pet.lastName}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: '13px',
+                          color: '#57606a',
+                        }}
+                      >
+                        {pet.type} • {pet.breed}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Paper>
+              </Grid>
+            )}
+
+            {owner && (
+              <Grid item xs={12} md={6} sx={{ display: 'flex' }}>
+                <Paper
+                  sx={{
+                    padding: 2.5,
+                    backgroundColor: '#ffffff',
+                    border: '1px solid #d0d7de',
+                    borderRadius: '8px',
+                    height: '100%',
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 1.5,
+                      marginBottom: 1.5,
+                    }}
+                  >
+                    <PersonIcon sx={{ color: orgColor, fontSize: '18px' }} />
+                    <Typography
+                      sx={{
+                        fontSize: '13px',
+                        fontWeight: 600,
+                        color: '#57606a',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.5px',
+                      }}
+                    >
+                      Owner Information
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 2,
+                      cursor: 'pointer',
+                      marginBottom: 2,
+                    }}
+                    onClick={() => {
+                      navigate({
+                        to: '/owners/$ownerId',
+                        params: { ownerId: String(owner.id) },
+                      });
+                    }}
+                  >
+                    <Avatar
+                      sx={{
+                        width: 48,
+                        height: 48,
+                        backgroundColor: orgColor,
+                        fontSize: '18px',
+                        borderRadius: '6px',
+                      }}
+                    >
+                      {owner.firstName.charAt(0)}
+                      {owner.lastName.charAt(0)}
+                    </Avatar>
+                    <Box sx={{ flexGrow: 1 }}>
+                      <Typography
+                        sx={{
+                          fontSize: '16px',
+                          fontWeight: 600,
+                          color: '#24292f',
+                          marginBottom: 0.5,
+                        }}
+                      >
+                        {owner.firstName} {owner.lastName}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: '13px',
+                          color: '#57606a',
+                        }}
+                      >
+                        {owner.email}
+                      </Typography>
+                    </Box>
+                  </Box>
+                  {owner.phones.length > 0 && (
                     <Box
                       sx={{
                         display: 'flex',
                         alignItems: 'center',
-                        gap: 1.5,
-                        marginBottom: 2,
+                        gap: 1,
                       }}
                     >
-                      <BusinessIcon
-                        sx={{ color: orgColor, fontSize: '20px' }}
-                      />
+                      <PhoneIcon sx={{ fontSize: '16px', color: '#57606a' }} />
                       <Typography
                         sx={{
                           fontSize: '14px',
-                          fontWeight: 600,
                           color: '#57606a',
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.5px',
                         }}
                       >
-                        Organization
+                        {owner.phones[0]}
                       </Typography>
                     </Box>
-                    <Box
+                  )}
+                </Paper>
+              </Grid>
+            )}
+
+            {/* Fourth Row: Notes - Full Width */}
+            {surgery.notes && (
+              <Grid item xs={12}>
+                <Paper
+                  sx={{
+                    padding: 2.5,
+                    backgroundColor: '#ffffff',
+                    border: '1px solid #d0d7de',
+                    borderRadius: '8px',
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 1.5,
+                      marginBottom: 1.5,
+                    }}
+                  >
+                    <NoteIcon sx={{ color: orgColor, fontSize: '18px' }} />
+                    <Typography
                       sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 2,
-                        cursor: 'pointer',
-                      }}
-                      onClick={() => {
-                        navigate({
-                          to: '/organization/$organizationId',
-                          params: {
-                            organizationId: String(organization.organizationId),
-                          },
-                        });
+                        fontSize: '13px',
+                        fontWeight: 600,
+                        color: '#57606a',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.5px',
                       }}
                     >
-                      <Avatar
-                        sx={{
-                          width: 56,
-                          height: 56,
-                          backgroundColor: orgColor,
-                          fontSize: '20px',
-                          borderRadius: '8px',
-                        }}
-                      >
-                        {organization.name.charAt(0)}
-                      </Avatar>
-                      <Box sx={{ flexGrow: 1 }}>
-                        <Typography
-                          sx={{
-                            fontSize: '18px',
-                            fontWeight: 600,
-                            color: '#24292f',
-                            marginBottom: 0.5,
-                          }}
-                        >
-                          {organization.name}
-                        </Typography>
-                        <Typography
-                          sx={{
-                            fontSize: '14px',
-                            color: '#57606a',
-                          }}
-                        >
-                          {organization.city}
-                        </Typography>
-                      </Box>
-                    </Box>
-                  </Paper>
-                )}
-              </Box>
-            </Grid>
+                      Notes
+                    </Typography>
+                  </Box>
+                  <Typography
+                    sx={{
+                      fontSize: '14px',
+                      color: '#24292f',
+                      whiteSpace: 'pre-wrap',
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    {surgery.notes}
+                  </Typography>
+                </Paper>
+              </Grid>
+            )}
           </Grid>
         </Box>
       </Box>

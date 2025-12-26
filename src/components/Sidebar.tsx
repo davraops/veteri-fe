@@ -20,6 +20,9 @@ import {
   Close as CloseIcon,
   Healing as SurgeryIcon,
   Logout as LogoutIcon,
+  Inventory2 as InventoryIcon,
+  Assignment as ProceduresIcon,
+  Vaccines as VaccinesIcon,
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from '@tanstack/react-router';
 import logo from '@/assets/logo.png';
@@ -43,9 +46,12 @@ export function Sidebar({ open, onClose }: SidebarProps) {
       path: '/appointments',
     },
     { text: 'Surgeries', icon: <SurgeryIcon />, path: '/surgeries' },
+    { text: 'Vaccinations', icon: <VaccinesIcon />, path: '/vaccinations' },
     { text: 'Organization', icon: <BusinessIcon />, path: '/organization' },
     { text: 'Treatments', icon: <LocalHospitalIcon />, path: '/treatments' },
+    { text: 'Procedures', icon: <ProceduresIcon />, path: '/procedures' },
     { text: 'Vademecum', icon: <MenuBookIcon />, path: '/vademecum' },
+    { text: 'Inventory', icon: <InventoryIcon />, path: '/inventory' },
   ];
 
   return (
@@ -116,8 +122,14 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                     location.pathname.startsWith('/appointments')) ||
                   (item.path === '/surgeries' &&
                     location.pathname.startsWith('/surgeries')) ||
+                  (item.path === '/vaccinations' &&
+                    location.pathname.startsWith('/vaccinations')) ||
+                  (item.path === '/procedures' &&
+                    location.pathname.startsWith('/procedures')) ||
                   (item.path === '/vademecum' &&
-                    location.pathname.startsWith('/vademecum'))
+                    location.pathname.startsWith('/vademecum')) ||
+                  (item.path === '/inventory' &&
+                    location.pathname.startsWith('/inventory'))
                 }
                 sx={{
                   '&.Mui-selected': {

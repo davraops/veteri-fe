@@ -112,6 +112,31 @@ function Surgeries() {
     };
   };
 
+  // Calculate time remaining until surgery
+  const getTimeRemaining = (dateString: string) => {
+    const now = new Date();
+    const surgeryDate = new Date(dateString);
+    const diff = surgeryDate.getTime() - now.getTime();
+
+    if (diff < 0) {
+      return null; // Surgery is in the past
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+    if (days === 0 && hours === 0) {
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      return minutes < 60 ? `${minutes} min` : null;
+    }
+
+    if (days === 0) {
+      return `${hours} hour${hours !== 1 ? 's' : ''}`;
+    }
+
+    return `${days} day${days !== 1 ? 's' : ''} ${hours} hour${hours !== 1 ? 's' : ''}`;
+  };
+
   const getAppointmentInfo = (appointment: Appointment) => {
     const pet = mockPets.find((p) => p.id === appointment.petId);
     const owner = pet
@@ -159,12 +184,33 @@ function Surgeries() {
   });
 
   // Group by status
-  const upcomingSurgeries = sortedSurgeries.filter(
-    (apt) =>
-      new Date(apt.startTime) >= new Date() &&
+  // Upcoming: surgeries in the next 7 days
+  const now = new Date();
+  // Normalize now to start of day for comparison
+  const nowStartOfDay = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate()
+  );
+  const sevenDaysFromNow = new Date(nowStartOfDay);
+  sevenDaysFromNow.setDate(sevenDaysFromNow.getDate() + 7);
+  sevenDaysFromNow.setHours(23, 59, 59, 999); // End of day
+
+  const upcomingSurgeries = sortedSurgeries.filter((apt) => {
+    const aptDate = new Date(apt.startTime);
+    // Normalize appointment date to start of day for comparison
+    const aptDateStartOfDay = new Date(
+      aptDate.getFullYear(),
+      aptDate.getMonth(),
+      aptDate.getDate()
+    );
+    return (
+      aptDateStartOfDay >= nowStartOfDay &&
+      aptDateStartOfDay <= sevenDaysFromNow &&
       apt.status !== 'completed' &&
       apt.status !== 'cancelled'
-  );
+    );
+  });
   const completedSurgeries = sortedSurgeries.filter(
     (apt) => apt.status === 'completed'
   );
@@ -230,214 +276,501 @@ function Surgeries() {
           </Box>
 
           {/* Statistics */}
-          <Grid container spacing={3} sx={{ marginBottom: 3 }}>
-            <Grid item xs={12} sm={6} md={3}>
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: {
+                xs: '1fr',
+                sm: 'repeat(2, 1fr)',
+                md: 'repeat(4, 1fr)',
+              },
+              gap: 3,
+              marginBottom: 3,
+            }}
+          >
+            <Paper
+              sx={{
+                padding: 2.5,
+                backgroundColor: '#ffffff',
+                border: '1px solid #d0d7de',
+                borderRadius: '8px',
+              }}
+            >
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1.5,
+                  marginBottom: 1.5,
+                }}
+              >
+                <Box
+                  sx={{
+                    padding: 1,
+                    backgroundColor: '#fef2f215',
+                    borderRadius: '6px',
+                  }}
+                >
+                  <SurgeryIcon sx={{ color: '#dc2626', fontSize: '24px' }} />
+                </Box>
+                <Box>
+                  <Typography
+                    sx={{
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      color: '#57606a',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    Total
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: '28px',
+                      fontWeight: 700,
+                      color: '#24292f',
+                    }}
+                  >
+                    {surgeryAppointments.length}
+                  </Typography>
+                </Box>
+              </Box>
+            </Paper>
+            <Paper
+              sx={{
+                padding: 2.5,
+                backgroundColor: '#ffffff',
+                border: '1px solid #d0d7de',
+                borderRadius: '8px',
+              }}
+            >
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1.5,
+                  marginBottom: 1.5,
+                }}
+              >
+                <Box
+                  sx={{
+                    padding: 1,
+                    backgroundColor: '#e3f2fd15',
+                    borderRadius: '6px',
+                  }}
+                >
+                  <CalendarTodayIcon
+                    sx={{ color: '#2563eb', fontSize: '24px' }}
+                  />
+                </Box>
+                <Box>
+                  <Typography
+                    sx={{
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      color: '#57606a',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    Upcoming
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: '28px',
+                      fontWeight: 700,
+                      color: '#24292f',
+                    }}
+                  >
+                    {upcomingSurgeries.length}
+                  </Typography>
+                </Box>
+              </Box>
+            </Paper>
+            <Paper
+              sx={{
+                padding: 2.5,
+                backgroundColor: '#ffffff',
+                border: '1px solid #d0d7de',
+                borderRadius: '8px',
+              }}
+            >
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1.5,
+                  marginBottom: 1.5,
+                }}
+              >
+                <Box
+                  sx={{
+                    padding: 1,
+                    backgroundColor: '#e6ffed15',
+                    borderRadius: '6px',
+                  }}
+                >
+                  <TimeIcon sx={{ color: '#10b981', fontSize: '24px' }} />
+                </Box>
+                <Box>
+                  <Typography
+                    sx={{
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      color: '#57606a',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    Completed
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: '28px',
+                      fontWeight: 700,
+                      color: '#24292f',
+                    }}
+                  >
+                    {completedSurgeries.length}
+                  </Typography>
+                </Box>
+              </Box>
+            </Paper>
+            <Paper
+              sx={{
+                padding: 2.5,
+                backgroundColor: '#ffffff',
+                border: '1px solid #d0d7de',
+                borderRadius: '8px',
+              }}
+            >
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1.5,
+                  marginBottom: 1.5,
+                }}
+              >
+                <Box
+                  sx={{
+                    padding: 1,
+                    backgroundColor: '#fef3c715',
+                    borderRadius: '6px',
+                  }}
+                >
+                  <TimeIcon sx={{ color: '#f97316', fontSize: '24px' }} />
+                </Box>
+                <Box>
+                  <Typography
+                    sx={{
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      color: '#57606a',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    In Progress
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: '28px',
+                      fontWeight: 700,
+                      color: '#24292f',
+                    }}
+                  >
+                    {
+                      sortedSurgeries.filter(
+                        (apt) => apt.status === 'in_progress'
+                      ).length
+                    }
+                  </Typography>
+                </Box>
+              </Box>
+            </Paper>
+          </Box>
+
+          {/* Upcoming Surgeries (Next 7 Days) */}
+          <Box sx={{ marginBottom: 4 }}>
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 600,
+                color: '#24292f',
+                marginBottom: 2,
+              }}
+            >
+              Upcoming Surgeries (Next 7 Days)
+            </Typography>
+            {upcomingSurgeries.length > 0 ? (
+              <Grid container spacing={2}>
+                {upcomingSurgeries.map((appointment) => {
+                  const { pet, organization } = getAppointmentInfo(appointment);
+                  const orgColor = getOrganizationColor(
+                    appointment.organization
+                  );
+                  const statusColor = getStatusColor(appointment.status);
+                  const dateTime = formatDateTime(appointment.startTime);
+                  const assignedTeam = getAssignedTeam(appointment);
+                  const timeRemaining = getTimeRemaining(appointment.startTime);
+
+                  return (
+                    <Grid item xs={12} md={6} key={appointment.id}>
+                      <Card
+                        sx={{
+                          border: '1px solid #d0d7de',
+                          borderRadius: '8px',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease-in-out',
+                          '&:hover': {
+                            borderColor: orgColor,
+                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                          },
+                        }}
+                        onClick={() => {
+                          navigate({
+                            to: '/surgeries/$surgeryId',
+                            params: { surgeryId: String(appointment.id) },
+                          });
+                        }}
+                      >
+                        <CardContent>
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignItems: 'flex-start',
+                              marginBottom: 2,
+                            }}
+                          >
+                            <Box>
+                              <Chip
+                                label="Surgery"
+                                size="small"
+                                sx={{
+                                  backgroundColor: `${orgColor}15`,
+                                  color: orgColor,
+                                  fontWeight: 600,
+                                  fontSize: '11px',
+                                  marginBottom: 1,
+                                }}
+                              />
+                              <Chip
+                                label={appointment.status}
+                                size="small"
+                                sx={{
+                                  backgroundColor: `${statusColor}15`,
+                                  color: statusColor,
+                                  fontWeight: 600,
+                                  fontSize: '11px',
+                                  marginLeft: 1,
+                                  textTransform: 'capitalize',
+                                }}
+                              />
+                            </Box>
+                            {organization && (
+                              <Chip
+                                label={organization.name}
+                                size="small"
+                                sx={{
+                                  backgroundColor: `${orgColor}15`,
+                                  color: orgColor,
+                                  fontSize: '11px',
+                                }}
+                              />
+                            )}
+                          </Box>
+
+                          <Typography
+                            variant="h6"
+                            sx={{
+                              fontWeight: 600,
+                              color: '#24292f',
+                              marginBottom: 1.5,
+                            }}
+                          >
+                            {appointment.title}
+                          </Typography>
+
+                          {appointment.description && (
+                            <Typography
+                              sx={{
+                                fontSize: '14px',
+                                color: '#57606a',
+                                marginBottom: 2,
+                              }}
+                            >
+                              {appointment.description}
+                            </Typography>
+                          )}
+
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: 1.5,
+                              marginBottom: 2,
+                              flexWrap: 'wrap',
+                            }}
+                          >
+                            <CalendarTodayIcon
+                              sx={{ fontSize: '18px', color: '#57606a' }}
+                            />
+                            <Typography
+                              sx={{ fontSize: '14px', color: '#24292f' }}
+                            >
+                              {dateTime.date}
+                            </Typography>
+                            <TimeIcon
+                              sx={{
+                                fontSize: '18px',
+                                color: '#57606a',
+                                marginLeft: 1,
+                              }}
+                            />
+                            <Typography
+                              sx={{ fontSize: '14px', color: '#24292f' }}
+                            >
+                              {dateTime.time}
+                            </Typography>
+                            {timeRemaining && (
+                              <>
+                                <Box
+                                  sx={{
+                                    width: 4,
+                                    height: 4,
+                                    borderRadius: '50%',
+                                    backgroundColor: '#57606a',
+                                    marginLeft: 1,
+                                  }}
+                                />
+                                <Typography
+                                  sx={{
+                                    fontSize: '13px',
+                                    fontWeight: 600,
+                                    color:
+                                      appointment.status === 'scheduled'
+                                        ? '#2563eb'
+                                        : appointment.status === 'confirmed'
+                                          ? '#10b981'
+                                          : '#57606a',
+                                  }}
+                                >
+                                  {timeRemaining}
+                                </Typography>
+                              </>
+                            )}
+                          </Box>
+
+                          {pet && (
+                            <Box
+                              sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 1.5,
+                                marginBottom: 2,
+                                padding: 1.5,
+                                backgroundColor: '#f6f8fa',
+                                borderRadius: '6px',
+                              }}
+                            >
+                              <Avatar
+                                sx={{
+                                  width: 40,
+                                  height: 40,
+                                  backgroundColor: orgColor,
+                                  fontSize: '16px',
+                                }}
+                              >
+                                {pet.name.charAt(0)}
+                                {pet.lastName.charAt(0)}
+                              </Avatar>
+                              <Box sx={{ flexGrow: 1 }}>
+                                <Typography
+                                  sx={{
+                                    fontSize: '14px',
+                                    fontWeight: 600,
+                                    color: '#24292f',
+                                  }}
+                                >
+                                  {pet.name} {pet.lastName}
+                                </Typography>
+                                <Typography
+                                  sx={{
+                                    fontSize: '12px',
+                                    color: '#57606a',
+                                  }}
+                                >
+                                  {pet.type} • {pet.breed}
+                                </Typography>
+                              </Box>
+                            </Box>
+                          )}
+
+                          {assignedTeam.length > 0 && (
+                            <Box>
+                              <Typography
+                                sx={{
+                                  fontSize: '12px',
+                                  fontWeight: 600,
+                                  color: '#57606a',
+                                  textTransform: 'uppercase',
+                                  marginBottom: 1,
+                                }}
+                              >
+                                Surgical Team
+                              </Typography>
+                              <Box
+                                sx={{
+                                  display: 'flex',
+                                  flexWrap: 'wrap',
+                                  gap: 1,
+                                }}
+                              >
+                                {assignedTeam.map((member) => (
+                                  <Chip
+                                    key={member.userId}
+                                    label={`${member.firstName} ${member.lastName} - ${getRoleLabel(member)}`}
+                                    size="small"
+                                    sx={{
+                                      fontSize: '11px',
+                                      backgroundColor: '#f6f8fa',
+                                      color: '#24292f',
+                                    }}
+                                  />
+                                ))}
+                              </Box>
+                            </Box>
+                          )}
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                  );
+                })}
+              </Grid>
+            ) : (
               <Paper
                 sx={{
-                  padding: 2.5,
+                  padding: 4,
+                  textAlign: 'center',
                   backgroundColor: '#ffffff',
                   border: '1px solid #d0d7de',
                   borderRadius: '8px',
                 }}
               >
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 1.5,
-                    marginBottom: 1.5,
-                  }}
+                <CalendarTodayIcon
+                  sx={{ fontSize: 48, color: '#d0d7de', marginBottom: 2 }}
+                />
+                <Typography
+                  variant="h6"
+                  sx={{ marginBottom: 1, color: '#24292f' }}
                 >
-                  <Box
-                    sx={{
-                      padding: 1,
-                      backgroundColor: '#fef2f215',
-                      borderRadius: '6px',
-                    }}
-                  >
-                    <SurgeryIcon sx={{ color: '#dc2626', fontSize: '24px' }} />
-                  </Box>
-                  <Box>
-                    <Typography
-                      sx={{
-                        fontSize: '12px',
-                        fontWeight: 600,
-                        color: '#57606a',
-                        textTransform: 'uppercase',
-                      }}
-                    >
-                      Total
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: '28px',
-                        fontWeight: 700,
-                        color: '#24292f',
-                      }}
-                    >
-                      {surgeryAppointments.length}
-                    </Typography>
-                  </Box>
-                </Box>
+                  No upcoming surgeries
+                </Typography>
+                <Typography sx={{ color: '#57606a' }}>
+                  There are no surgeries scheduled for the next 7 days.
+                </Typography>
               </Paper>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <Paper
-                sx={{
-                  padding: 2.5,
-                  backgroundColor: '#ffffff',
-                  border: '1px solid #d0d7de',
-                  borderRadius: '8px',
-                }}
-              >
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 1.5,
-                    marginBottom: 1.5,
-                  }}
-                >
-                  <Box
-                    sx={{
-                      padding: 1,
-                      backgroundColor: '#e3f2fd15',
-                      borderRadius: '6px',
-                    }}
-                  >
-                    <CalendarTodayIcon
-                      sx={{ color: '#2563eb', fontSize: '24px' }}
-                    />
-                  </Box>
-                  <Box>
-                    <Typography
-                      sx={{
-                        fontSize: '12px',
-                        fontWeight: 600,
-                        color: '#57606a',
-                        textTransform: 'uppercase',
-                      }}
-                    >
-                      Upcoming
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: '28px',
-                        fontWeight: 700,
-                        color: '#24292f',
-                      }}
-                    >
-                      {upcomingSurgeries.length}
-                    </Typography>
-                  </Box>
-                </Box>
-              </Paper>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <Paper
-                sx={{
-                  padding: 2.5,
-                  backgroundColor: '#ffffff',
-                  border: '1px solid #d0d7de',
-                  borderRadius: '8px',
-                }}
-              >
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 1.5,
-                    marginBottom: 1.5,
-                  }}
-                >
-                  <Box
-                    sx={{
-                      padding: 1,
-                      backgroundColor: '#e6ffed15',
-                      borderRadius: '6px',
-                    }}
-                  >
-                    <TimeIcon sx={{ color: '#10b981', fontSize: '24px' }} />
-                  </Box>
-                  <Box>
-                    <Typography
-                      sx={{
-                        fontSize: '12px',
-                        fontWeight: 600,
-                        color: '#57606a',
-                        textTransform: 'uppercase',
-                      }}
-                    >
-                      Completed
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: '28px',
-                        fontWeight: 700,
-                        color: '#24292f',
-                      }}
-                    >
-                      {completedSurgeries.length}
-                    </Typography>
-                  </Box>
-                </Box>
-              </Paper>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <Paper
-                sx={{
-                  padding: 2.5,
-                  backgroundColor: '#ffffff',
-                  border: '1px solid #d0d7de',
-                  borderRadius: '8px',
-                }}
-              >
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 1.5,
-                    marginBottom: 1.5,
-                  }}
-                >
-                  <Box
-                    sx={{
-                      padding: 1,
-                      backgroundColor: '#fef3c715',
-                      borderRadius: '6px',
-                    }}
-                  >
-                    <TimeIcon sx={{ color: '#f97316', fontSize: '24px' }} />
-                  </Box>
-                  <Box>
-                    <Typography
-                      sx={{
-                        fontSize: '12px',
-                        fontWeight: 600,
-                        color: '#57606a',
-                        textTransform: 'uppercase',
-                      }}
-                    >
-                      In Progress
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: '28px',
-                        fontWeight: 700,
-                        color: '#24292f',
-                      }}
-                    >
-                      {
-                        sortedSurgeries.filter(
-                          (apt) => apt.status === 'in_progress'
-                        ).length
-                      }
-                    </Typography>
-                  </Box>
-                </Box>
-              </Paper>
-            </Grid>
-          </Grid>
+            )}
+          </Box>
 
           {/* All Surgeries List */}
           {allSurgeries.length > 0 && (
@@ -464,7 +797,7 @@ function Surgeries() {
                     display: 'grid',
                     gridTemplateColumns: {
                       xs: '1fr',
-                      md: '200px 1fr 150px 120px 150px',
+                      md: '200px 1fr 150px 120px 120px 150px',
                     },
                     gap: 2,
                     padding: 2,
@@ -480,10 +813,11 @@ function Surgeries() {
                   <Box>Surgery Details</Box>
                   <Box>Pet</Box>
                   <Box>Status</Box>
+                  <Box>Time Remaining</Box>
                   <Box>Organization</Box>
                 </Box>
                 {allSurgeries.map((appointment) => {
-                  const { pet } = getAppointmentInfo(appointment);
+                  const { pet, organization } = getAppointmentInfo(appointment);
                   const orgColor = getOrganizationColor(
                     appointment.organization
                   );
@@ -504,7 +838,7 @@ function Surgeries() {
                         display: 'grid',
                         gridTemplateColumns: {
                           xs: '1fr',
-                          md: '200px 1fr 150px 120px 150px',
+                          md: '200px 1fr 150px 120px 120px 150px',
                         },
                         gap: 2,
                         padding: 2,
@@ -625,6 +959,42 @@ function Surgeries() {
                         />
                       </Box>
                       <Box>
+                        {(() => {
+                          const timeRemaining = getTimeRemaining(
+                            appointment.startTime
+                          );
+                          if (!timeRemaining) {
+                            return (
+                              <Typography
+                                sx={{
+                                  fontSize: '12px',
+                                  color: '#57606a',
+                                  fontStyle: 'italic',
+                                }}
+                              >
+                                Past
+                              </Typography>
+                            );
+                          }
+                          return (
+                            <Typography
+                              sx={{
+                                fontSize: '13px',
+                                fontWeight: 600,
+                                color:
+                                  appointment.status === 'scheduled'
+                                    ? '#2563eb'
+                                    : appointment.status === 'confirmed'
+                                      ? '#10b981'
+                                      : '#57606a',
+                              }}
+                            >
+                              {timeRemaining}
+                            </Typography>
+                          );
+                        })()}
+                      </Box>
+                      <Box>
                         {organization ? (
                           <Chip
                             label={organization.name}
@@ -650,238 +1020,6 @@ function Surgeries() {
             </Box>
           )}
 
-          {/* Upcoming Surgeries */}
-          {upcomingSurgeries.length > 0 && (
-            <Box sx={{ marginBottom: 4 }}>
-              <Typography
-                variant="h6"
-                sx={{
-                  fontWeight: 600,
-                  color: '#24292f',
-                  marginBottom: 2,
-                }}
-              >
-                Upcoming Surgeries
-              </Typography>
-              <Grid container spacing={2}>
-                {upcomingSurgeries.map((appointment) => {
-                  const { pet } = getAppointmentInfo(appointment);
-                  const orgColor = getOrganizationColor(
-                    appointment.organization
-                  );
-                  const statusColor = getStatusColor(appointment.status);
-                  const dateTime = formatDateTime(appointment.startTime);
-                  const assignedTeam = getAssignedTeam(appointment);
-
-                  return (
-                    <Grid item xs={12} md={6} key={appointment.id}>
-                      <Card
-                        sx={{
-                          border: '1px solid #d0d7de',
-                          borderRadius: '8px',
-                          cursor: 'pointer',
-                          transition: 'all 0.2s ease-in-out',
-                          '&:hover': {
-                            borderColor: orgColor,
-                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                          },
-                        }}
-                        onClick={() => {
-                          navigate({
-                            to: '/surgeries/$surgeryId',
-                            params: { surgeryId: String(appointment.id) },
-                          });
-                        }}
-                      >
-                        <CardContent>
-                          <Box
-                            sx={{
-                              display: 'flex',
-                              justifyContent: 'space-between',
-                              alignItems: 'flex-start',
-                              marginBottom: 2,
-                            }}
-                          >
-                            <Box>
-                              <Chip
-                                label="Surgery"
-                                size="small"
-                                sx={{
-                                  backgroundColor: `${orgColor}15`,
-                                  color: orgColor,
-                                  fontWeight: 600,
-                                  fontSize: '11px',
-                                  marginBottom: 1,
-                                }}
-                              />
-                              <Chip
-                                label={appointment.status}
-                                size="small"
-                                sx={{
-                                  backgroundColor: `${statusColor}15`,
-                                  color: statusColor,
-                                  fontWeight: 600,
-                                  fontSize: '11px',
-                                  marginLeft: 1,
-                                  textTransform: 'capitalize',
-                                }}
-                              />
-                            </Box>
-                            {organization && (
-                              <Chip
-                                label={organization.name}
-                                size="small"
-                                sx={{
-                                  backgroundColor: `${orgColor}15`,
-                                  color: orgColor,
-                                  fontSize: '11px',
-                                }}
-                              />
-                            )}
-                          </Box>
-
-                          <Typography
-                            variant="h6"
-                            sx={{
-                              fontWeight: 600,
-                              color: '#24292f',
-                              marginBottom: 1.5,
-                            }}
-                          >
-                            {appointment.title}
-                          </Typography>
-
-                          {appointment.description && (
-                            <Typography
-                              sx={{
-                                fontSize: '14px',
-                                color: '#57606a',
-                                marginBottom: 2,
-                              }}
-                            >
-                              {appointment.description}
-                            </Typography>
-                          )}
-
-                          <Box
-                            sx={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: 1.5,
-                              marginBottom: 2,
-                            }}
-                          >
-                            <CalendarTodayIcon
-                              sx={{ fontSize: '18px', color: '#57606a' }}
-                            />
-                            <Typography
-                              sx={{ fontSize: '14px', color: '#24292f' }}
-                            >
-                              {dateTime.date}
-                            </Typography>
-                            <TimeIcon
-                              sx={{
-                                fontSize: '18px',
-                                color: '#57606a',
-                                marginLeft: 1,
-                              }}
-                            />
-                            <Typography
-                              sx={{ fontSize: '14px', color: '#24292f' }}
-                            >
-                              {dateTime.time}
-                            </Typography>
-                          </Box>
-
-                          {pet && (
-                            <Box
-                              sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 1.5,
-                                marginBottom: 2,
-                                padding: 1.5,
-                                backgroundColor: '#f6f8fa',
-                                borderRadius: '6px',
-                              }}
-                            >
-                              <Avatar
-                                sx={{
-                                  width: 40,
-                                  height: 40,
-                                  backgroundColor: orgColor,
-                                  fontSize: '16px',
-                                }}
-                              >
-                                {pet.name.charAt(0)}
-                                {pet.lastName.charAt(0)}
-                              </Avatar>
-                              <Box sx={{ flexGrow: 1 }}>
-                                <Typography
-                                  sx={{
-                                    fontSize: '14px',
-                                    fontWeight: 600,
-                                    color: '#24292f',
-                                  }}
-                                >
-                                  {pet.name} {pet.lastName}
-                                </Typography>
-                                <Typography
-                                  sx={{
-                                    fontSize: '12px',
-                                    color: '#57606a',
-                                  }}
-                                >
-                                  {pet.type} • {pet.breed}
-                                </Typography>
-                              </Box>
-                            </Box>
-                          )}
-
-                          {assignedTeam.length > 0 && (
-                            <Box>
-                              <Typography
-                                sx={{
-                                  fontSize: '12px',
-                                  fontWeight: 600,
-                                  color: '#57606a',
-                                  textTransform: 'uppercase',
-                                  marginBottom: 1,
-                                }}
-                              >
-                                Surgical Team
-                              </Typography>
-                              <Box
-                                sx={{
-                                  display: 'flex',
-                                  flexWrap: 'wrap',
-                                  gap: 1,
-                                }}
-                              >
-                                {assignedTeam.map((member) => (
-                                  <Chip
-                                    key={member.userId}
-                                    label={`${member.firstName} ${member.lastName} - ${getRoleLabel(member)}`}
-                                    size="small"
-                                    sx={{
-                                      fontSize: '11px',
-                                      backgroundColor: '#f6f8fa',
-                                      color: '#24292f',
-                                    }}
-                                  />
-                                ))}
-                              </Box>
-                            </Box>
-                          )}
-                        </CardContent>
-                      </Card>
-                    </Grid>
-                  );
-                })}
-              </Grid>
-            </Box>
-          )}
-
           {/* Completed Surgeries */}
           {completedSurgeries.length > 0 && (
             <Box sx={{ marginBottom: 4 }}>
@@ -895,113 +1033,155 @@ function Surgeries() {
               >
                 Completed Surgeries
               </Typography>
-              <Grid container spacing={2}>
+              <Paper
+                sx={{
+                  border: '1px solid #d0d7de',
+                  borderRadius: '8px',
+                  overflow: 'hidden',
+                }}
+              >
+                <Box
+                  sx={{
+                    display: 'grid',
+                    gridTemplateColumns: {
+                      xs: '1fr',
+                      md: '180px 1fr 150px 100px',
+                    },
+                    gap: 2,
+                    padding: 2,
+                    backgroundColor: '#f6f8fa',
+                    borderBottom: '1px solid #d0d7de',
+                    fontWeight: 600,
+                    fontSize: '12px',
+                    color: '#57606a',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  <Box>Date</Box>
+                  <Box>Surgery</Box>
+                  <Box>Pet</Box>
+                  <Box>Status</Box>
+                </Box>
                 {completedSurgeries.map((appointment) => {
                   const { pet } = getAppointmentInfo(appointment);
-                  const orgColor = getOrganizationColor(
-                    appointment.organization
-                  );
                   const dateTime = formatDateTime(appointment.startTime);
 
                   return (
-                    <Grid item xs={12} md={6} key={appointment.id}>
-                      <Card
-                        sx={{
-                          border: '1px solid #d0d7de',
-                          borderRadius: '8px',
-                          cursor: 'pointer',
-                          opacity: 0.8,
-                          transition: 'all 0.2s ease-in-out',
-                          '&:hover': {
-                            borderColor: orgColor,
-                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                            opacity: 1,
-                          },
-                        }}
-                        onClick={() => {
-                          navigate({
-                            to: '/surgeries/$surgeryId',
-                            params: { surgeryId: String(appointment.id) },
-                          });
-                        }}
-                      >
-                        <CardContent>
-                          <Box
-                            sx={{
-                              display: 'flex',
-                              justifyContent: 'space-between',
-                              alignItems: 'flex-start',
-                              marginBottom: 2,
-                            }}
-                          >
-                            <Chip
-                              label="Surgery"
-                              size="small"
-                              sx={{
-                                backgroundColor: `${orgColor}15`,
-                                color: orgColor,
-                                fontWeight: 600,
-                                fontSize: '11px',
-                              }}
-                            />
-                            <Chip
-                              label="Completed"
-                              size="small"
-                              sx={{
-                                backgroundColor: '#57606a15',
-                                color: '#57606a',
-                                fontWeight: 600,
-                                fontSize: '11px',
-                              }}
-                            />
-                          </Box>
-
+                    <Box
+                      key={appointment.id}
+                      onClick={() => {
+                        navigate({
+                          to: '/surgeries/$surgeryId',
+                          params: { surgeryId: String(appointment.id) },
+                        });
+                      }}
+                      sx={{
+                        display: 'grid',
+                        gridTemplateColumns: {
+                          xs: '1fr',
+                          md: '180px 1fr 150px 100px',
+                        },
+                        gap: 2,
+                        padding: 2,
+                        borderBottom: '1px solid #f6f8fa',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease-in-out',
+                        '&:hover': {
+                          backgroundColor: '#f6f8fa',
+                        },
+                        '&:last-child': {
+                          borderBottom: 'none',
+                        },
+                      }}
+                    >
+                      <Box>
+                        <Typography
+                          sx={{
+                            fontSize: '13px',
+                            fontWeight: 600,
+                            color: '#24292f',
+                            marginBottom: 0.5,
+                          }}
+                        >
+                          {dateTime.date}
+                        </Typography>
+                        <Typography
+                          sx={{
+                            fontSize: '12px',
+                            color: '#57606a',
+                          }}
+                        >
+                          {dateTime.time}
+                        </Typography>
+                      </Box>
+                      <Box>
+                        <Typography
+                          sx={{
+                            fontSize: '14px',
+                            fontWeight: 600,
+                            color: '#24292f',
+                            marginBottom: 0.5,
+                          }}
+                        >
+                          {appointment.title}
+                        </Typography>
+                        {appointment.description && (
                           <Typography
-                            variant="h6"
                             sx={{
-                              fontWeight: 600,
-                              color: '#24292f',
-                              marginBottom: 1,
+                              fontSize: '12px',
+                              color: '#57606a',
                             }}
                           >
-                            {appointment.title}
+                            {appointment.description}
                           </Typography>
-
-                          <Box
-                            sx={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: 1.5,
-                              marginTop: 1.5,
-                            }}
-                          >
-                            <CalendarTodayIcon
-                              sx={{ fontSize: '16px', color: '#57606a' }}
-                            />
-                            <Typography
-                              sx={{ fontSize: '13px', color: '#57606a' }}
-                            >
-                              {dateTime.date} at {dateTime.time}
-                            </Typography>
-                          </Box>
-
-                          {pet && (
+                        )}
+                      </Box>
+                      <Box>
+                        {pet ? (
+                          <>
                             <Typography
                               sx={{
                                 fontSize: '13px',
-                                color: '#57606a',
-                                marginTop: 1,
+                                fontWeight: 600,
+                                color: '#24292f',
+                                marginBottom: 0.5,
                               }}
                             >
                               {pet.name} {pet.lastName}
                             </Typography>
-                          )}
-                        </CardContent>
-                      </Card>
-                    </Grid>
+                            <Typography
+                              sx={{
+                                fontSize: '11px',
+                                color: '#57606a',
+                              }}
+                            >
+                              {pet.type} • {pet.breed}
+                            </Typography>
+                          </>
+                        ) : (
+                          <Typography
+                            sx={{ fontSize: '12px', color: '#57606a' }}
+                          >
+                            Pet not found
+                          </Typography>
+                        )}
+                      </Box>
+                      <Box>
+                        <Chip
+                          label="Completed"
+                          size="small"
+                          sx={{
+                            backgroundColor: '#57606a15',
+                            color: '#57606a',
+                            fontWeight: 600,
+                            fontSize: '11px',
+                          }}
+                        />
+                      </Box>
+                    </Box>
                   );
                 })}
-              </Grid>
+              </Paper>
             </Box>
           )}
 

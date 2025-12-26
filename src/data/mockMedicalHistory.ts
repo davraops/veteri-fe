@@ -68,18 +68,42 @@ export const mockMedicalHistory: Record<number, MedicalHistoryEntry[]> = {
     {
       id: 'mh-1-2',
       petId: 1,
-      date: '2024-01-10',
+      date: '2024-09-10',
       time: '2:15 PM',
       type: 'vaccination',
-      title: 'Vaccination Update',
+      title: 'Bordetella Vaccination',
       diagnosis: 'Vaccination administered',
       professional: {
-        name: 'Dr. Sarah Martinez',
-        initials: 'SM',
+        name: 'Dr. John Doe',
+        initials: 'JD',
         role: 'Veterinarian',
       },
       notes:
-        'DHPP, Rabies, and Bordetella boosters administered. Patient tolerated vaccines well with no adverse reactions observed. Heartworm test performed - negative. Weight: 32.5kg. All vaccinations are up to date.',
+        'Bordetella vaccine administered. Batch: BOR-2024-001. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-09-10. Weight: 32.5kg.',
+      medications: [
+        {
+          name: 'Bordetella',
+          dosage: '0.5 mL',
+          frequency: 'Single dose',
+          duration: 'Annual',
+        },
+      ],
+    },
+    {
+      id: 'mh-1-2b',
+      petId: 1,
+      date: '2024-10-15',
+      time: '10:30 AM',
+      type: 'vaccination',
+      title: 'DHPP Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. John Doe',
+        initials: 'JD',
+        role: 'Veterinarian',
+      },
+      notes:
+        'DHPP booster administered. Batch: DHPP-2024-001. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-10-15. Weight: 32.5kg.',
       medications: [
         {
           name: 'DHPP Booster',
@@ -87,17 +111,29 @@ export const mockMedicalHistory: Record<number, MedicalHistoryEntry[]> = {
           frequency: 'Single dose',
           duration: 'Annual',
         },
+      ],
+    },
+    {
+      id: 'mh-1-2c',
+      petId: 1,
+      date: '2024-11-20',
+      time: '2:00 PM',
+      type: 'vaccination',
+      title: 'Rabies Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. John Doe',
+        initials: 'JD',
+        role: 'Veterinarian',
+      },
+      notes:
+        'Rabies vaccine administered. Batch: RAB-2024-002. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2026-11-20. Weight: 32.5kg.',
+      medications: [
         {
           name: 'Rabies Vaccine',
           dosage: '1 mL',
           frequency: 'Single dose',
           duration: '3 years',
-        },
-        {
-          name: 'Bordetella',
-          dosage: '0.5 mL',
-          frequency: 'Single dose',
-          duration: 'Annual',
         },
       ],
     },
@@ -206,30 +242,48 @@ export const mockMedicalHistory: Record<number, MedicalHistoryEntry[]> = {
     {
       id: 'mh-3-1',
       petId: 3,
-      date: '2024-01-12',
+      date: '2024-11-15',
       time: '2:00 PM',
-      type: 'consultation',
-      title: 'Annual Vaccination Check',
-      diagnosis: 'Healthy - Vaccinations current',
+      type: 'vaccination',
+      title: 'Rabies Vaccination',
+      diagnosis: 'Vaccination administered',
       professional: {
-        name: 'Dr. Michael Chen',
-        initials: 'MC',
+        name: 'Dr. John Doe',
+        initials: 'JD',
         role: 'Veterinarian',
       },
       notes:
-        'DHPP, Rabies, and Bordetella boosters administered. Physical exam unremarkable. Heartworm test negative. Weight: 28.5kg (ideal). Dental cleaning recommended within 6 months. Next visit: 1 year.',
+        'Rabies vaccine administered. Batch: RAB-2024-003. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2026-11-15. Weight: 28.5kg.',
+      medications: [
+        {
+          name: 'Rabies Vaccine',
+          dosage: '1 mL',
+          frequency: 'Single dose',
+          duration: '3 years',
+        },
+      ],
+    },
+    {
+      id: 'mh-3-1b',
+      petId: 3,
+      date: '2024-12-01',
+      time: '10:00 AM',
+      type: 'vaccination',
+      title: 'DHPP Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. John Doe',
+        initials: 'JD',
+        role: 'Veterinarian',
+      },
+      notes:
+        'DHPP booster administered. Batch: DHPP-2024-003. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-12-01. Weight: 28.5kg.',
       medications: [
         {
           name: 'DHPP Booster',
           dosage: '1 mL',
           frequency: 'Single dose',
           duration: 'Annual',
-        },
-        {
-          name: 'Rabies Vaccine',
-          dosage: '1 mL',
-          frequency: 'Single dose',
-          duration: '3 years',
         },
       ],
     },
@@ -504,18 +558,18 @@ export const mockMedicalHistory: Record<number, MedicalHistoryEntry[]> = {
     {
       id: 'mh-4-3',
       petId: 4,
-      date: '2023-11-25',
-      time: '11:00 AM',
+      date: '2024-08-20',
+      time: '10:00 AM',
       type: 'vaccination',
-      title: 'Vaccination Update',
-      diagnosis: 'Vaccinations administered',
+      title: 'DHPP Vaccination',
+      diagnosis: 'Vaccination administered',
       professional: {
-        name: 'Dr. Sarah Martinez',
-        initials: 'SM',
+        name: 'Dr. John Doe',
+        initials: 'JD',
         role: 'Veterinarian',
       },
       notes:
-        'DHPP and Rabies boosters given. Patient tolerated vaccines well. No adverse reactions.',
+        'DHPP booster administered. Batch: DHPP-2024-002. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-08-20. Weight: 12.5kg.',
       medications: [
         {
           name: 'DHPP Booster',
@@ -523,11 +577,77 @@ export const mockMedicalHistory: Record<number, MedicalHistoryEntry[]> = {
           frequency: 'Single dose',
           duration: 'Annual',
         },
+      ],
+    },
+    {
+      id: 'mh-4-4',
+      petId: 4,
+      date: '2024-09-05',
+      time: '2:00 PM',
+      type: 'vaccination',
+      title: 'Rabies Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. John Doe',
+        initials: 'JD',
+        role: 'Veterinarian',
+      },
+      notes:
+        'Rabies vaccine administered. Batch: RAB-2024-001. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2026-09-05. Weight: 12.5kg.',
+      medications: [
         {
           name: 'Rabies Vaccine',
           dosage: '1 mL',
           frequency: 'Single dose',
           duration: '3 years',
+        },
+      ],
+    },
+    {
+      id: 'mh-4-5',
+      petId: 4,
+      date: '2024-09-15',
+      time: '11:00 AM',
+      type: 'vaccination',
+      title: 'Lyme Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. John Doe',
+        initials: 'JD',
+        role: 'Veterinarian',
+      },
+      notes:
+        'Lyme vaccine administered. Batch: LYM-2024-001. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-09-15. Weight: 12.5kg.',
+      medications: [
+        {
+          name: 'Lyme Vaccine',
+          dosage: '1 mL',
+          frequency: 'Single dose',
+          duration: 'Annual',
+        },
+      ],
+    },
+    {
+      id: 'mh-4-6',
+      petId: 4,
+      date: '2024-10-01',
+      time: '3:00 PM',
+      type: 'vaccination',
+      title: 'Bordetella Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. John Doe',
+        initials: 'JD',
+        role: 'Veterinarian',
+      },
+      notes:
+        'Bordetella vaccine administered. Batch: BOR-2024-002. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-10-01. Weight: 12.5kg.',
+      medications: [
+        {
+          name: 'Bordetella',
+          dosage: '0.5 mL',
+          frequency: 'Single dose',
+          duration: 'Annual',
         },
       ],
     },
@@ -646,30 +766,48 @@ export const mockMedicalHistory: Record<number, MedicalHistoryEntry[]> = {
     {
       id: 'mh-6-3',
       petId: 6,
-      date: '2023-10-10',
-      time: '9:30 AM',
+      date: '2024-10-25',
+      time: '2:00 PM',
       type: 'vaccination',
-      title: 'Annual Vaccination',
-      diagnosis: 'Vaccinations administered',
+      title: 'Rabies Vaccination',
+      diagnosis: 'Vaccination administered',
       professional: {
         name: 'Dr. John Doe',
         initials: 'JD',
         role: 'Veterinarian',
       },
       notes:
-        'DHPP and Rabies boosters given. Patient was calm and cooperative. Weight: 23kg.',
+        'Rabies vaccine administered. Batch: RAB-2024-004. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2026-10-25. Weight: 23kg.',
+      medications: [
+        {
+          name: 'Rabies Vaccine',
+          dosage: '1 mL',
+          frequency: 'Single dose',
+          duration: '3 years',
+        },
+      ],
+    },
+    {
+      id: 'mh-6-4',
+      petId: 6,
+      date: '2024-11-10',
+      time: '10:00 AM',
+      type: 'vaccination',
+      title: 'DHPP Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. John Doe',
+        initials: 'JD',
+        role: 'Veterinarian',
+      },
+      notes:
+        'DHPP booster administered. Batch: DHPP-2024-004. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-11-10. Weight: 23kg.',
       medications: [
         {
           name: 'DHPP Booster',
           dosage: '1 mL',
           frequency: 'Single dose',
           duration: 'Annual',
-        },
-        {
-          name: 'Rabies Vaccine',
-          dosage: '1 mL',
-          frequency: 'Single dose',
-          duration: '3 years',
         },
       ],
     },
@@ -735,18 +873,18 @@ export const mockMedicalHistory: Record<number, MedicalHistoryEntry[]> = {
     {
       id: 'mh-7-3',
       petId: 7,
-      date: '2023-11-15',
-      time: '11:00 AM',
+      date: '2024-09-20',
+      time: '10:00 AM',
       type: 'vaccination',
-      title: 'Vaccination Update',
-      diagnosis: 'Vaccinations current',
+      title: 'DHPP Vaccination',
+      diagnosis: 'Vaccination administered',
       professional: {
-        name: 'Dr. Jane Doe',
-        initials: 'JD',
+        name: 'Dr. Lisa Gonzalez',
+        initials: 'LG',
         role: 'Veterinarian',
       },
       notes:
-        'DHPP, Rabies, and Bordetella boosters administered. Patient tolerated vaccines well.',
+        'DHPP booster administered. Batch: DHPP-2024-010. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-09-20. Weight: 35kg.',
       medications: [
         {
           name: 'DHPP Booster',
@@ -754,12 +892,48 @@ export const mockMedicalHistory: Record<number, MedicalHistoryEntry[]> = {
           frequency: 'Single dose',
           duration: 'Annual',
         },
+      ],
+    },
+    {
+      id: 'mh-7-4',
+      petId: 7,
+      date: '2024-10-10',
+      time: '2:00 PM',
+      type: 'vaccination',
+      title: 'Rabies Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. Lisa Gonzalez',
+        initials: 'LG',
+        role: 'Veterinarian',
+      },
+      notes:
+        'Rabies vaccine administered. Batch: RAB-2024-010. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2026-10-10. Weight: 35kg.',
+      medications: [
         {
           name: 'Rabies Vaccine',
           dosage: '1 mL',
           frequency: 'Single dose',
           duration: '3 years',
         },
+      ],
+    },
+    {
+      id: 'mh-7-5',
+      petId: 7,
+      date: '2024-11-15',
+      time: '11:00 AM',
+      type: 'vaccination',
+      title: 'Bordetella Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. Lisa Gonzalez',
+        initials: 'LG',
+        role: 'Veterinarian',
+      },
+      notes:
+        'Bordetella vaccine administered. Batch: BOR-2024-005. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-11-15. Weight: 35kg.',
+      medications: [
         {
           name: 'Bordetella',
           dosage: '0.5 mL',
@@ -791,30 +965,48 @@ export const mockMedicalHistory: Record<number, MedicalHistoryEntry[]> = {
     {
       id: 'mh-8-2',
       petId: 8,
-      date: '2023-12-18',
-      time: '10:30 AM',
+      date: '2024-11-20',
+      time: '2:00 PM',
       type: 'vaccination',
-      title: 'Annual Vaccination',
-      diagnosis: 'Vaccinations administered',
+      title: 'Rabies Vaccination',
+      diagnosis: 'Vaccination administered',
       professional: {
-        name: 'Dr. Michael Chen',
-        initials: 'MC',
+        name: 'Dr. Patricia Martinez',
+        initials: 'PM',
         role: 'Veterinarian',
       },
       notes:
-        'DHPP and Rabies boosters given. Patient was calm. Weight: 6.8kg. All vaccinations current.',
+        'Rabies vaccine administered. Batch: RAB-2024-011. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2026-11-20. Weight: 6.8kg.',
+      medications: [
+        {
+          name: 'Rabies Vaccine',
+          dosage: '1 mL',
+          frequency: 'Single dose',
+          duration: '3 years',
+        },
+      ],
+    },
+    {
+      id: 'mh-8-2b',
+      petId: 8,
+      date: '2024-12-05',
+      time: '10:00 AM',
+      type: 'vaccination',
+      title: 'DHPP Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. Patricia Martinez',
+        initials: 'PM',
+        role: 'Veterinarian',
+      },
+      notes:
+        'DHPP booster administered. Batch: DHPP-2024-011. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-12-05. Weight: 6.8kg.',
       medications: [
         {
           name: 'DHPP Booster',
           dosage: '1 mL',
           frequency: 'Single dose',
           duration: 'Annual',
-        },
-        {
-          name: 'Rabies Vaccine',
-          dosage: '1 mL',
-          frequency: 'Single dose',
-          duration: '3 years',
         },
       ],
     },
@@ -1023,18 +1215,42 @@ export const mockMedicalHistory: Record<number, MedicalHistoryEntry[]> = {
     {
       id: 'mh-11-2',
       petId: 11,
-      date: '2023-12-05',
-      time: '2:00 PM',
+      date: '2024-08-30',
+      time: '10:00 AM',
       type: 'vaccination',
-      title: 'Annual Vaccination',
-      diagnosis: 'Vaccinations current',
+      title: 'Rabies Vaccination',
+      diagnosis: 'Vaccination administered',
       professional: {
-        name: 'Dr. Sarah Martinez',
-        initials: 'SM',
+        name: 'Dr. John Doe',
+        initials: 'JD',
         role: 'Veterinarian',
       },
       notes:
-        'DHPP, Rabies, and Bordetella boosters administered. Patient was energetic but cooperative. Weight: 20.5kg.',
+        'Rabies vaccine administered. Batch: RAB-2024-005. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2026-08-30. Weight: 20.5kg.',
+      medications: [
+        {
+          name: 'Rabies Vaccine',
+          dosage: '1 mL',
+          frequency: 'Single dose',
+          duration: '3 years',
+        },
+      ],
+    },
+    {
+      id: 'mh-11-2b',
+      petId: 11,
+      date: '2024-09-25',
+      time: '2:00 PM',
+      type: 'vaccination',
+      title: 'DHPP Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. John Doe',
+        initials: 'JD',
+        role: 'Veterinarian',
+      },
+      notes:
+        'DHPP booster administered. Batch: DHPP-2024-005. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-09-25. Weight: 20.5kg.',
       medications: [
         {
           name: 'DHPP Booster',
@@ -1042,12 +1258,24 @@ export const mockMedicalHistory: Record<number, MedicalHistoryEntry[]> = {
           frequency: 'Single dose',
           duration: 'Annual',
         },
-        {
-          name: 'Rabies Vaccine',
-          dosage: '1 mL',
-          frequency: 'Single dose',
-          duration: '3 years',
-        },
+      ],
+    },
+    {
+      id: 'mh-11-2c',
+      petId: 11,
+      date: '2024-10-05',
+      time: '11:00 AM',
+      type: 'vaccination',
+      title: 'Bordetella Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. John Doe',
+        initials: 'JD',
+        role: 'Veterinarian',
+      },
+      notes:
+        'Bordetella vaccine administered. Batch: BOR-2024-003. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-10-05. Weight: 20.5kg.',
+      medications: [
         {
           name: 'Bordetella',
           dosage: '0.5 mL',
@@ -1193,34 +1421,46 @@ export const mockMedicalHistory: Record<number, MedicalHistoryEntry[]> = {
     {
       id: 'mh-13-2',
       petId: 13,
-      date: '2023-12-15',
-      time: '11:00 AM',
+      date: '2024-06-20',
+      time: '10:00 AM',
       type: 'vaccination',
-      title: 'Annual Vaccination',
-      diagnosis: 'Vaccinations current',
+      title: 'Rabies Vaccination',
+      diagnosis: 'Vaccination administered',
       professional: {
-        name: 'Dr. Emily Rodriguez',
-        initials: 'ER',
+        name: 'Dr. John Doe',
+        initials: 'JD',
         role: 'Veterinarian',
       },
       notes:
-        'DHPP, Rabies, and Bordetella boosters administered. Patient was cooperative. Weight: 48kg.',
+        'Rabies vaccine administered. Batch: RAB-2024-006. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2026-06-20. Weight: 48kg.',
       medications: [
-        {
-          name: 'DHPP Booster',
-          dosage: '1 mL',
-          frequency: 'Single dose',
-          duration: 'Annual',
-        },
         {
           name: 'Rabies Vaccine',
           dosage: '1 mL',
           frequency: 'Single dose',
           duration: '3 years',
         },
+      ],
+    },
+    {
+      id: 'mh-13-2b',
+      petId: 13,
+      date: '2024-07-15',
+      time: '2:00 PM',
+      type: 'vaccination',
+      title: 'DHPP Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. John Doe',
+        initials: 'JD',
+        role: 'Veterinarian',
+      },
+      notes:
+        'DHPP booster administered. Batch: DHPP-2024-006. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-07-15. Weight: 48kg.',
+      medications: [
         {
-          name: 'Bordetella',
-          dosage: '0.5 mL',
+          name: 'DHPP Booster',
+          dosage: '1 mL',
           frequency: 'Single dose',
           duration: 'Annual',
         },
@@ -1288,30 +1528,48 @@ export const mockMedicalHistory: Record<number, MedicalHistoryEntry[]> = {
     {
       id: 'mh-14-2',
       petId: 14,
-      date: '2023-12-10',
-      time: '10:00 AM',
+      date: '2024-11-25',
+      time: '2:00 PM',
       type: 'vaccination',
-      title: 'Puppy Vaccination Series',
-      diagnosis: 'Vaccinations administered',
+      title: 'Rabies Vaccination',
+      diagnosis: 'Vaccination administered',
       professional: {
-        name: 'Dr. Jane Doe',
+        name: 'Dr. John Doe',
         initials: 'JD',
         role: 'Veterinarian',
       },
       notes:
-        'DHPP booster (final in series) and Rabies vaccine given. Patient was calm. Weight: 2.5kg. Vaccination series complete.',
+        'Rabies vaccine administered. Batch: RAB-2024-007. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2026-11-25. Weight: 4.5kg.',
+      medications: [
+        {
+          name: 'Rabies Vaccine',
+          dosage: '1 mL',
+          frequency: 'Single dose',
+          duration: '3 years',
+        },
+      ],
+    },
+    {
+      id: 'mh-14-2b',
+      petId: 14,
+      date: '2024-12-10',
+      time: '10:00 AM',
+      type: 'vaccination',
+      title: 'DHPP Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. John Doe',
+        initials: 'JD',
+        role: 'Veterinarian',
+      },
+      notes:
+        'DHPP booster administered. Batch: DHPP-2024-007. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-12-10. Weight: 4.5kg.',
       medications: [
         {
           name: 'DHPP Booster',
           dosage: '1 mL',
           frequency: 'Single dose',
           duration: 'Annual',
-        },
-        {
-          name: 'Rabies Vaccine',
-          dosage: '1 mL',
-          frequency: 'Single dose',
-          duration: '3 years',
         },
       ],
     },
@@ -1417,18 +1675,42 @@ export const mockMedicalHistory: Record<number, MedicalHistoryEntry[]> = {
     {
       id: 'mh-16-2',
       petId: 16,
-      date: '2023-12-18',
-      time: '3:00 PM',
+      date: '2024-09-30',
+      time: '10:00 AM',
       type: 'vaccination',
-      title: 'Annual Vaccination',
-      diagnosis: 'Vaccinations current',
+      title: 'Rabies Vaccination',
+      diagnosis: 'Vaccination administered',
       professional: {
-        name: 'Dr. Jane Doe',
+        name: 'Dr. John Doe',
         initials: 'JD',
         role: 'Veterinarian',
       },
       notes:
-        'DHPP and Rabies boosters administered. Patient was calm and cooperative. Weight: 13.5kg.',
+        'Rabies vaccine administered. Batch: RAB-2024-008. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2026-09-30. Weight: 13.5kg.',
+      medications: [
+        {
+          name: 'Rabies Vaccine',
+          dosage: '1 mL',
+          frequency: 'Single dose',
+          duration: '3 years',
+        },
+      ],
+    },
+    {
+      id: 'mh-16-2b',
+      petId: 16,
+      date: '2024-10-20',
+      time: '2:00 PM',
+      type: 'vaccination',
+      title: 'DHPP Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. John Doe',
+        initials: 'JD',
+        role: 'Veterinarian',
+      },
+      notes:
+        'DHPP booster administered. Batch: DHPP-2024-008. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-10-20. Weight: 13.5kg.',
       medications: [
         {
           name: 'DHPP Booster',
@@ -1436,11 +1718,29 @@ export const mockMedicalHistory: Record<number, MedicalHistoryEntry[]> = {
           frequency: 'Single dose',
           duration: 'Annual',
         },
+      ],
+    },
+    {
+      id: 'mh-16-2c',
+      petId: 16,
+      date: '2024-11-05',
+      time: '11:00 AM',
+      type: 'vaccination',
+      title: 'Bordetella Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. John Doe',
+        initials: 'JD',
+        role: 'Veterinarian',
+      },
+      notes:
+        'Bordetella vaccine administered. Batch: BOR-2024-004. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-11-05. Weight: 13.5kg.',
+      medications: [
         {
-          name: 'Rabies Vaccine',
-          dosage: '1 mL',
+          name: 'Bordetella',
+          dosage: '0.5 mL',
           frequency: 'Single dose',
-          duration: '3 years',
+          duration: 'Annual',
         },
       ],
     },
@@ -1581,34 +1881,46 @@ export const mockMedicalHistory: Record<number, MedicalHistoryEntry[]> = {
     {
       id: 'mh-18-2',
       petId: 18,
-      date: '2023-12-28',
-      time: '11:00 AM',
+      date: '2024-07-25',
+      time: '10:00 AM',
       type: 'vaccination',
-      title: 'Annual Vaccination',
-      diagnosis: 'Vaccinations current',
+      title: 'Rabies Vaccination',
+      diagnosis: 'Vaccination administered',
       professional: {
-        name: 'Dr. Michael Chen',
-        initials: 'MC',
+        name: 'Dr. John Doe',
+        initials: 'JD',
         role: 'Veterinarian',
       },
       notes:
-        'DHPP, Rabies, and Bordetella boosters administered. Patient was calm and gentle. Weight: 68kg.',
+        'Rabies vaccine administered. Batch: RAB-2024-009. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2026-07-25. Weight: 68kg.',
       medications: [
-        {
-          name: 'DHPP Booster',
-          dosage: '1 mL',
-          frequency: 'Single dose',
-          duration: 'Annual',
-        },
         {
           name: 'Rabies Vaccine',
           dosage: '1 mL',
           frequency: 'Single dose',
           duration: '3 years',
         },
+      ],
+    },
+    {
+      id: 'mh-18-2b',
+      petId: 18,
+      date: '2024-08-10',
+      time: '2:00 PM',
+      type: 'vaccination',
+      title: 'DHPP Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. John Doe',
+        initials: 'JD',
+        role: 'Veterinarian',
+      },
+      notes:
+        'DHPP booster administered. Batch: DHPP-2024-009. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-08-10. Weight: 68kg.',
+      medications: [
         {
-          name: 'Bordetella',
-          dosage: '0.5 mL',
+          name: 'DHPP Booster',
+          dosage: '1 mL',
           frequency: 'Single dose',
           duration: 'Annual',
         },
@@ -1665,18 +1977,42 @@ export const mockMedicalHistory: Record<number, MedicalHistoryEntry[]> = {
     {
       id: 'mh-19-2',
       petId: 19,
-      date: '2023-12-30',
-      time: '2:00 PM',
+      date: '2024-09-15',
+      time: '10:00 AM',
       type: 'vaccination',
-      title: 'Annual Vaccination',
-      diagnosis: 'Vaccinations administered',
+      title: 'Rabies Vaccination',
+      diagnosis: 'Vaccination administered',
       professional: {
-        name: 'Dr. Emily Rodriguez',
-        initials: 'ER',
+        name: 'Dr. John Doe',
+        initials: 'JD',
         role: 'Veterinarian',
       },
       notes:
-        'DHPP, Rabies, and Bordetella boosters given. Patient was active but cooperative. Weight: 25kg.',
+        'Rabies vaccine administered. Batch: RAB-2024-012. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2026-09-15. Weight: 25kg.',
+      medications: [
+        {
+          name: 'Rabies Vaccine',
+          dosage: '1 mL',
+          frequency: 'Single dose',
+          duration: '3 years',
+        },
+      ],
+    },
+    {
+      id: 'mh-19-2b',
+      petId: 19,
+      date: '2024-10-30',
+      time: '2:00 PM',
+      type: 'vaccination',
+      title: 'DHPP Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. John Doe',
+        initials: 'JD',
+        role: 'Veterinarian',
+      },
+      notes:
+        'DHPP booster administered. Batch: DHPP-2024-012. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-10-30. Weight: 25kg.',
       medications: [
         {
           name: 'DHPP Booster',
@@ -1684,12 +2020,24 @@ export const mockMedicalHistory: Record<number, MedicalHistoryEntry[]> = {
           frequency: 'Single dose',
           duration: 'Annual',
         },
-        {
-          name: 'Rabies Vaccine',
-          dosage: '1 mL',
-          frequency: 'Single dose',
-          duration: '3 years',
-        },
+      ],
+    },
+    {
+      id: 'mh-19-2c',
+      petId: 19,
+      date: '2024-11-10',
+      time: '11:00 AM',
+      type: 'vaccination',
+      title: 'Bordetella Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. John Doe',
+        initials: 'JD',
+        role: 'Veterinarian',
+      },
+      notes:
+        'Bordetella vaccine administered. Batch: BOR-2024-006. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-11-10. Weight: 25kg.',
+      medications: [
         {
           name: 'Bordetella',
           dosage: '0.5 mL',
@@ -1925,34 +2273,46 @@ export const mockMedicalHistory: Record<number, MedicalHistoryEntry[]> = {
     {
       id: 'mh-22-2',
       petId: 22,
-      date: '2023-12-30',
-      time: '3:00 PM',
+      date: '2024-07-30',
+      time: '10:00 AM',
       type: 'vaccination',
-      title: 'Annual Vaccination',
-      diagnosis: 'Vaccinations current',
+      title: 'Rabies Vaccination',
+      diagnosis: 'Vaccination administered',
       professional: {
-        name: 'Dr. Jane Doe',
-        initials: 'JD',
+        name: 'Dr. Carlos Rodriguez',
+        initials: 'CR',
         role: 'Veterinarian',
       },
       notes:
-        'DHPP, Rabies, and Bordetella boosters administered. Patient was playful but cooperative. Weight: 28kg.',
+        'Rabies vaccine administered. Batch: RAB-2024-013. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2026-07-30. Weight: 28kg.',
       medications: [
-        {
-          name: 'DHPP Booster',
-          dosage: '1 mL',
-          frequency: 'Single dose',
-          duration: 'Annual',
-        },
         {
           name: 'Rabies Vaccine',
           dosage: '1 mL',
           frequency: 'Single dose',
           duration: '3 years',
         },
+      ],
+    },
+    {
+      id: 'mh-22-2b',
+      petId: 22,
+      date: '2024-08-25',
+      time: '2:00 PM',
+      type: 'vaccination',
+      title: 'DHPP Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. Carlos Rodriguez',
+        initials: 'CR',
+        role: 'Veterinarian',
+      },
+      notes:
+        'DHPP booster administered. Batch: DHPP-2024-013. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-08-25. Weight: 28kg.',
+      medications: [
         {
-          name: 'Bordetella',
-          dosage: '0.5 mL',
+          name: 'DHPP Booster',
+          dosage: '1 mL',
           frequency: 'Single dose',
           duration: 'Annual',
         },
@@ -2089,30 +2449,48 @@ export const mockMedicalHistory: Record<number, MedicalHistoryEntry[]> = {
     {
       id: 'mh-24-2',
       petId: 24,
-      date: '2024-01-08',
-      time: '2:00 PM',
+      date: '2024-11-30',
+      time: '10:00 AM',
       type: 'vaccination',
-      title: 'Puppy Vaccination Series',
-      diagnosis: 'Vaccinations administered',
+      title: 'Rabies Vaccination',
+      diagnosis: 'Vaccination administered',
       professional: {
-        name: 'Dr. Jane Doe',
-        initials: 'JD',
+        name: 'Dr. Patricia Martinez',
+        initials: 'PM',
         role: 'Veterinarian',
       },
       notes:
-        'DHPP booster (final in series) and Rabies vaccine given. Patient was calm and gentle. Weight: 6.2kg. Vaccination series complete.',
+        'Rabies vaccine administered. Batch: RAB-2024-014. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2026-11-30. Weight: 6.2kg.',
+      medications: [
+        {
+          name: 'Rabies Vaccine',
+          dosage: '1 mL',
+          frequency: 'Single dose',
+          duration: '3 years',
+        },
+      ],
+    },
+    {
+      id: 'mh-24-2b',
+      petId: 24,
+      date: '2024-12-15',
+      time: '2:00 PM',
+      type: 'vaccination',
+      title: 'DHPP Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. Patricia Martinez',
+        initials: 'PM',
+        role: 'Veterinarian',
+      },
+      notes:
+        'DHPP booster administered. Batch: DHPP-2024-014. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-12-15. Weight: 6.2kg.',
       medications: [
         {
           name: 'DHPP Booster',
           dosage: '1 mL',
           frequency: 'Single dose',
           duration: 'Annual',
-        },
-        {
-          name: 'Rabies Vaccine',
-          dosage: '1 mL',
-          frequency: 'Single dose',
-          duration: '3 years',
         },
       ],
     },
@@ -2239,18 +2617,42 @@ export const mockMedicalHistory: Record<number, MedicalHistoryEntry[]> = {
     {
       id: 'mh-26-2',
       petId: 26,
-      date: '2024-01-12',
-      time: '2:00 PM',
+      date: '2024-10-20',
+      time: '10:00 AM',
       type: 'vaccination',
-      title: 'Annual Vaccination',
-      diagnosis: 'Vaccinations current',
+      title: 'Rabies Vaccination',
+      diagnosis: 'Vaccination administered',
       professional: {
-        name: 'Dr. Michael Chen',
-        initials: 'MC',
+        name: 'Dr. Lisa Gonzalez',
+        initials: 'LG',
         role: 'Veterinarian',
       },
       notes:
-        'DHPP and Rabies boosters administered. Patient was calm. Weight: 11.5kg.',
+        'Rabies vaccine administered. Batch: RAB-2024-015. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2026-10-20. Weight: 11.5kg.',
+      medications: [
+        {
+          name: 'Rabies Vaccine',
+          dosage: '1 mL',
+          frequency: 'Single dose',
+          duration: '3 years',
+        },
+      ],
+    },
+    {
+      id: 'mh-26-2b',
+      petId: 26,
+      date: '2024-11-05',
+      time: '2:00 PM',
+      type: 'vaccination',
+      title: 'DHPP Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. Lisa Gonzalez',
+        initials: 'LG',
+        role: 'Veterinarian',
+      },
+      notes:
+        'DHPP booster administered. Batch: DHPP-2024-015. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-11-05. Weight: 11.5kg.',
       medications: [
         {
           name: 'DHPP Booster',
@@ -2258,11 +2660,29 @@ export const mockMedicalHistory: Record<number, MedicalHistoryEntry[]> = {
           frequency: 'Single dose',
           duration: 'Annual',
         },
+      ],
+    },
+    {
+      id: 'mh-26-2c',
+      petId: 26,
+      date: '2024-12-01',
+      time: '11:00 AM',
+      type: 'vaccination',
+      title: 'Bordetella Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. Lisa Gonzalez',
+        initials: 'LG',
+        role: 'Veterinarian',
+      },
+      notes:
+        'Bordetella vaccine administered. Batch: BOR-2024-007. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-12-01. Weight: 11.5kg.',
+      medications: [
         {
-          name: 'Rabies Vaccine',
-          dosage: '1 mL',
+          name: 'Bordetella',
+          dosage: '0.5 mL',
           frequency: 'Single dose',
-          duration: '3 years',
+          duration: 'Annual',
         },
       ],
     },
@@ -2388,34 +2808,46 @@ export const mockMedicalHistory: Record<number, MedicalHistoryEntry[]> = {
     {
       id: 'mh-28-2',
       petId: 28,
-      date: '2024-01-18',
-      time: '2:30 PM',
+      date: '2024-08-15',
+      time: '10:00 AM',
       type: 'vaccination',
-      title: 'Annual Vaccination',
-      diagnosis: 'Vaccinations current',
+      title: 'Rabies Vaccination',
+      diagnosis: 'Vaccination administered',
       professional: {
-        name: 'Dr. Jane Doe',
+        name: 'Dr. John Doe',
         initials: 'JD',
         role: 'Veterinarian',
       },
       notes:
-        'DHPP, Rabies, and Bordetella boosters administered. Patient was energetic but cooperative. Weight: 24kg.',
+        'Rabies vaccine administered. Batch: RAB-2024-016. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2026-08-15. Weight: 24kg.',
       medications: [
-        {
-          name: 'DHPP Booster',
-          dosage: '1 mL',
-          frequency: 'Single dose',
-          duration: 'Annual',
-        },
         {
           name: 'Rabies Vaccine',
           dosage: '1 mL',
           frequency: 'Single dose',
           duration: '3 years',
         },
+      ],
+    },
+    {
+      id: 'mh-28-2b',
+      petId: 28,
+      date: '2024-09-30',
+      time: '2:00 PM',
+      type: 'vaccination',
+      title: 'DHPP Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. John Doe',
+        initials: 'JD',
+        role: 'Veterinarian',
+      },
+      notes:
+        'DHPP booster administered. Batch: DHPP-2024-016. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-09-30. Weight: 24kg.',
+      medications: [
         {
-          name: 'Bordetella',
-          dosage: '0.5 mL',
+          name: 'DHPP Booster',
+          dosage: '1 mL',
           frequency: 'Single dose',
           duration: 'Annual',
         },
@@ -2544,18 +2976,42 @@ export const mockMedicalHistory: Record<number, MedicalHistoryEntry[]> = {
     {
       id: 'mh-30-2',
       petId: 30,
-      date: '2024-01-22',
-      time: '11:00 AM',
+      date: '2024-06-25',
+      time: '10:00 AM',
       type: 'vaccination',
-      title: 'Annual Vaccination',
-      diagnosis: 'Vaccinations current',
+      title: 'Rabies Vaccination',
+      diagnosis: 'Vaccination administered',
       professional: {
-        name: 'Dr. Michael Chen',
-        initials: 'MC',
+        name: 'Dr. Jennifer Ramirez',
+        initials: 'JR',
         role: 'Veterinarian',
       },
       notes:
-        'DHPP, Rabies, and Bordetella boosters administered. Patient was calm and cooperative. Weight: 42kg.',
+        'Rabies vaccine administered. Batch: RAB-2024-017. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2026-06-25. Weight: 42kg.',
+      medications: [
+        {
+          name: 'Rabies Vaccine',
+          dosage: '1 mL',
+          frequency: 'Single dose',
+          duration: '3 years',
+        },
+      ],
+    },
+    {
+      id: 'mh-30-2b',
+      petId: 30,
+      date: '2024-07-20',
+      time: '2:00 PM',
+      type: 'vaccination',
+      title: 'DHPP Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. Jennifer Ramirez',
+        initials: 'JR',
+        role: 'Veterinarian',
+      },
+      notes:
+        'DHPP booster administered. Batch: DHPP-2024-017. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-07-20. Weight: 42kg.',
       medications: [
         {
           name: 'DHPP Booster',
@@ -2563,12 +3019,24 @@ export const mockMedicalHistory: Record<number, MedicalHistoryEntry[]> = {
           frequency: 'Single dose',
           duration: 'Annual',
         },
-        {
-          name: 'Rabies Vaccine',
-          dosage: '1 mL',
-          frequency: 'Single dose',
-          duration: '3 years',
-        },
+      ],
+    },
+    {
+      id: 'mh-30-2c',
+      petId: 30,
+      date: '2024-08-05',
+      time: '11:00 AM',
+      type: 'vaccination',
+      title: 'Bordetella Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. Jennifer Ramirez',
+        initials: 'JR',
+        role: 'Veterinarian',
+      },
+      notes:
+        'Bordetella vaccine administered. Batch: BOR-2024-008. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-08-05. Weight: 42kg.',
+      medications: [
         {
           name: 'Bordetella',
           dosage: '0.5 mL',
@@ -2618,6 +3086,360 @@ export const mockMedicalHistory: Record<number, MedicalHistoryEntry[]> = {
         date: '2024-09-20',
         notes: 'Annual hip screening',
       },
+    },
+  ],
+  31: [
+    // Chloe - Shih Tzu
+    {
+      id: 'mh-31-1',
+      petId: 31,
+      date: '2024-11-05',
+      time: '10:00 AM',
+      type: 'vaccination',
+      title: 'Rabies Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. Maria Garcia',
+        initials: 'MG',
+        role: 'Veterinarian',
+      },
+      notes:
+        'Rabies vaccine administered. Batch: RAB-2024-018. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2026-11-05. Weight: 6.5kg.',
+      medications: [
+        {
+          name: 'Rabies Vaccine',
+          dosage: '1 mL',
+          frequency: 'Single dose',
+          duration: '3 years',
+        },
+      ],
+    },
+    {
+      id: 'mh-31-2',
+      petId: 31,
+      date: '2024-12-20',
+      time: '2:00 PM',
+      type: 'vaccination',
+      title: 'DHPP Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. Maria Garcia',
+        initials: 'MG',
+        role: 'Veterinarian',
+      },
+      notes:
+        'DHPP booster administered. Batch: DHPP-2024-018. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-12-20. Weight: 6.5kg.',
+      medications: [
+        {
+          name: 'DHPP Booster',
+          dosage: '1 mL',
+          frequency: 'Single dose',
+          duration: 'Annual',
+        },
+      ],
+    },
+  ],
+  32: [
+    // Max - Bernese Mountain Dog
+    {
+      id: 'mh-32-1',
+      petId: 32,
+      date: '2024-09-25',
+      time: '10:00 AM',
+      type: 'vaccination',
+      title: 'Rabies Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. Jose Hernandez',
+        initials: 'JH',
+        role: 'Veterinarian',
+      },
+      notes:
+        'Rabies vaccine administered. Batch: RAB-2024-019. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2026-09-25. Weight: 50kg.',
+      medications: [
+        {
+          name: 'Rabies Vaccine',
+          dosage: '1 mL',
+          frequency: 'Single dose',
+          duration: '3 years',
+        },
+      ],
+    },
+    {
+      id: 'mh-32-2',
+      petId: 32,
+      date: '2024-10-10',
+      time: '2:00 PM',
+      type: 'vaccination',
+      title: 'DHPP Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. Jose Hernandez',
+        initials: 'JH',
+        role: 'Veterinarian',
+      },
+      notes:
+        'DHPP booster administered. Batch: DHPP-2024-019. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-10-10. Weight: 50kg.',
+      medications: [
+        {
+          name: 'DHPP Booster',
+          dosage: '1 mL',
+          frequency: 'Single dose',
+          duration: 'Annual',
+        },
+      ],
+    },
+    {
+      id: 'mh-32-3',
+      petId: 32,
+      date: '2024-11-20',
+      time: '11:00 AM',
+      type: 'vaccination',
+      title: 'Bordetella Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. Jose Hernandez',
+        initials: 'JH',
+        role: 'Veterinarian',
+      },
+      notes:
+        'Bordetella vaccine administered. Batch: BOR-2024-009. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-11-20. Weight: 50kg.',
+      medications: [
+        {
+          name: 'Bordetella',
+          dosage: '0.5 mL',
+          frequency: 'Single dose',
+          duration: 'Annual',
+        },
+      ],
+    },
+  ],
+  33: [
+    // Riley - Golden Retriever
+    {
+      id: 'mh-33-1',
+      petId: 33,
+      date: '2024-08-30',
+      time: '10:00 AM',
+      type: 'vaccination',
+      title: 'Rabies Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. Robert Torres',
+        initials: 'RT',
+        role: 'Veterinarian',
+      },
+      notes:
+        'Rabies vaccine administered. Batch: RAB-2024-020. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2026-08-30. Weight: 30kg.',
+      medications: [
+        {
+          name: 'Rabies Vaccine',
+          dosage: '1 mL',
+          frequency: 'Single dose',
+          duration: '3 years',
+        },
+      ],
+    },
+    {
+      id: 'mh-33-2',
+      petId: 33,
+      date: '2024-09-18',
+      time: '2:00 PM',
+      type: 'vaccination',
+      title: 'DHPP Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. Robert Torres',
+        initials: 'RT',
+        role: 'Veterinarian',
+      },
+      notes:
+        'DHPP booster administered. Batch: DHPP-2024-020. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-09-18. Weight: 30kg.',
+      medications: [
+        {
+          name: 'DHPP Booster',
+          dosage: '1 mL',
+          frequency: 'Single dose',
+          duration: 'Annual',
+        },
+      ],
+    },
+  ],
+  34: [
+    // Jack - Jack Russell Terrier
+    {
+      id: 'mh-34-1',
+      petId: 34,
+      date: '2024-07-10',
+      time: '10:00 AM',
+      type: 'vaccination',
+      title: 'Rabies Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. Ana Martinez',
+        initials: 'AM',
+        role: 'Veterinarian',
+      },
+      notes:
+        'Rabies vaccine administered. Batch: RAB-2024-021. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2026-07-10. Weight: 8kg.',
+      medications: [
+        {
+          name: 'Rabies Vaccine',
+          dosage: '1 mL',
+          frequency: 'Single dose',
+          duration: '3 years',
+        },
+      ],
+    },
+    {
+      id: 'mh-34-2',
+      petId: 34,
+      date: '2024-08-20',
+      time: '2:00 PM',
+      type: 'vaccination',
+      title: 'DHPP Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. Ana Martinez',
+        initials: 'AM',
+        role: 'Veterinarian',
+      },
+      notes:
+        'DHPP booster administered. Batch: DHPP-2024-021. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-08-20. Weight: 8kg.',
+      medications: [
+        {
+          name: 'DHPP Booster',
+          dosage: '1 mL',
+          frequency: 'Single dose',
+          duration: 'Annual',
+        },
+      ],
+    },
+    {
+      id: 'mh-34-3',
+      petId: 34,
+      date: '2024-09-05',
+      time: '11:00 AM',
+      type: 'vaccination',
+      title: 'Bordetella Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. Ana Martinez',
+        initials: 'AM',
+        role: 'Veterinarian',
+      },
+      notes:
+        'Bordetella vaccine administered. Batch: BOR-2024-010. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-09-05. Weight: 8kg.',
+      medications: [
+        {
+          name: 'Bordetella',
+          dosage: '0.5 mL',
+          frequency: 'Single dose',
+          duration: 'Annual',
+        },
+      ],
+    },
+  ],
+  35: [
+    // Bear - Saint Bernard
+    {
+      id: 'mh-35-1',
+      petId: 35,
+      date: '2024-06-15',
+      time: '10:00 AM',
+      type: 'vaccination',
+      title: 'Rabies Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. Carmen Silva',
+        initials: 'CS',
+        role: 'Veterinarian',
+      },
+      notes:
+        'Rabies vaccine administered. Batch: RAB-2024-022. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2026-06-15. Weight: 70kg.',
+      medications: [
+        {
+          name: 'Rabies Vaccine',
+          dosage: '1 mL',
+          frequency: 'Single dose',
+          duration: '3 years',
+        },
+      ],
+    },
+    {
+      id: 'mh-35-2',
+      petId: 35,
+      date: '2024-07-05',
+      time: '2:00 PM',
+      type: 'vaccination',
+      title: 'DHPP Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. Carmen Silva',
+        initials: 'CS',
+        role: 'Veterinarian',
+      },
+      notes:
+        'DHPP booster administered. Batch: DHPP-2024-022. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-07-05. Weight: 70kg.',
+      medications: [
+        {
+          name: 'DHPP Booster',
+          dosage: '1 mL',
+          frequency: 'Single dose',
+          duration: 'Annual',
+        },
+      ],
+    },
+  ],
+  36: [
+    // Milo - Chihuahua
+    {
+      id: 'mh-36-1',
+      petId: 36,
+      date: '2024-12-10',
+      time: '10:00 AM',
+      type: 'vaccination',
+      title: 'Rabies Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. Luis Rodriguez',
+        initials: 'LR',
+        role: 'Veterinarian',
+      },
+      notes:
+        'Rabies vaccine administered. Batch: RAB-2024-023. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2026-12-10. Weight: 3kg.',
+      medications: [
+        {
+          name: 'Rabies Vaccine',
+          dosage: '1 mL',
+          frequency: 'Single dose',
+          duration: '3 years',
+        },
+      ],
+    },
+    {
+      id: 'mh-36-2',
+      petId: 36,
+      date: '2024-12-25',
+      time: '2:00 PM',
+      type: 'vaccination',
+      title: 'DHPP Vaccination',
+      diagnosis: 'Vaccination administered',
+      professional: {
+        name: 'Dr. Luis Rodriguez',
+        initials: 'LR',
+        role: 'Veterinarian',
+      },
+      notes:
+        'DHPP booster administered. Batch: DHPP-2024-023. Patient tolerated vaccine well with no adverse reactions observed. Next due: 2025-12-25. Weight: 3kg.',
+      medications: [
+        {
+          name: 'DHPP Booster',
+          dosage: '1 mL',
+          frequency: 'Single dose',
+          duration: 'Annual',
+        },
+      ],
     },
   ],
 };

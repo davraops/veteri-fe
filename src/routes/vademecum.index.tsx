@@ -55,7 +55,7 @@ export const Route = createFileRoute('/vademecum/')({
   component: Vademecum,
 });
 
-interface Medication {
+export interface Medication {
   id: string;
   name: string;
   activeIngredient: string;
@@ -780,7 +780,8 @@ const customMedications: Medication[] = [
   },
 ];
 
-const mockMedications: Medication[] = [
+// eslint-disable-next-line react-refresh/only-export-components
+export const mockMedications: Medication[] = [
   ...medicationsList,
   ...customMedications,
 ];

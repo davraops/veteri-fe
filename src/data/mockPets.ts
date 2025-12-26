@@ -1,3 +1,13 @@
+export interface Vaccination {
+  id: string;
+  name: string; // e.g., 'DHPP', 'Rabies', 'Bordetella', 'Lyme'
+  date: string; // ISO date string
+  nextDueDate?: string; // ISO date string - when next dose is due
+  batchNumber?: string;
+  veterinarian?: string; // Name of veterinarian who administered
+  validityMonths?: number; // How many months the vaccination is valid
+}
+
 export interface Pet {
   id: number;
   name: string;
@@ -13,6 +23,7 @@ export interface Pet {
   color?: string;
   microchip?: string;
   notes?: string;
+  vaccinations?: Vaccination[]; // Vaccination records (mainly for dogs)
 }
 
 export const mockPets: Pet[] = [
@@ -33,6 +44,35 @@ export const mockPets: Pet[] = [
     microchip: '123456789012345',
     notes:
       'Friendly and energetic dog. Loves playing fetch and going on long walks.',
+    vaccinations: [
+      {
+        id: 'v1',
+        name: 'DHPP',
+        date: '2024-10-15',
+        nextDueDate: '2025-10-15',
+        batchNumber: 'DHPP-2024-001',
+        veterinarian: 'Dr. John Doe',
+        validityMonths: 12,
+      },
+      {
+        id: 'v2',
+        name: 'Rabies',
+        date: '2024-11-20',
+        nextDueDate: '2026-11-20',
+        batchNumber: 'RAB-2024-002',
+        veterinarian: 'Dr. John Doe',
+        validityMonths: 24,
+      },
+      {
+        id: 'v3',
+        name: 'Bordetella',
+        date: '2024-09-10',
+        nextDueDate: '2025-09-10',
+        batchNumber: 'BOR-2024-001',
+        veterinarian: 'Dr. John Doe',
+        validityMonths: 12,
+      },
+    ],
   },
   {
     id: 2,
@@ -65,6 +105,26 @@ export const mockPets: Pet[] = [
     color: 'Black',
     microchip: '345678901234567',
     notes: 'Very playful and social. Great with children and other dogs.',
+    vaccinations: [
+      {
+        id: 'v4',
+        name: 'DHPP',
+        date: '2024-12-01',
+        nextDueDate: '2025-12-01',
+        batchNumber: 'DHPP-2024-003',
+        veterinarian: 'Dr. John Doe',
+        validityMonths: 12,
+      },
+      {
+        id: 'v5',
+        name: 'Rabies',
+        date: '2024-11-15',
+        nextDueDate: '2026-11-15',
+        batchNumber: 'RAB-2024-003',
+        veterinarian: 'Dr. John Doe',
+        validityMonths: 24,
+      },
+    ],
   },
   {
     id: 4,
@@ -81,6 +141,44 @@ export const mockPets: Pet[] = [
     color: 'Tri-color',
     microchip: '456789012345678',
     notes: 'Curious and active. Loves exploring and following scents.',
+    vaccinations: [
+      {
+        id: 'v6',
+        name: 'DHPP',
+        date: '2024-08-20',
+        nextDueDate: '2025-08-20',
+        batchNumber: 'DHPP-2024-002',
+        veterinarian: 'Dr. John Doe',
+        validityMonths: 12,
+      },
+      {
+        id: 'v7',
+        name: 'Rabies',
+        date: '2024-09-05',
+        nextDueDate: '2026-09-05',
+        batchNumber: 'RAB-2024-001',
+        veterinarian: 'Dr. John Doe',
+        validityMonths: 24,
+      },
+      {
+        id: 'v8',
+        name: 'Bordetella',
+        date: '2024-10-01',
+        nextDueDate: '2025-10-01',
+        batchNumber: 'BOR-2024-002',
+        veterinarian: 'Dr. John Doe',
+        validityMonths: 12,
+      },
+      {
+        id: 'v9',
+        name: 'Lyme',
+        date: '2024-09-15',
+        nextDueDate: '2025-09-15',
+        batchNumber: 'LYM-2024-001',
+        veterinarian: 'Dr. John Doe',
+        validityMonths: 12,
+      },
+    ],
   },
   {
     id: 5,
@@ -113,6 +211,26 @@ export const mockPets: Pet[] = [
     color: 'Brindle',
     microchip: '678901234567890',
     notes: 'Gentle and calm. Prefers shorter walks and indoor activities.',
+    vaccinations: [
+      {
+        id: 'v10',
+        name: 'DHPP',
+        date: '2024-11-10',
+        nextDueDate: '2025-11-10',
+        batchNumber: 'DHPP-2024-004',
+        veterinarian: 'Dr. John Doe',
+        validityMonths: 12,
+      },
+      {
+        id: 'v11',
+        name: 'Rabies',
+        date: '2024-10-25',
+        nextDueDate: '2026-10-25',
+        batchNumber: 'RAB-2024-004',
+        veterinarian: 'Dr. John Doe',
+        validityMonths: 24,
+      },
+    ],
   },
   {
     id: 11,
@@ -129,6 +247,35 @@ export const mockPets: Pet[] = [
     color: 'Black and White',
     microchip: '111111111111111',
     notes: 'Highly intelligent and energetic. Excellent herding instincts.',
+    vaccinations: [
+      {
+        id: 'v12',
+        name: 'DHPP',
+        date: '2024-09-25',
+        nextDueDate: '2025-09-25',
+        batchNumber: 'DHPP-2024-005',
+        veterinarian: 'Dr. John Doe',
+        validityMonths: 12,
+      },
+      {
+        id: 'v13',
+        name: 'Rabies',
+        date: '2024-08-30',
+        nextDueDate: '2026-08-30',
+        batchNumber: 'RAB-2024-005',
+        veterinarian: 'Dr. John Doe',
+        validityMonths: 24,
+      },
+      {
+        id: 'v14',
+        name: 'Bordetella',
+        date: '2024-10-05',
+        nextDueDate: '2025-10-05',
+        batchNumber: 'BOR-2024-003',
+        veterinarian: 'Dr. John Doe',
+        validityMonths: 12,
+      },
+    ],
   },
   {
     id: 12,
@@ -162,6 +309,26 @@ export const mockPets: Pet[] = [
     microchip: '333333333333333',
     notes:
       'Loyal and protective. Requires consistent training and socialization.',
+    vaccinations: [
+      {
+        id: 'v15',
+        name: 'DHPP',
+        date: '2024-07-15',
+        nextDueDate: '2025-07-15',
+        batchNumber: 'DHPP-2024-006',
+        veterinarian: 'Dr. John Doe',
+        validityMonths: 12,
+      },
+      {
+        id: 'v16',
+        name: 'Rabies',
+        date: '2024-06-20',
+        nextDueDate: '2026-06-20',
+        batchNumber: 'RAB-2024-006',
+        veterinarian: 'Dr. John Doe',
+        validityMonths: 24,
+      },
+    ],
   },
   {
     id: 14,
@@ -178,6 +345,26 @@ export const mockPets: Pet[] = [
     color: 'Blue and Tan',
     microchip: '444444444444444',
     notes: 'Small but confident. Enjoys being pampered and dressed up.',
+    vaccinations: [
+      {
+        id: 'v17',
+        name: 'DHPP',
+        date: '2024-12-10',
+        nextDueDate: '2025-12-10',
+        batchNumber: 'DHPP-2024-007',
+        veterinarian: 'Dr. John Doe',
+        validityMonths: 12,
+      },
+      {
+        id: 'v18',
+        name: 'Rabies',
+        date: '2024-11-25',
+        nextDueDate: '2026-11-25',
+        batchNumber: 'RAB-2024-007',
+        veterinarian: 'Dr. John Doe',
+        validityMonths: 24,
+      },
+    ],
   },
   {
     id: 15,
@@ -210,6 +397,35 @@ export const mockPets: Pet[] = [
     color: 'Brown',
     microchip: '666666666666666',
     notes: 'Friendly and gentle. Great family dog.',
+    vaccinations: [
+      {
+        id: 'v19',
+        name: 'DHPP',
+        date: '2024-10-20',
+        nextDueDate: '2025-10-20',
+        batchNumber: 'DHPP-2024-008',
+        veterinarian: 'Dr. John Doe',
+        validityMonths: 12,
+      },
+      {
+        id: 'v20',
+        name: 'Rabies',
+        date: '2024-09-30',
+        nextDueDate: '2026-09-30',
+        batchNumber: 'RAB-2024-008',
+        veterinarian: 'Dr. John Doe',
+        validityMonths: 24,
+      },
+      {
+        id: 'v21',
+        name: 'Bordetella',
+        date: '2024-11-05',
+        nextDueDate: '2025-11-05',
+        batchNumber: 'BOR-2024-004',
+        veterinarian: 'Dr. John Doe',
+        validityMonths: 12,
+      },
+    ],
   },
   {
     id: 17,
@@ -242,6 +458,26 @@ export const mockPets: Pet[] = [
     color: 'Fawn',
     microchip: '888888888888888',
     notes: 'Gentle giant. Very friendly despite large size.',
+    vaccinations: [
+      {
+        id: 'v22',
+        name: 'DHPP',
+        date: '2024-08-10',
+        nextDueDate: '2025-08-10',
+        batchNumber: 'DHPP-2024-009',
+        veterinarian: 'Dr. John Doe',
+        validityMonths: 12,
+      },
+      {
+        id: 'v23',
+        name: 'Rabies',
+        date: '2024-07-25',
+        nextDueDate: '2026-07-25',
+        batchNumber: 'RAB-2024-009',
+        veterinarian: 'Dr. John Doe',
+        validityMonths: 24,
+      },
+    ],
   },
   // mr-pet organization (13 pets)
   {
@@ -259,6 +495,35 @@ export const mockPets: Pet[] = [
     color: 'Black and Tan',
     microchip: '789012345678901',
     notes: 'Loyal and protective. Excellent guard dog with proper training.',
+    vaccinations: [
+      {
+        id: 'v24',
+        name: 'DHPP',
+        date: '2024-09-20',
+        nextDueDate: '2025-09-20',
+        batchNumber: 'DHPP-2024-010',
+        veterinarian: 'Dr. Lisa Gonzalez',
+        validityMonths: 12,
+      },
+      {
+        id: 'v25',
+        name: 'Rabies',
+        date: '2024-10-10',
+        nextDueDate: '2026-10-10',
+        batchNumber: 'RAB-2024-010',
+        veterinarian: 'Dr. Lisa Gonzalez',
+        validityMonths: 24,
+      },
+      {
+        id: 'v26',
+        name: 'Bordetella',
+        date: '2024-11-15',
+        nextDueDate: '2025-11-15',
+        batchNumber: 'BOR-2024-005',
+        veterinarian: 'Dr. Lisa Gonzalez',
+        validityMonths: 12,
+      },
+    ],
   },
   {
     id: 8,
@@ -275,6 +540,26 @@ export const mockPets: Pet[] = [
     color: 'Apricot',
     microchip: '890123456789012',
     notes: 'Intelligent and trainable. Requires regular grooming.',
+    vaccinations: [
+      {
+        id: 'v27',
+        name: 'DHPP',
+        date: '2024-12-05',
+        nextDueDate: '2025-12-05',
+        batchNumber: 'DHPP-2024-011',
+        veterinarian: 'Dr. Patricia Martinez',
+        validityMonths: 12,
+      },
+      {
+        id: 'v28',
+        name: 'Rabies',
+        date: '2024-11-20',
+        nextDueDate: '2026-11-20',
+        batchNumber: 'RAB-2024-011',
+        veterinarian: 'Dr. Patricia Martinez',
+        validityMonths: 24,
+      },
+    ],
   },
   {
     id: 19,
@@ -292,6 +577,35 @@ export const mockPets: Pet[] = [
     microchip: '191919191919191',
     notes:
       'Energetic and intelligent. Needs plenty of exercise and mental stimulation.',
+    vaccinations: [
+      {
+        id: 'v29',
+        name: 'DHPP',
+        date: '2024-10-30',
+        nextDueDate: '2025-10-30',
+        batchNumber: 'DHPP-2024-012',
+        veterinarian: 'Dr. John Doe',
+        validityMonths: 12,
+      },
+      {
+        id: 'v30',
+        name: 'Rabies',
+        date: '2024-09-15',
+        nextDueDate: '2026-09-15',
+        batchNumber: 'RAB-2024-012',
+        veterinarian: 'Dr. John Doe',
+        validityMonths: 24,
+      },
+      {
+        id: 'v31',
+        name: 'Bordetella',
+        date: '2024-11-10',
+        nextDueDate: '2025-11-10',
+        batchNumber: 'BOR-2024-006',
+        veterinarian: 'Dr. John Doe',
+        validityMonths: 12,
+      },
+    ],
   },
   {
     id: 20,
@@ -340,6 +654,26 @@ export const mockPets: Pet[] = [
     color: 'Brindle',
     microchip: '222222222222222',
     notes: 'Playful and energetic. Great with families and children.',
+    vaccinations: [
+      {
+        id: 'v32',
+        name: 'DHPP',
+        date: '2024-08-25',
+        nextDueDate: '2025-08-25',
+        batchNumber: 'DHPP-2024-013',
+        veterinarian: 'Dr. Carlos Rodriguez',
+        validityMonths: 12,
+      },
+      {
+        id: 'v33',
+        name: 'Rabies',
+        date: '2024-07-30',
+        nextDueDate: '2026-07-30',
+        batchNumber: 'RAB-2024-013',
+        veterinarian: 'Dr. Carlos Rodriguez',
+        validityMonths: 24,
+      },
+    ],
   },
   {
     id: 23,
@@ -372,6 +706,26 @@ export const mockPets: Pet[] = [
     color: 'Blenheim',
     microchip: '242424242424242',
     notes: 'Gentle and affectionate. Perfect lap dog.',
+    vaccinations: [
+      {
+        id: 'v34',
+        name: 'DHPP',
+        date: '2024-12-15',
+        nextDueDate: '2025-12-15',
+        batchNumber: 'DHPP-2024-014',
+        veterinarian: 'Dr. Patricia Martinez',
+        validityMonths: 12,
+      },
+      {
+        id: 'v35',
+        name: 'Rabies',
+        date: '2024-11-30',
+        nextDueDate: '2026-11-30',
+        batchNumber: 'RAB-2024-014',
+        veterinarian: 'Dr. Patricia Martinez',
+        validityMonths: 24,
+      },
+    ],
   },
   {
     id: 25,
@@ -404,6 +758,35 @@ export const mockPets: Pet[] = [
     color: 'Fawn',
     microchip: '262626262626262',
     notes: 'Playful and adaptable. Great apartment dog.',
+    vaccinations: [
+      {
+        id: 'v36',
+        name: 'DHPP',
+        date: '2024-11-05',
+        nextDueDate: '2025-11-05',
+        batchNumber: 'DHPP-2024-015',
+        veterinarian: 'Dr. Lisa Gonzalez',
+        validityMonths: 12,
+      },
+      {
+        id: 'v37',
+        name: 'Rabies',
+        date: '2024-10-20',
+        nextDueDate: '2026-10-20',
+        batchNumber: 'RAB-2024-015',
+        veterinarian: 'Dr. Lisa Gonzalez',
+        validityMonths: 24,
+      },
+      {
+        id: 'v38',
+        name: 'Bordetella',
+        date: '2024-12-01',
+        nextDueDate: '2025-12-01',
+        batchNumber: 'BOR-2024-007',
+        veterinarian: 'Dr. Lisa Gonzalez',
+        validityMonths: 12,
+      },
+    ],
   },
   {
     id: 27,
@@ -436,6 +819,26 @@ export const mockPets: Pet[] = [
     color: 'Gray and White',
     microchip: '282828282828282',
     notes: 'Energetic and independent. Requires lots of exercise.',
+    vaccinations: [
+      {
+        id: 'v39',
+        name: 'DHPP',
+        date: '2024-09-30',
+        nextDueDate: '2025-09-30',
+        batchNumber: 'DHPP-2024-016',
+        veterinarian: 'Dr. John Doe',
+        validityMonths: 12,
+      },
+      {
+        id: 'v40',
+        name: 'Rabies',
+        date: '2024-08-15',
+        nextDueDate: '2026-08-15',
+        batchNumber: 'RAB-2024-016',
+        veterinarian: 'Dr. John Doe',
+        validityMonths: 24,
+      },
+    ],
   },
   {
     id: 29,
@@ -501,6 +904,35 @@ export const mockPets: Pet[] = [
     color: 'Black and Rust',
     microchip: '303030303030303',
     notes: 'Loyal and alert. Excellent guard dog.',
+    vaccinations: [
+      {
+        id: 'v41',
+        name: 'DHPP',
+        date: '2024-07-20',
+        nextDueDate: '2025-07-20',
+        batchNumber: 'DHPP-2024-017',
+        veterinarian: 'Dr. Jennifer Ramirez',
+        validityMonths: 12,
+      },
+      {
+        id: 'v42',
+        name: 'Rabies',
+        date: '2024-06-25',
+        nextDueDate: '2026-06-25',
+        batchNumber: 'RAB-2024-017',
+        veterinarian: 'Dr. Jennifer Ramirez',
+        validityMonths: 24,
+      },
+      {
+        id: 'v43',
+        name: 'Bordetella',
+        date: '2024-08-05',
+        nextDueDate: '2025-08-05',
+        batchNumber: 'BOR-2024-008',
+        veterinarian: 'Dr. Jennifer Ramirez',
+        validityMonths: 12,
+      },
+    ],
   },
   {
     id: 31,
@@ -517,6 +949,26 @@ export const mockPets: Pet[] = [
     color: 'White and Gold',
     microchip: '313131313131313',
     notes: 'Affectionate and playful. Great companion dog.',
+    vaccinations: [
+      {
+        id: 'v44',
+        name: 'DHPP',
+        date: '2024-12-20',
+        nextDueDate: '2025-12-20',
+        batchNumber: 'DHPP-2024-018',
+        veterinarian: 'Dr. Maria Garcia',
+        validityMonths: 12,
+      },
+      {
+        id: 'v45',
+        name: 'Rabies',
+        date: '2024-11-05',
+        nextDueDate: '2026-11-05',
+        batchNumber: 'RAB-2024-018',
+        veterinarian: 'Dr. Maria Garcia',
+        validityMonths: 24,
+      },
+    ],
   },
   {
     id: 32,
@@ -549,6 +1001,35 @@ export const mockPets: Pet[] = [
     color: 'Tri-color',
     microchip: '333333333333333',
     notes: 'Gentle and calm. Great family dog with children.',
+    vaccinations: [
+      {
+        id: 'v46',
+        name: 'DHPP',
+        date: '2024-10-10',
+        nextDueDate: '2025-10-10',
+        batchNumber: 'DHPP-2024-019',
+        veterinarian: 'Dr. Jose Hernandez',
+        validityMonths: 12,
+      },
+      {
+        id: 'v47',
+        name: 'Rabies',
+        date: '2024-09-25',
+        nextDueDate: '2026-09-25',
+        batchNumber: 'RAB-2024-019',
+        veterinarian: 'Dr. Jose Hernandez',
+        validityMonths: 24,
+      },
+      {
+        id: 'v48',
+        name: 'Bordetella',
+        date: '2024-11-20',
+        nextDueDate: '2025-11-20',
+        batchNumber: 'BOR-2024-009',
+        veterinarian: 'Dr. Jose Hernandez',
+        validityMonths: 12,
+      },
+    ],
   },
   {
     id: 34,
@@ -581,6 +1062,26 @@ export const mockPets: Pet[] = [
     color: 'Golden',
     microchip: '353535353535353',
     notes: 'Friendly and intelligent. Great with families and other pets.',
+    vaccinations: [
+      {
+        id: 'v49',
+        name: 'DHPP',
+        date: '2024-09-18',
+        nextDueDate: '2025-09-18',
+        batchNumber: 'DHPP-2024-020',
+        veterinarian: 'Dr. Robert Torres',
+        validityMonths: 12,
+      },
+      {
+        id: 'v50',
+        name: 'Rabies',
+        date: '2024-08-30',
+        nextDueDate: '2026-08-30',
+        batchNumber: 'RAB-2024-020',
+        veterinarian: 'Dr. Robert Torres',
+        validityMonths: 24,
+      },
+    ],
   },
   {
     id: 36,
@@ -614,6 +1115,35 @@ export const mockPets: Pet[] = [
     microchip: '373737373737373',
     notes:
       'Energetic and intelligent. Requires lots of exercise and mental stimulation.',
+    vaccinations: [
+      {
+        id: 'v51',
+        name: 'DHPP',
+        date: '2024-08-20',
+        nextDueDate: '2025-08-20',
+        batchNumber: 'DHPP-2024-021',
+        veterinarian: 'Dr. Ana Martinez',
+        validityMonths: 12,
+      },
+      {
+        id: 'v52',
+        name: 'Rabies',
+        date: '2024-07-10',
+        nextDueDate: '2026-07-10',
+        batchNumber: 'RAB-2024-021',
+        veterinarian: 'Dr. Ana Martinez',
+        validityMonths: 24,
+      },
+      {
+        id: 'v53',
+        name: 'Bordetella',
+        date: '2024-09-05',
+        nextDueDate: '2025-09-05',
+        batchNumber: 'BOR-2024-010',
+        veterinarian: 'Dr. Ana Martinez',
+        validityMonths: 12,
+      },
+    ],
   },
   {
     id: 38,
@@ -646,6 +1176,26 @@ export const mockPets: Pet[] = [
     color: 'Red and White',
     microchip: '393939393939393',
     notes: 'Gentle giant. Very patient and good with children.',
+    vaccinations: [
+      {
+        id: 'v54',
+        name: 'DHPP',
+        date: '2024-07-05',
+        nextDueDate: '2025-07-05',
+        batchNumber: 'DHPP-2024-022',
+        veterinarian: 'Dr. Carmen Silva',
+        validityMonths: 12,
+      },
+      {
+        id: 'v55',
+        name: 'Rabies',
+        date: '2024-06-15',
+        nextDueDate: '2026-06-15',
+        batchNumber: 'RAB-2024-022',
+        veterinarian: 'Dr. Carmen Silva',
+        validityMonths: 24,
+      },
+    ],
   },
   {
     id: 40,
@@ -662,5 +1212,25 @@ export const mockPets: Pet[] = [
     color: 'Tan',
     microchip: '404040404040404',
     notes: 'Small but confident. Loyal to one person.',
+    vaccinations: [
+      {
+        id: 'v56',
+        name: 'DHPP',
+        date: '2024-12-25',
+        nextDueDate: '2025-12-25',
+        batchNumber: 'DHPP-2024-023',
+        veterinarian: 'Dr. Luis Rodriguez',
+        validityMonths: 12,
+      },
+      {
+        id: 'v57',
+        name: 'Rabies',
+        date: '2024-12-10',
+        nextDueDate: '2026-12-10',
+        batchNumber: 'RAB-2024-023',
+        veterinarian: 'Dr. Luis Rodriguez',
+        validityMonths: 24,
+      },
+    ],
   },
 ];

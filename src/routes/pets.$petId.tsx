@@ -14,7 +14,12 @@ import {
   Button,
   Chip,
 } from '@mui/material';
-import { Edit as EditIcon } from '@mui/icons-material';
+import {
+  Edit as EditIcon,
+  Vaccines as VaccinesIcon,
+  Warning as WarningIcon,
+  CheckCircle as CheckCircleIcon,
+} from '@mui/icons-material';
 import { Topbar } from '@/components/Topbar';
 import { Sidebar } from '@/components/Sidebar';
 import { mockPets } from '@/data/mockPets';
@@ -95,6 +100,7 @@ function PetProfile() {
           color: (search.color as string) || '',
           microchip: (search.microchip as string) || '',
           notes: (search.notes as string) || '',
+          vaccinations: undefined,
         }
       : (() => {
           // Try to find pet in mock data
@@ -119,6 +125,7 @@ function PetProfile() {
               color: foundPet.color || '',
               microchip: foundPet.microchip || '',
               notes: foundPet.notes || '',
+              vaccinations: foundPet.vaccinations || [],
             };
           }
 
@@ -136,6 +143,7 @@ function PetProfile() {
             color: 'Golden',
             microchip: '123456789012345',
             notes: 'Friendly and energetic dog. Loves playing fetch.',
+            vaccinations: [],
           };
         })();
 
@@ -181,6 +189,160 @@ function PetProfile() {
     petData.ownerId && petData.ownerId > 0
       ? mockOwners.find((o) => o.id === petData.ownerId)
       : null;
+
+  // Get vaccinations
+  const vaccinations = petData.vaccinations || [];
+
+  // Check if any vaccination is due soon (within 30 days)
+  const getVaccinationStatus = (nextDueDate?: string) => {
+    if (!nextDueDate) return 'unknown';
+    const dueDate = new Date(nextDueDate);
+    const today = new Date();
+    const daysUntilDue = Math.ceil(
+      (dueDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+    );
+
+    if (daysUntilDue < 0) return 'overdue';
+    if (daysUntilDue <= 30) return 'due_soon';
+    return 'current';
+  };
+
+  // Get recommended vaccinations based on species and best practices
+  const getRecommendedVaccinations = (species: string) => {
+    const speciesLower = species.toLowerCase();
+
+    if (speciesLower === 'dog') {
+      return [
+        {
+          name: 'DHPP',
+          category: 'Core',
+          frequency: 'Annual',
+          description: 'Distemper, Hepatitis, Parvovirus, Parainfluenza',
+        },
+        {
+          name: 'Rabies',
+          category: 'Core',
+          frequency: '1-3 years',
+          description: 'Required by law in most areas',
+        },
+        {
+          name: 'Bordetella',
+          category: 'Non-Core',
+          frequency: 'Annual',
+          description: 'Kennel cough prevention',
+        },
+        {
+          name: 'Lyme',
+          category: 'Non-Core',
+          frequency: 'Annual',
+          description: 'Recommended in tick-endemic areas',
+        },
+        {
+          name: 'Leptospirosis',
+          category: 'Non-Core',
+          frequency: 'Annual',
+          description: 'Bacterial disease prevention',
+        },
+        {
+          name: 'Canine Influenza',
+          category: 'Non-Core',
+          frequency: 'Annual',
+          description: 'Dog flu prevention',
+        },
+      ];
+    } else if (speciesLower === 'cat') {
+      return [
+        {
+          name: 'FVRCP',
+          category: 'Core',
+          frequency: 'Annual',
+          description:
+            'Feline Viral Rhinotracheitis, Calicivirus, Panleukopenia',
+        },
+        {
+          name: 'Rabies',
+          category: 'Core',
+          frequency: '1-3 years',
+          description: 'Required by law in most areas',
+        },
+        {
+          name: 'Feline Leukemia',
+          category: 'Non-Core',
+          frequency: 'Annual',
+          description: 'Recommended for outdoor cats',
+        },
+        {
+          name: 'FIV',
+          category: 'Non-Core',
+          frequency: 'As needed',
+          description: 'Feline Immunodeficiency Virus',
+        },
+      ];
+    }
+
+    return [];
+  };
+
+  // Get pending vaccinations (recommended but not administered or expired)
+  const getPendingVaccinations = () => {
+    const recommended = getRecommendedVaccinations(petData.type);
+    const pending: Array<{
+      name: string;
+      category: string;
+      frequency: string;
+      description: string;
+      reason: string;
+    }> = [];
+
+    recommended.forEach((rec) => {
+      // Normalize names for comparison (handle variations like "Rabies" vs "Rabies Vaccine")
+      const normalizeName = (name: string) => {
+        return name
+          .toLowerCase()
+          .replace(/\s+/g, ' ')
+          .replace(/\b(vaccine|vaccination|shot)\b/gi, '')
+          .trim();
+      };
+
+      const recNameNormalized = normalizeName(rec.name);
+
+      // Check if pet has this vaccination
+      const existingVaccination = vaccinations.find((v) => {
+        const vacNameNormalized = normalizeName(v.name);
+        return vacNameNormalized === recNameNormalized;
+      });
+
+      if (!existingVaccination) {
+        // Vaccination never administered
+        pending.push({
+          ...rec,
+          reason: 'Not administered',
+        });
+      } else if (existingVaccination.nextDueDate) {
+        // Check if vaccination is expired
+        const status = getVaccinationStatus(existingVaccination.nextDueDate);
+        if (status === 'overdue') {
+          pending.push({
+            ...rec,
+            reason: 'Overdue - needs booster',
+          });
+        }
+      } else {
+        // Vaccination exists but no next due date - might need initial series completion
+        // For now, we'll consider it pending if it's a core vaccine without next due date
+        if (rec.category === 'Core') {
+          pending.push({
+            ...rec,
+            reason: 'May need booster or completion',
+          });
+        }
+      }
+    });
+
+    return pending;
+  };
+
+  const pendingVaccinations = getPendingVaccinations();
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
@@ -751,6 +913,377 @@ function PetProfile() {
               </Paper>
             </Box>
           </Box>
+
+          {/* Vaccinations Section - List Format */}
+          {vaccinations.length > 0 && (
+            <Paper
+              sx={{
+                padding: 3,
+                backgroundColor: '#ffffff',
+                border: '1px solid #d0d7de',
+                borderRadius: '8px',
+                marginTop: 3,
+              }}
+            >
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1.5,
+                  marginBottom: 2.5,
+                }}
+              >
+                <VaccinesIcon
+                  sx={{
+                    color: getOrganizationColor(petData.organization),
+                    fontSize: '22px',
+                  }}
+                />
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: 600,
+                    color: '#24292f',
+                  }}
+                >
+                  Vaccinations
+                </Typography>
+              </Box>
+
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                {vaccinations.map((vaccination, index) => {
+                  const status = getVaccinationStatus(vaccination.nextDueDate);
+                  const isOverdue = status === 'overdue';
+                  const isDueSoon = status === 'due_soon';
+
+                  return (
+                    <Box key={vaccination.id}>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 2,
+                          padding: 2,
+                          borderRadius: '6px',
+                          backgroundColor: isOverdue
+                            ? '#fee2e2'
+                            : isDueSoon
+                              ? '#fef3c7'
+                              : '#f6f8fa',
+                          border: `1px solid ${
+                            isOverdue
+                              ? '#dc2626'
+                              : isDueSoon
+                                ? '#f59e0b'
+                                : '#e1e4e8'
+                          }`,
+                          '&:hover': {
+                            backgroundColor: isOverdue
+                              ? '#fecaca'
+                              : isDueSoon
+                                ? '#fde68a'
+                                : '#f0f0f0',
+                          },
+                        }}
+                      >
+                        {/* Status Icon */}
+                        <Box sx={{ flexShrink: 0 }}>
+                          {isOverdue ? (
+                            <WarningIcon
+                              sx={{ color: '#dc2626', fontSize: '24px' }}
+                            />
+                          ) : isDueSoon ? (
+                            <WarningIcon
+                              sx={{ color: '#f59e0b', fontSize: '24px' }}
+                            />
+                          ) : (
+                            <CheckCircleIcon
+                              sx={{ color: '#10b981', fontSize: '24px' }}
+                            />
+                          )}
+                        </Box>
+
+                        {/* Vaccination Info */}
+                        <Box sx={{ flex: 1, minWidth: 0 }}>
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: 1.5,
+                              marginBottom: 0.5,
+                              flexWrap: 'wrap',
+                            }}
+                          >
+                            <Typography
+                              sx={{
+                                fontSize: '16px',
+                                fontWeight: 600,
+                                color: '#24292f',
+                              }}
+                            >
+                              {vaccination.name}
+                            </Typography>
+                            {isOverdue && (
+                              <Chip
+                                label="Overdue"
+                                size="small"
+                                sx={{
+                                  backgroundColor: '#dc2626',
+                                  color: '#ffffff',
+                                  fontSize: '10px',
+                                  height: '20px',
+                                  fontWeight: 600,
+                                }}
+                              />
+                            )}
+                            {isDueSoon && !isOverdue && (
+                              <Chip
+                                label="Due Soon"
+                                size="small"
+                                sx={{
+                                  backgroundColor: '#f59e0b',
+                                  color: '#ffffff',
+                                  fontSize: '10px',
+                                  height: '20px',
+                                  fontWeight: 600,
+                                }}
+                              />
+                            )}
+                          </Box>
+
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              flexWrap: 'wrap',
+                              gap: 2,
+                              alignItems: 'center',
+                            }}
+                          >
+                            <Typography
+                              sx={{
+                                fontSize: '13px',
+                                color: '#57606a',
+                              }}
+                            >
+                              <strong>Date:</strong>{' '}
+                              {new Date(vaccination.date).toLocaleDateString(
+                                'en-US',
+                                {
+                                  year: 'numeric',
+                                  month: 'short',
+                                  day: 'numeric',
+                                }
+                              )}
+                            </Typography>
+
+                            {vaccination.nextDueDate && (
+                              <Typography
+                                sx={{
+                                  fontSize: '13px',
+                                  color: isOverdue
+                                    ? '#dc2626'
+                                    : isDueSoon
+                                      ? '#f59e0b'
+                                      : '#57606a',
+                                  fontWeight:
+                                    isOverdue || isDueSoon ? 600 : 400,
+                                }}
+                              >
+                                <strong>Next Due:</strong>{' '}
+                                {new Date(
+                                  vaccination.nextDueDate
+                                ).toLocaleDateString('en-US', {
+                                  year: 'numeric',
+                                  month: 'short',
+                                  day: 'numeric',
+                                })}
+                              </Typography>
+                            )}
+
+                            {vaccination.batchNumber && (
+                              <Typography
+                                sx={{
+                                  fontSize: '13px',
+                                  color: '#57606a',
+                                  fontFamily: 'monospace',
+                                }}
+                              >
+                                <strong>Batch:</strong>{' '}
+                                {vaccination.batchNumber}
+                              </Typography>
+                            )}
+
+                            {vaccination.veterinarian && (
+                              <Typography
+                                sx={{
+                                  fontSize: '13px',
+                                  color: '#57606a',
+                                }}
+                              >
+                                <strong>By:</strong> {vaccination.veterinarian}
+                              </Typography>
+                            )}
+                          </Box>
+                        </Box>
+                      </Box>
+                      {index < vaccinations.length - 1 && (
+                        <Divider sx={{ marginY: 1 }} />
+                      )}
+                    </Box>
+                  );
+                })}
+              </Box>
+            </Paper>
+          )}
+
+          {/* Pending Vaccinations Section */}
+          {pendingVaccinations.length > 0 && (
+            <Paper
+              sx={{
+                padding: 3,
+                backgroundColor: '#ffffff',
+                border: '1px solid #d0d7de',
+                borderRadius: '8px',
+                marginTop: 3,
+              }}
+            >
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1.5,
+                  marginBottom: 2.5,
+                }}
+              >
+                <WarningIcon
+                  sx={{
+                    color: '#f59e0b',
+                    fontSize: '22px',
+                  }}
+                />
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: 600,
+                    color: '#24292f',
+                  }}
+                >
+                  Pending Vaccinations
+                </Typography>
+                <Chip
+                  label={pendingVaccinations.length}
+                  size="small"
+                  sx={{
+                    backgroundColor: '#fef3c7',
+                    color: '#f59e0b',
+                    fontWeight: 600,
+                    fontSize: '11px',
+                    height: '22px',
+                  }}
+                />
+              </Box>
+
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                {pendingVaccinations.map((vaccination, index) => (
+                  <Box key={`pending-${vaccination.name}-${index}`}>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        gap: 2,
+                        padding: 2,
+                        borderRadius: '6px',
+                        backgroundColor: '#fef3c7',
+                        border: '1px solid #f59e0b',
+                      }}
+                    >
+                      <WarningIcon
+                        sx={{
+                          color: '#f59e0b',
+                          fontSize: '20px',
+                          flexShrink: 0,
+                          marginTop: 0.5,
+                        }}
+                      />
+
+                      <Box sx={{ flex: 1, minWidth: 0 }}>
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 1.5,
+                            marginBottom: 0.5,
+                            flexWrap: 'wrap',
+                          }}
+                        >
+                          <Typography
+                            sx={{
+                              fontSize: '16px',
+                              fontWeight: 600,
+                              color: '#24292f',
+                            }}
+                          >
+                            {vaccination.name}
+                          </Typography>
+                          <Chip
+                            label={vaccination.category}
+                            size="small"
+                            sx={{
+                              backgroundColor:
+                                vaccination.category === 'Core'
+                                  ? '#dbeafe'
+                                  : '#f3f4f6',
+                              color:
+                                vaccination.category === 'Core'
+                                  ? '#2563eb'
+                                  : '#57606a',
+                              fontSize: '10px',
+                              height: '20px',
+                              fontWeight: 500,
+                            }}
+                          />
+                          <Chip
+                            label={vaccination.reason}
+                            size="small"
+                            sx={{
+                              backgroundColor: '#fee2e2',
+                              color: '#dc2626',
+                              fontSize: '10px',
+                              height: '20px',
+                              fontWeight: 500,
+                            }}
+                          />
+                        </Box>
+
+                        <Typography
+                          sx={{
+                            fontSize: '13px',
+                            color: '#57606a',
+                            marginBottom: 0.5,
+                          }}
+                        >
+                          {vaccination.description}
+                        </Typography>
+
+                        <Typography
+                          sx={{
+                            fontSize: '12px',
+                            color: '#57606a',
+                            fontStyle: 'italic',
+                          }}
+                        >
+                          Recommended frequency: {vaccination.frequency}
+                        </Typography>
+                      </Box>
+                    </Box>
+                    {index < pendingVaccinations.length - 1 && (
+                      <Divider sx={{ marginY: 1 }} />
+                    )}
+                  </Box>
+                ))}
+              </Box>
+            </Paper>
+          )}
         </Box>
       </Box>
     </Box>

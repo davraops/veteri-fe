@@ -15,6 +15,11 @@ import {
   IconButton,
   ListItemIcon,
   ListItemText,
+  Paper,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from '@mui/material';
 import { Topbar } from '@/components/Topbar';
 import { Sidebar } from '@/components/Sidebar';
@@ -30,6 +35,12 @@ import {
   Lock as LockIcon,
   Search as SearchIcon,
   Pets as PetsIcon,
+  LocalHospital as ConsultationIcon,
+  Healing as SurgeryIcon,
+  Warning as EmergencyIcon,
+  Vaccines as VaccinationIcon,
+  ContentCut as GroomingIcon,
+  Assignment as FollowUpIcon,
 } from '@mui/icons-material';
 
 export const Route = createFileRoute('/')({
@@ -52,6 +63,10 @@ function Dashboard() {
   );
   const [selectedModel, setSelectedModel] = useState('veterai-3.1');
   const [queryValue, setQueryValue] = useState('');
+  const [emergencyModalOpen, setEmergencyModalOpen] = useState(false);
+  const [groomingModalOpen, setGroomingModalOpen] = useState(false);
+  const [surgeryModalOpen, setSurgeryModalOpen] = useState(false);
+  const [followUpModalOpen, setFollowUpModalOpen] = useState(false);
 
   // Mock feed posts
   const feedPosts = [
@@ -1076,6 +1091,199 @@ function Dashboard() {
             </Box>
           </Box>
 
+          {/* Quick Actions Section */}
+          <Box sx={{ marginTop: 4 }}>
+            <Typography
+              sx={{
+                fontSize: '14px',
+                fontWeight: 600,
+                color: '#57606a',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px',
+                marginBottom: 2,
+              }}
+            >
+              Quick Actions
+            </Typography>
+            <Paper
+              sx={{
+                padding: 3,
+                backgroundColor: '#ffffff',
+                border: '1px solid #d0d7de',
+                borderRadius: '8px',
+              }}
+            >
+              <Box
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: {
+                    xs: 'repeat(2, 1fr)',
+                    sm: 'repeat(3, 1fr)',
+                    md: 'repeat(6, 1fr)',
+                  },
+                  gap: 2,
+                }}
+              >
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  onClick={() => {
+                    navigate({ to: '/consultations/new' });
+                  }}
+                  sx={{
+                    height: '100px',
+                    flexDirection: 'column',
+                    gap: 1,
+                    padding: 2,
+                    borderColor: '#bfdbfe',
+                    color: '#2563eb',
+                    backgroundColor: '#eff6ff',
+                    textTransform: 'none',
+                    fontSize: '14px',
+                    fontWeight: 500,
+                    '&:hover': {
+                      borderColor: '#2563eb',
+                      backgroundColor: '#dbeafe',
+                    },
+                  }}
+                >
+                  <ConsultationIcon sx={{ fontSize: '32px' }} />
+                  Start Consultation
+                </Button>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  onClick={() => {
+                    setFollowUpModalOpen(true);
+                  }}
+                  sx={{
+                    height: '100px',
+                    flexDirection: 'column',
+                    gap: 1,
+                    padding: 2,
+                    borderColor: '#bae6fd',
+                    color: '#0284c7',
+                    backgroundColor: '#f0f9ff',
+                    textTransform: 'none',
+                    fontSize: '14px',
+                    fontWeight: 500,
+                    '&:hover': {
+                      borderColor: '#0284c7',
+                      backgroundColor: '#e0f2fe',
+                    },
+                  }}
+                >
+                  <FollowUpIcon sx={{ fontSize: '32px' }} />
+                  Start Follow-up
+                </Button>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  onClick={() => {
+                    setSurgeryModalOpen(true);
+                  }}
+                  sx={{
+                    height: '100px',
+                    flexDirection: 'column',
+                    gap: 1,
+                    padding: 2,
+                    borderColor: '#fecaca',
+                    color: '#dc2626',
+                    backgroundColor: '#fef2f2',
+                    textTransform: 'none',
+                    fontSize: '14px',
+                    fontWeight: 500,
+                    '&:hover': {
+                      borderColor: '#dc2626',
+                      backgroundColor: '#fee2e2',
+                    },
+                  }}
+                >
+                  <SurgeryIcon sx={{ fontSize: '32px' }} />
+                  Start Surgery
+                </Button>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  onClick={() => {
+                    setEmergencyModalOpen(true);
+                  }}
+                  sx={{
+                    height: '100px',
+                    flexDirection: 'column',
+                    gap: 1,
+                    padding: 2,
+                    borderColor: '#fecaca',
+                    color: '#ef4444',
+                    backgroundColor: '#fef2f2',
+                    textTransform: 'none',
+                    fontSize: '14px',
+                    fontWeight: 500,
+                    '&:hover': {
+                      borderColor: '#ef4444',
+                      backgroundColor: '#fee2e2',
+                    },
+                  }}
+                >
+                  <EmergencyIcon sx={{ fontSize: '32px' }} />
+                  Start Emergency
+                </Button>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  onClick={() => {
+                    navigate({ to: '/vaccinations/new' });
+                  }}
+                  sx={{
+                    height: '100px',
+                    flexDirection: 'column',
+                    gap: 1,
+                    padding: 2,
+                    borderColor: '#bbf7d0',
+                    color: '#10b981',
+                    backgroundColor: '#f0fdf4',
+                    textTransform: 'none',
+                    fontSize: '14px',
+                    fontWeight: 500,
+                    '&:hover': {
+                      borderColor: '#10b981',
+                      backgroundColor: '#dcfce7',
+                    },
+                  }}
+                >
+                  <VaccinationIcon sx={{ fontSize: '32px' }} />
+                  Start Vaccination
+                </Button>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  onClick={() => {
+                    setGroomingModalOpen(true);
+                  }}
+                  sx={{
+                    height: '100px',
+                    flexDirection: 'column',
+                    gap: 1,
+                    padding: 2,
+                    borderColor: '#fde68a',
+                    color: '#d97706',
+                    backgroundColor: '#fef3c7',
+                    textTransform: 'none',
+                    fontSize: '14px',
+                    fontWeight: 500,
+                    '&:hover': {
+                      borderColor: '#d97706',
+                      backgroundColor: '#fde68a',
+                    },
+                  }}
+                >
+                  <GroomingIcon sx={{ fontSize: '32px' }} />
+                  Start Grooming
+                </Button>
+              </Box>
+            </Paper>
+          </Box>
+
           {/* Feed Section */}
           <Box sx={{ marginTop: 4 }}>
             <Typography
@@ -1327,6 +1535,167 @@ function Dashboard() {
               </ListItemText>
             </MenuItem>
           </Menu>
+
+          {/* Under Construction Modals */}
+          <Dialog
+            open={emergencyModalOpen}
+            onClose={() => setEmergencyModalOpen(false)}
+            maxWidth="sm"
+            fullWidth
+          >
+            <DialogTitle
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1.5,
+                fontWeight: 600,
+              }}
+            >
+              <EmergencyIcon sx={{ color: '#ef4444', fontSize: '24px' }} />
+              New Emergency
+            </DialogTitle>
+            <DialogContent>
+              <Typography sx={{ color: '#57606a', fontSize: '14px' }}>
+                This feature is currently under construction. Please check back
+                soon!
+              </Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button
+                onClick={() => setEmergencyModalOpen(false)}
+                variant="contained"
+                sx={{
+                  textTransform: 'none',
+                  backgroundColor: '#ef4444',
+                  '&:hover': {
+                    backgroundColor: '#dc2626',
+                  },
+                }}
+              >
+                Close
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+          <Dialog
+            open={groomingModalOpen}
+            onClose={() => setGroomingModalOpen(false)}
+            maxWidth="sm"
+            fullWidth
+          >
+            <DialogTitle
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1.5,
+                fontWeight: 600,
+              }}
+            >
+              <GroomingIcon sx={{ color: '#d97706', fontSize: '24px' }} />
+              New Grooming
+            </DialogTitle>
+            <DialogContent>
+              <Typography sx={{ color: '#57606a', fontSize: '14px' }}>
+                This feature is currently under construction. Please check back
+                soon!
+              </Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button
+                onClick={() => setGroomingModalOpen(false)}
+                variant="contained"
+                sx={{
+                  textTransform: 'none',
+                  backgroundColor: '#d97706',
+                  '&:hover': {
+                    backgroundColor: '#b45309',
+                  },
+                }}
+              >
+                Close
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+          <Dialog
+            open={surgeryModalOpen}
+            onClose={() => setSurgeryModalOpen(false)}
+            maxWidth="sm"
+            fullWidth
+          >
+            <DialogTitle
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1.5,
+                fontWeight: 600,
+              }}
+            >
+              <SurgeryIcon sx={{ color: '#dc2626', fontSize: '24px' }} />
+              New Surgery
+            </DialogTitle>
+            <DialogContent>
+              <Typography sx={{ color: '#57606a', fontSize: '14px' }}>
+                This feature is currently under construction. Please check back
+                soon!
+              </Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button
+                onClick={() => setSurgeryModalOpen(false)}
+                variant="contained"
+                sx={{
+                  textTransform: 'none',
+                  backgroundColor: '#dc2626',
+                  '&:hover': {
+                    backgroundColor: '#b91c1c',
+                  },
+                }}
+              >
+                Close
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+          <Dialog
+            open={followUpModalOpen}
+            onClose={() => setFollowUpModalOpen(false)}
+            maxWidth="sm"
+            fullWidth
+          >
+            <DialogTitle
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1.5,
+                fontWeight: 600,
+              }}
+            >
+              <FollowUpIcon sx={{ color: '#0284c7', fontSize: '24px' }} />
+              New Follow-up
+            </DialogTitle>
+            <DialogContent>
+              <Typography sx={{ color: '#57606a', fontSize: '14px' }}>
+                This feature is currently under construction. Please check back
+                soon!
+              </Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button
+                onClick={() => setFollowUpModalOpen(false)}
+                variant="contained"
+                sx={{
+                  textTransform: 'none',
+                  backgroundColor: '#0284c7',
+                  '&:hover': {
+                    backgroundColor: '#0369a1',
+                  },
+                }}
+              >
+                Close
+              </Button>
+            </DialogActions>
+          </Dialog>
         </Box>
       </Box>
     </Box>

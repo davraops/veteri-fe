@@ -15,17 +15,22 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as ConsultantRouteImport } from './routes/consultant'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as VademecumIndexRouteImport } from './routes/vademecum.index'
+import { Route as VaccinationsIndexRouteImport } from './routes/vaccinations.index'
 import { Route as SurgeriesIndexRouteImport } from './routes/surgeries.index'
+import { Route as ProceduresIndexRouteImport } from './routes/procedures.index'
 import { Route as PetsIndexRouteImport } from './routes/pets.index'
 import { Route as OwnersIndexRouteImport } from './routes/owners.index'
 import { Route as OrganizationIndexRouteImport } from './routes/organization.index'
+import { Route as InventoryIndexRouteImport } from './routes/inventory.index'
 import { Route as AppointmentsIndexRouteImport } from './routes/appointments.index'
+import { Route as VaccinationsNewRouteImport } from './routes/vaccinations.new'
 import { Route as SurgeriesSurgeryIdRouteImport } from './routes/surgeries.$surgeryId'
 import { Route as PetsNewRouteImport } from './routes/pets.new'
 import { Route as PetsPetIdRouteImport } from './routes/pets.$petId'
 import { Route as OwnersNewRouteImport } from './routes/owners.new'
 import { Route as OwnersOwnerIdRouteImport } from './routes/owners.$ownerId'
 import { Route as OrganizationOrganizationIdRouteImport } from './routes/organization.$organizationId'
+import { Route as ConsultationsNewRouteImport } from './routes/consultations.new'
 import { Route as AppointmentsAppointmentIdRouteImport } from './routes/appointments.$appointmentId'
 import { Route as PetsNewIndexRouteImport } from './routes/pets.new.index'
 import { Route as OwnersNewIndexRouteImport } from './routes/owners.new.index'
@@ -64,9 +69,19 @@ const VademecumIndexRoute = VademecumIndexRouteImport.update({
   path: '/vademecum/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VaccinationsIndexRoute = VaccinationsIndexRouteImport.update({
+  id: '/vaccinations/',
+  path: '/vaccinations/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SurgeriesIndexRoute = SurgeriesIndexRouteImport.update({
   id: '/surgeries/',
   path: '/surgeries/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProceduresIndexRoute = ProceduresIndexRouteImport.update({
+  id: '/procedures/',
+  path: '/procedures/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PetsIndexRoute = PetsIndexRouteImport.update({
@@ -84,9 +99,19 @@ const OrganizationIndexRoute = OrganizationIndexRouteImport.update({
   path: '/organization/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InventoryIndexRoute = InventoryIndexRouteImport.update({
+  id: '/inventory/',
+  path: '/inventory/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppointmentsIndexRoute = AppointmentsIndexRouteImport.update({
   id: '/appointments/',
   path: '/appointments/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VaccinationsNewRoute = VaccinationsNewRouteImport.update({
+  id: '/vaccinations/new',
+  path: '/vaccinations/new',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SurgeriesSurgeryIdRoute = SurgeriesSurgeryIdRouteImport.update({
@@ -120,6 +145,11 @@ const OrganizationOrganizationIdRoute =
     path: '/organization/$organizationId',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ConsultationsNewRoute = ConsultationsNewRouteImport.update({
+  id: '/consultations/new',
+  path: '/consultations/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppointmentsAppointmentIdRoute =
   AppointmentsAppointmentIdRouteImport.update({
     id: '/appointments/$appointmentId',
@@ -165,17 +195,22 @@ export interface FileRoutesByFullPath {
   '/owners': typeof OwnersRouteWithChildren
   '/pets': typeof PetsRouteWithChildren
   '/appointments/$appointmentId': typeof AppointmentsAppointmentIdRoute
+  '/consultations/new': typeof ConsultationsNewRoute
   '/organization/$organizationId': typeof OrganizationOrganizationIdRouteWithChildren
   '/owners/$ownerId': typeof OwnersOwnerIdRoute
   '/owners/new': typeof OwnersNewRouteWithChildren
   '/pets/$petId': typeof PetsPetIdRouteWithChildren
   '/pets/new': typeof PetsNewRouteWithChildren
   '/surgeries/$surgeryId': typeof SurgeriesSurgeryIdRoute
+  '/vaccinations/new': typeof VaccinationsNewRoute
   '/appointments': typeof AppointmentsIndexRoute
+  '/inventory': typeof InventoryIndexRoute
   '/organization': typeof OrganizationIndexRoute
   '/owners/': typeof OwnersIndexRoute
   '/pets/': typeof PetsIndexRoute
+  '/procedures': typeof ProceduresIndexRoute
   '/surgeries': typeof SurgeriesIndexRoute
+  '/vaccinations': typeof VaccinationsIndexRoute
   '/vademecum': typeof VademecumIndexRoute
   '/organization/$organizationId/edit': typeof OrganizationOrganizationIdEditRoute
   '/owners/new/verify': typeof OwnersNewVerifyRoute
@@ -189,15 +224,20 @@ export interface FileRoutesByTo {
   '/consultant': typeof ConsultantRoute
   '/login': typeof LoginRoute
   '/appointments/$appointmentId': typeof AppointmentsAppointmentIdRoute
+  '/consultations/new': typeof ConsultationsNewRoute
   '/organization/$organizationId': typeof OrganizationOrganizationIdRouteWithChildren
   '/owners/$ownerId': typeof OwnersOwnerIdRoute
   '/pets/$petId': typeof PetsPetIdRouteWithChildren
   '/surgeries/$surgeryId': typeof SurgeriesSurgeryIdRoute
+  '/vaccinations/new': typeof VaccinationsNewRoute
   '/appointments': typeof AppointmentsIndexRoute
+  '/inventory': typeof InventoryIndexRoute
   '/organization': typeof OrganizationIndexRoute
   '/owners': typeof OwnersIndexRoute
   '/pets': typeof PetsIndexRoute
+  '/procedures': typeof ProceduresIndexRoute
   '/surgeries': typeof SurgeriesIndexRoute
+  '/vaccinations': typeof VaccinationsIndexRoute
   '/vademecum': typeof VademecumIndexRoute
   '/organization/$organizationId/edit': typeof OrganizationOrganizationIdEditRoute
   '/owners/new/verify': typeof OwnersNewVerifyRoute
@@ -214,17 +254,22 @@ export interface FileRoutesById {
   '/owners': typeof OwnersRouteWithChildren
   '/pets': typeof PetsRouteWithChildren
   '/appointments/$appointmentId': typeof AppointmentsAppointmentIdRoute
+  '/consultations/new': typeof ConsultationsNewRoute
   '/organization/$organizationId': typeof OrganizationOrganizationIdRouteWithChildren
   '/owners/$ownerId': typeof OwnersOwnerIdRoute
   '/owners/new': typeof OwnersNewRouteWithChildren
   '/pets/$petId': typeof PetsPetIdRouteWithChildren
   '/pets/new': typeof PetsNewRouteWithChildren
   '/surgeries/$surgeryId': typeof SurgeriesSurgeryIdRoute
+  '/vaccinations/new': typeof VaccinationsNewRoute
   '/appointments/': typeof AppointmentsIndexRoute
+  '/inventory/': typeof InventoryIndexRoute
   '/organization/': typeof OrganizationIndexRoute
   '/owners/': typeof OwnersIndexRoute
   '/pets/': typeof PetsIndexRoute
+  '/procedures/': typeof ProceduresIndexRoute
   '/surgeries/': typeof SurgeriesIndexRoute
+  '/vaccinations/': typeof VaccinationsIndexRoute
   '/vademecum/': typeof VademecumIndexRoute
   '/organization/$organizationId/edit': typeof OrganizationOrganizationIdEditRoute
   '/owners/new/verify': typeof OwnersNewVerifyRoute
@@ -242,17 +287,22 @@ export interface FileRouteTypes {
     | '/owners'
     | '/pets'
     | '/appointments/$appointmentId'
+    | '/consultations/new'
     | '/organization/$organizationId'
     | '/owners/$ownerId'
     | '/owners/new'
     | '/pets/$petId'
     | '/pets/new'
     | '/surgeries/$surgeryId'
+    | '/vaccinations/new'
     | '/appointments'
+    | '/inventory'
     | '/organization'
     | '/owners/'
     | '/pets/'
+    | '/procedures'
     | '/surgeries'
+    | '/vaccinations'
     | '/vademecum'
     | '/organization/$organizationId/edit'
     | '/owners/new/verify'
@@ -266,15 +316,20 @@ export interface FileRouteTypes {
     | '/consultant'
     | '/login'
     | '/appointments/$appointmentId'
+    | '/consultations/new'
     | '/organization/$organizationId'
     | '/owners/$ownerId'
     | '/pets/$petId'
     | '/surgeries/$surgeryId'
+    | '/vaccinations/new'
     | '/appointments'
+    | '/inventory'
     | '/organization'
     | '/owners'
     | '/pets'
+    | '/procedures'
     | '/surgeries'
+    | '/vaccinations'
     | '/vademecum'
     | '/organization/$organizationId/edit'
     | '/owners/new/verify'
@@ -290,17 +345,22 @@ export interface FileRouteTypes {
     | '/owners'
     | '/pets'
     | '/appointments/$appointmentId'
+    | '/consultations/new'
     | '/organization/$organizationId'
     | '/owners/$ownerId'
     | '/owners/new'
     | '/pets/$petId'
     | '/pets/new'
     | '/surgeries/$surgeryId'
+    | '/vaccinations/new'
     | '/appointments/'
+    | '/inventory/'
     | '/organization/'
     | '/owners/'
     | '/pets/'
+    | '/procedures/'
     | '/surgeries/'
+    | '/vaccinations/'
     | '/vademecum/'
     | '/organization/$organizationId/edit'
     | '/owners/new/verify'
@@ -317,11 +377,16 @@ export interface RootRouteChildren {
   OwnersRoute: typeof OwnersRouteWithChildren
   PetsRoute: typeof PetsRouteWithChildren
   AppointmentsAppointmentIdRoute: typeof AppointmentsAppointmentIdRoute
+  ConsultationsNewRoute: typeof ConsultationsNewRoute
   OrganizationOrganizationIdRoute: typeof OrganizationOrganizationIdRouteWithChildren
   SurgeriesSurgeryIdRoute: typeof SurgeriesSurgeryIdRoute
+  VaccinationsNewRoute: typeof VaccinationsNewRoute
   AppointmentsIndexRoute: typeof AppointmentsIndexRoute
+  InventoryIndexRoute: typeof InventoryIndexRoute
   OrganizationIndexRoute: typeof OrganizationIndexRoute
+  ProceduresIndexRoute: typeof ProceduresIndexRoute
   SurgeriesIndexRoute: typeof SurgeriesIndexRoute
+  VaccinationsIndexRoute: typeof VaccinationsIndexRoute
   VademecumIndexRoute: typeof VademecumIndexRoute
 }
 
@@ -369,11 +434,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VademecumIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/vaccinations/': {
+      id: '/vaccinations/'
+      path: '/vaccinations'
+      fullPath: '/vaccinations'
+      preLoaderRoute: typeof VaccinationsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/surgeries/': {
       id: '/surgeries/'
       path: '/surgeries'
       fullPath: '/surgeries'
       preLoaderRoute: typeof SurgeriesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/procedures/': {
+      id: '/procedures/'
+      path: '/procedures'
+      fullPath: '/procedures'
+      preLoaderRoute: typeof ProceduresIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pets/': {
@@ -397,11 +476,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrganizationIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/inventory/': {
+      id: '/inventory/'
+      path: '/inventory'
+      fullPath: '/inventory'
+      preLoaderRoute: typeof InventoryIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/appointments/': {
       id: '/appointments/'
       path: '/appointments'
       fullPath: '/appointments'
       preLoaderRoute: typeof AppointmentsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vaccinations/new': {
+      id: '/vaccinations/new'
+      path: '/vaccinations/new'
+      fullPath: '/vaccinations/new'
+      preLoaderRoute: typeof VaccinationsNewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/surgeries/$surgeryId': {
@@ -444,6 +537,13 @@ declare module '@tanstack/react-router' {
       path: '/organization/$organizationId'
       fullPath: '/organization/$organizationId'
       preLoaderRoute: typeof OrganizationOrganizationIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/consultations/new': {
+      id: '/consultations/new'
+      path: '/consultations/new'
+      fullPath: '/consultations/new'
+      preLoaderRoute: typeof ConsultationsNewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/appointments/$appointmentId': {
@@ -587,11 +687,16 @@ const rootRouteChildren: RootRouteChildren = {
   OwnersRoute: OwnersRouteWithChildren,
   PetsRoute: PetsRouteWithChildren,
   AppointmentsAppointmentIdRoute: AppointmentsAppointmentIdRoute,
+  ConsultationsNewRoute: ConsultationsNewRoute,
   OrganizationOrganizationIdRoute: OrganizationOrganizationIdRouteWithChildren,
   SurgeriesSurgeryIdRoute: SurgeriesSurgeryIdRoute,
+  VaccinationsNewRoute: VaccinationsNewRoute,
   AppointmentsIndexRoute: AppointmentsIndexRoute,
+  InventoryIndexRoute: InventoryIndexRoute,
   OrganizationIndexRoute: OrganizationIndexRoute,
+  ProceduresIndexRoute: ProceduresIndexRoute,
   SurgeriesIndexRoute: SurgeriesIndexRoute,
+  VaccinationsIndexRoute: VaccinationsIndexRoute,
   VademecumIndexRoute: VademecumIndexRoute,
 }
 export const routeTree = rootRouteImport
