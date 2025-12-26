@@ -216,6 +216,7 @@ function Owners() {
                   padding: 2,
                   cursor: 'pointer',
                   transition: 'all 0.2s ease-in-out',
+                  overflow: 'hidden',
                   '&:hover': {
                     borderColor: '#2563eb',
                     boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
@@ -228,6 +229,7 @@ function Owners() {
                     alignItems: 'center',
                     gap: 1.5,
                     marginBottom: 1.5,
+                    minWidth: 0,
                   }}
                 >
                   <Avatar
@@ -241,6 +243,8 @@ function Owners() {
                             ? '#10b981'
                             : '#f97316',
                       fontSize: '10px',
+                      borderRadius: '6px',
+                      flexShrink: 0,
                     }}
                   >
                     {owner.organization === 'johndoe'
@@ -249,7 +253,7 @@ function Owners() {
                         ? 'MP'
                         : 'VA'}
                   </Avatar>
-                  <Box sx={{ flexGrow: 1, minWidth: 0 }}>
+                  <Box sx={{ flexGrow: 1, minWidth: 0, overflow: 'hidden' }}>
                     <Typography
                       sx={{
                         fontSize: '16px',
@@ -258,6 +262,7 @@ function Owners() {
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',
+                        width: '100%',
                       }}
                     >
                       {owner.firstName} {owner.lastName}
@@ -269,13 +274,14 @@ function Owners() {
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',
+                        width: '100%',
                       }}
                     >
                       {owner.organization}
                     </Typography>
                   </Box>
                 </Box>
-                <Box sx={{ marginTop: 1.5 }}>
+                <Box sx={{ marginTop: 1.5, minWidth: 0, overflow: 'hidden' }}>
                   <Typography
                     sx={{
                       fontSize: '13px',
@@ -284,6 +290,7 @@ function Owners() {
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
                       whiteSpace: 'nowrap',
+                      width: '100%',
                     }}
                   >
                     {owner.email}
@@ -295,6 +302,7 @@ function Owners() {
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
                       whiteSpace: 'nowrap',
+                      width: '100%',
                     }}
                   >
                     {owner.phones[0] || 'No phone'}

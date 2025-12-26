@@ -622,6 +622,7 @@ function Dashboard() {
                             ? '#10b981'
                             : '#f97316',
                       fontSize: '10px',
+                      borderRadius: '4px',
                     }}
                     src={
                       pet.organization === 'johndoe'

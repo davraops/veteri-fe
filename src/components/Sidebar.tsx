@@ -15,6 +15,7 @@ import {
   People as PeopleIcon,
   Business as BusinessIcon,
   LocalHospital as LocalHospitalIcon,
+  CalendarToday as CalendarTodayIcon,
   Close as CloseIcon,
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from '@tanstack/react-router';
@@ -33,6 +34,11 @@ export function Sidebar({ open, onClose }: SidebarProps) {
     { text: 'Home', icon: <HomeIcon />, path: '/' },
     { text: 'Pets', icon: <PetsIcon />, path: '/pets' },
     { text: 'Owners', icon: <PeopleIcon />, path: '/owners' },
+    {
+      text: 'Appointments',
+      icon: <CalendarTodayIcon />,
+      path: '/appointments',
+    },
     { text: 'Organization', icon: <BusinessIcon />, path: '/organization' },
     { text: 'Treatments', icon: <LocalHospitalIcon />, path: '/treatments' },
   ];
@@ -89,7 +95,13 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                 navigate({ to: item.path });
                 onClose();
               }}
-              selected={location.pathname === item.path}
+              selected={
+                location.pathname === item.path ||
+                (item.path === '/organization' &&
+                  location.pathname.startsWith('/organization')) ||
+                (item.path === '/appointments' &&
+                  location.pathname.startsWith('/appointments'))
+              }
               sx={{
                 '&.Mui-selected': {
                   backgroundColor: '#f6f8fa',

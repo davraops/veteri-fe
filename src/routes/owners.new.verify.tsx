@@ -145,6 +145,7 @@ function VerifyOwner() {
                         search.organization
                       ),
                       fontSize: '14px',
+                      borderRadius: '8px',
                     }}
                   >
                     {getOrganizationInitials(search.organization)}

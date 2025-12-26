@@ -1,4 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router';
+import {
+  createFileRoute,
+  useNavigate,
+  Outlet,
+  useMatchRoute,
+} from '@tanstack/react-router';
 import { useState } from 'react';
 import {
   Box,
@@ -13,6 +18,8 @@ import { Edit as EditIcon } from '@mui/icons-material';
 import { Topbar } from '@/components/Topbar';
 import { Sidebar } from '@/components/Sidebar';
 import { mockPets } from '@/data/mockPets';
+import { mockOwners } from '@/data/mockOwners';
+import { mockOrganizations } from '@/data/mockOrganizations';
 
 export const Route = createFileRoute('/pets/$petId')({
   component: PetProfile,
@@ -51,12 +58,22 @@ export const Route = createFileRoute('/pets/$petId')({
 
 function PetProfile() {
   const { petId } = Route.useParams();
+  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const search = Route.useSearch();
+  const matchRoute = useMatchRoute();
+
+  // Check if we're on a child route (like /history)
+  const isHistoryRoute = matchRoute({ to: '/pets/$petId/history' });
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
+
+  // If we're on a child route, render the outlet
+  if (isHistoryRoute) {
+    return <Outlet />;
+  }
 
   // Use data from search params if available (from verification page)
   // Otherwise, try to find pet in mock data by ID
@@ -93,6 +110,7 @@ function PetProfile() {
               name: foundPet.name,
               lastName: foundPet.lastName,
               organization: foundPet.organization,
+              ownerId: foundPet.ownerId,
               type: foundPet.type,
               breed: foundPet.breed,
               gender: foundPet.gender || '',
@@ -135,6 +153,17 @@ function PetProfile() {
     return '#57606a';
   };
 
+  // Map organization slug to organizationId
+  const getOrganizationId = (orgSlug: string): number | null => {
+    // johndoe uses johndoe-org in organizations
+    if (orgSlug === 'johndoe') {
+      const org = mockOrganizations.find((o) => o.slug === 'johndoe-org');
+      return org ? org.organizationId : null;
+    }
+    const org = mockOrganizations.find((o) => o.slug === orgSlug);
+    return org ? org.organizationId : null;
+  };
+
   const calculateAge = (birthDate: string | null, unknown: boolean) => {
     if (unknown || !birthDate) return 'Unknown';
     const birth = new Date(birthDate);
@@ -146,6 +175,12 @@ function PetProfile() {
     }
     return `${years} years, ${months} months`;
   };
+
+  // Get owner information
+  const owner =
+    petData.ownerId && petData.ownerId > 0
+      ? mockOwners.find((o) => o.id === petData.ownerId)
+      : null;
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
@@ -191,18 +226,23 @@ function PetProfile() {
                   backgroundColor: '#10b981',
                   fontSize: '32px',
                   fontWeight: 600,
+                  flexShrink: 0,
                 }}
               >
                 {petData.name.charAt(0).toUpperCase()}
                 {petData.lastName.charAt(0).toUpperCase()}
               </Avatar>
-              <Box sx={{ flexGrow: 1 }}>
+              <Box sx={{ flexGrow: 1, minWidth: 0, overflow: 'hidden' }}>
                 <Typography
                   variant="h4"
                   sx={{
                     fontWeight: 600,
                     color: '#24292f',
                     marginBottom: 1,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    width: '100%',
                   }}
                 >
                   {petData.name} {petData.lastName}
@@ -464,13 +504,114 @@ function PetProfile() {
 
             {/* Sidebar Info */}
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+              {/* Owner Card */}
+              {owner && (
+                <Paper
+                  sx={{
+                    padding: 3,
+                    backgroundColor: '#ffffff',
+                    border: '1px solid #d0d7de',
+                    borderRadius: '8px',
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      color: '#57606a',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.5px',
+                      marginBottom: 2,
+                    }}
+                  >
+                    Owner
+                  </Typography>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 2,
+                      cursor: 'pointer',
+                      '&:hover': {
+                        opacity: 0.8,
+                      },
+                    }}
+                    onClick={() => {
+                      navigate({
+                        to: '/owners/$ownerId',
+                        params: { ownerId: String(owner.id) },
+                        search: {},
+                      });
+                    }}
+                  >
+                    <Avatar
+                      sx={{
+                        width: 48,
+                        height: 48,
+                        backgroundColor: '#2563eb',
+                        fontSize: '18px',
+                        fontWeight: 600,
+                        flexShrink: 0,
+                      }}
+                    >
+                      {owner.firstName.charAt(0).toUpperCase()}
+                      {owner.lastName.charAt(0).toUpperCase()}
+                    </Avatar>
+                    <Box sx={{ flexGrow: 1, minWidth: 0, overflow: 'hidden' }}>
+                      <Typography
+                        sx={{
+                          fontSize: '16px',
+                          fontWeight: 500,
+                          color: '#24292f',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          width: '100%',
+                        }}
+                      >
+                        {owner.firstName} {owner.lastName}
+                      </Typography>
+                      {owner.email && (
+                        <Typography
+                          sx={{
+                            fontSize: '12px',
+                            color: '#57606a',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            width: '100%',
+                          }}
+                        >
+                          {owner.email}
+                        </Typography>
+                      )}
+                    </Box>
+                  </Box>
+                </Paper>
+              )}
+
               {/* Organization Card */}
               <Paper
+                onClick={() => {
+                  const orgId = getOrganizationId(petData.organization);
+                  if (orgId) {
+                    navigate({
+                      to: '/organization/$organizationId',
+                      params: { organizationId: String(orgId) },
+                    });
+                  }
+                }}
                 sx={{
                   padding: 3,
                   backgroundColor: '#ffffff',
                   border: '1px solid #d0d7de',
                   borderRadius: '8px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease-in-out',
+                  '&:hover': {
+                    borderColor: getOrganizationColor(petData.organization),
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+                  },
                 }}
               >
                 <Typography
@@ -494,19 +635,27 @@ function PetProfile() {
                         petData.organization
                       ),
                       fontSize: '18px',
+                      borderRadius: '8px',
+                      flexShrink: 0,
                     }}
                   >
                     {getOrganizationInitials(petData.organization)}
                   </Avatar>
-                  <Typography
-                    sx={{
-                      fontSize: '16px',
-                      fontWeight: 500,
-                      color: '#24292f',
-                    }}
-                  >
-                    {petData.organization}
-                  </Typography>
+                  <Box sx={{ flexGrow: 1, minWidth: 0, overflow: 'hidden' }}>
+                    <Typography
+                      sx={{
+                        fontSize: '16px',
+                        fontWeight: 500,
+                        color: '#24292f',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                        width: '100%',
+                      }}
+                    >
+                      {petData.organization}
+                    </Typography>
+                  </Box>
                 </Box>
               </Paper>
 
@@ -567,6 +716,24 @@ function PetProfile() {
                   <Button
                     variant="outlined"
                     fullWidth
+                    onClick={() => {
+                      console.log('Navigating to history with petId:', petId);
+                      const targetPath = `/pets/${petId}/history`;
+                      console.log('Target path:', targetPath);
+                      navigate({
+                        to: '/pets/$petId/history',
+                        params: { petId: String(petId) },
+                        replace: false,
+                      })
+                        .then(() => {
+                          console.log('Navigation promise resolved');
+                        })
+                        .catch((error) => {
+                          console.error('Navigation error:', error);
+                          // Fallback: try direct navigation
+                          window.location.href = targetPath;
+                        });
+                    }}
                     sx={{
                       textTransform: 'none',
                       justifyContent: 'flex-start',

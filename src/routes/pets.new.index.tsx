@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useForm } from '@tanstack/react-form';
 import {
   Box,
@@ -13,7 +13,12 @@ import {
   Paper,
   FormControlLabel,
   Checkbox,
+  InputBase,
 } from '@mui/material';
+import {
+  Search as SearchIcon,
+  PersonAdd as PersonAddIcon,
+} from '@mui/icons-material';
 import { Topbar } from '@/components/Topbar';
 import { Sidebar } from '@/components/Sidebar';
 import { mockOwners, Owner } from '@/data/mockOwners';
@@ -43,6 +48,10 @@ function NewPet() {
   const [selectedOrganization, setSelectedOrganization] = useState<string>('');
   const [showNewOwnerForm, setShowNewOwnerForm] = useState(false);
   const [newOwnerData, setNewOwnerData] = useState<Owner | null>(null);
+  const [ownerSearchValue, setOwnerSearchValue] = useState('');
+  const [ownerSearchFocused, setOwnerSearchFocused] = useState(false);
+  const [selectedOwner, setSelectedOwner] = useState<Owner | null>(null);
+  const ownerSearchRef = useRef<HTMLDivElement>(null);
 
   const form = useForm({
     defaultValues: {
@@ -60,12 +69,35 @@ function NewPet() {
       notes: '',
     } as PetFormValues,
     onSubmit: async ({ value }) => {
-      // If creating a new owner, include owner data
+      // If creating a new owner, validate and include owner data
+      let ownerDataToInclude: Owner | undefined = newOwnerData;
+
+      if (value.ownerId === 'new' && showNewOwnerForm) {
+        // Validate owner form before proceeding
+        const ownerFormValue = ownerForm.state.values;
+        if (
+          !ownerFormValue.firstName ||
+          !ownerFormValue.lastName ||
+          !ownerFormValue.email ||
+          !ownerFormValue.phones[0] ||
+          !ownerFormValue.nationalId ||
+          !ownerFormValue.nationality ||
+          !ownerFormValue.organization
+        ) {
+          // Trigger validation errors
+          await ownerForm.validateAllFields('submit');
+          return;
+        }
+        // Store owner data for next time and use it now
+        setNewOwnerData(ownerFormValue);
+        ownerDataToInclude = ownerFormValue;
+      }
+
       const searchParams: PetFormValues & { newOwnerData?: Owner } = {
         ...value,
       };
-      if (newOwnerData) {
-        searchParams.newOwnerData = newOwnerData;
+      if (ownerDataToInclude) {
+        searchParams.newOwnerData = ownerDataToInclude;
       }
       // Navigate to verification page with form data
       navigate({
@@ -189,8 +221,11 @@ function NewPet() {
                         onChange={(e) => {
                           field.handleChange(e.target.value);
                           setSelectedOrganization(e.target.value);
-                          // Reset ownerId when organization changes
+                          // Reset ownerId and search when organization changes
                           form.setFieldValue('ownerId', '');
+                          setOwnerSearchValue('');
+                          setSelectedOwner(null);
+                          setShowNewOwnerForm(false);
                         }}
                         onBlur={field.handleBlur}
                         label="Organization"
@@ -211,7 +246,7 @@ function NewPet() {
                   )}
                 </form.Field>
 
-                {/* Owner */}
+                {/* Owner Search */}
                 <form.Field
                   name="ownerId"
                   validators={{
@@ -236,79 +271,288 @@ function NewPet() {
                         )
                       : [];
 
+                    // Get selected owner from field value
+                    const currentOwner =
+                      field.state.value && field.state.value !== 'new'
+                        ? availableOwners.find(
+                            (owner) => String(owner.id) === field.state.value
+                          )
+                        : null;
+
+                    // Display value: show owner name if selected, otherwise show search value
+                    const displayValue = currentOwner
+                      ? `${currentOwner.firstName} ${currentOwner.lastName}`
+                      : ownerSearchValue;
+
+                    // Filter owners by search query (name or national ID)
+                    const filteredOwners = ownerSearchValue
+                      ? availableOwners.filter(
+                          (owner) =>
+                            `${owner.firstName} ${owner.lastName}`
+                              .toLowerCase()
+                              .includes(ownerSearchValue.toLowerCase()) ||
+                            owner.nationalId
+                              .toLowerCase()
+                              .includes(ownerSearchValue.toLowerCase())
+                        )
+                      : availableOwners;
+
+                    const handleOwnerSelect = (owner: Owner) => {
+                      setSelectedOwner(owner);
+                      setOwnerSearchValue(
+                        `${owner.firstName} ${owner.lastName}`
+                      );
+                      setOwnerSearchFocused(false);
+                      setShowNewOwnerForm(false);
+                      field.handleChange(String(owner.id));
+                    };
+
+                    const handleCreateNewOwner = () => {
+                      setShowNewOwnerForm(true);
+                      setOwnerSearchFocused(false);
+                      setOwnerSearchValue('');
+                      setSelectedOwner(null);
+                      field.handleChange('new');
+                    };
+
                     return (
                       <Box>
-                        <FormControl
-                          fullWidth
-                          required
-                          error={!!field.state.meta.errors.length}
+                        <Box
+                          ref={ownerSearchRef}
+                          sx={{
+                            position: 'relative',
+                          }}
                         >
-                          <InputLabel>Owner</InputLabel>
-                          <Select
-                            value={field.state.value}
-                            onChange={(e) => {
-                              const value = e.target.value;
-                              if (value === 'new') {
-                                setShowNewOwnerForm(true);
-                                field.handleChange('new');
-                              } else {
-                                setShowNewOwnerForm(false);
-                                field.handleChange(value);
-                              }
-                            }}
-                            onBlur={field.handleBlur}
-                            label="Owner"
-                            disabled={!selectedOrganization}
+                          <Box
                             sx={{
-                              '&:hover .MuiOutlinedInput-notchedOutline': {
-                                borderColor: '#2563eb',
+                              position: 'relative',
+                              borderRadius: '6px',
+                              backgroundColor: ownerSearchFocused
+                                ? '#ffffff'
+                                : '#f6f8fa',
+                              border: '1px solid',
+                              borderColor: ownerSearchFocused
+                                ? '#2563eb'
+                                : field.state.meta.errors.length > 0
+                                  ? '#d32f2f'
+                                  : '#d0d7de',
+                              display: 'flex',
+                              alignItems: 'center',
+                              transition: 'all 0.2s ease-in-out',
+                              boxShadow: ownerSearchFocused
+                                ? '0 0 0 3px rgba(37, 99, 235, 0.1)'
+                                : 'none',
+                              '&:hover': {
+                                borderColor:
+                                  field.state.meta.errors.length > 0
+                                    ? '#d32f2f'
+                                    : '#2563eb',
+                                backgroundColor: '#ffffff',
                               },
-                              '&.Mui-focused .MuiOutlinedInput-notchedOutline':
-                                {
-                                  borderColor: '#2563eb',
-                                },
                             }}
                           >
-                            {availableOwners.length === 0 ? (
-                              <MenuItem disabled>
-                                {!selectedOrganization
-                                  ? 'Select an organization first'
-                                  : 'No owners found for this organization'}
-                              </MenuItem>
-                            ) : (
-                              availableOwners.map((owner) => (
-                                <MenuItem
-                                  key={owner.id}
-                                  value={String(owner.id)}
-                                >
-                                  {owner.firstName} {owner.lastName}
-                                </MenuItem>
-                              ))
-                            )}
-                            <MenuItem
-                              value="new"
+                            <Box
                               sx={{
-                                borderTop: '1px solid #d0d7de',
-                                marginTop: 0.5,
-                                paddingTop: 1,
+                                padding: '0 8px',
+                                height: '100%',
+                                position: 'absolute',
+                                pointerEvents: 'none',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                color: '#57606a',
                               }}
                             >
+                              <SearchIcon fontSize="small" />
+                            </Box>
+                            <InputBase
+                              placeholder={
+                                !selectedOrganization
+                                  ? 'Select an organization first'
+                                  : 'Search by name or national ID...'
+                              }
+                              value={displayValue}
+                              onChange={(e) => {
+                                setOwnerSearchValue(e.target.value);
+                                if (selectedOwner || currentOwner) {
+                                  setSelectedOwner(null);
+                                  field.handleChange('');
+                                }
+                              }}
+                              onFocus={() => {
+                                if (selectedOrganization) {
+                                  setOwnerSearchFocused(true);
+                                }
+                              }}
+                              onBlur={(e) => {
+                                // Delay to allow clicking on suggestions
+                                setTimeout(() => {
+                                  if (
+                                    !ownerSearchRef.current?.contains(
+                                      e.relatedTarget as Node
+                                    )
+                                  ) {
+                                    setOwnerSearchFocused(false);
+                                    field.handleBlur();
+                                  }
+                                }, 200);
+                              }}
+                              disabled={!selectedOrganization}
+                              required
+                              sx={{
+                                color: '#24292f',
+                                padding: '14px 8px 14px 40px',
+                                width: '100%',
+                                fontSize: '14px',
+                                '& .MuiInputBase-input': {
+                                  '&::placeholder': {
+                                    color: '#57606a',
+                                    opacity: 1,
+                                  },
+                                  '&:disabled': {
+                                    color: '#57606a',
+                                    cursor: 'not-allowed',
+                                  },
+                                },
+                              }}
+                            />
+                          </Box>
+
+                          {/* Owner Search Dropdown */}
+                          {ownerSearchFocused &&
+                            selectedOrganization &&
+                            (filteredOwners.length > 0 ||
+                              ownerSearchValue.length > 0) && (
                               <Box
                                 sx={{
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  gap: 1,
+                                  position: 'absolute',
+                                  top: '100%',
+                                  left: 0,
+                                  right: 0,
+                                  marginTop: 1,
+                                  backgroundColor: '#ffffff',
+                                  border: '1px solid #d0d7de',
+                                  borderRadius: '6px',
+                                  boxShadow:
+                                    '0 8px 24px rgba(140, 149, 159, 0.2)',
+                                  zIndex: 1000,
+                                  maxHeight: 300,
+                                  overflow: 'auto',
                                 }}
+                                onMouseDown={(e) => e.preventDefault()}
                               >
-                                <Typography
-                                  sx={{ fontWeight: 600, color: '#2563eb' }}
-                                >
-                                  + Create New Owner
-                                </Typography>
+                                {filteredOwners.length > 0 ? (
+                                  <>
+                                    {filteredOwners.map((owner) => (
+                                      <Box
+                                        key={owner.id}
+                                        onClick={() => handleOwnerSelect(owner)}
+                                        sx={{
+                                          display: 'flex',
+                                          flexDirection: 'column',
+                                          padding: '12px 16px',
+                                          cursor: 'pointer',
+                                          borderBottom: '1px solid #f6f8fa',
+                                          '&:hover': {
+                                            backgroundColor: '#f6f8fa',
+                                          },
+                                          '&:last-child': {
+                                            borderBottom: 'none',
+                                          },
+                                        }}
+                                      >
+                                        <Typography
+                                          sx={{
+                                            fontSize: '14px',
+                                            fontWeight: 600,
+                                            color: '#24292f',
+                                          }}
+                                        >
+                                          {owner.firstName} {owner.lastName}
+                                        </Typography>
+                                        <Typography
+                                          sx={{
+                                            fontSize: '12px',
+                                            color: '#57606a',
+                                            marginTop: 0.5,
+                                          }}
+                                        >
+                                          National ID: {owner.nationalId}
+                                        </Typography>
+                                      </Box>
+                                    ))}
+                                    <Box
+                                      sx={{
+                                        borderTop: '1px solid #d0d7de',
+                                        marginTop: 0.5,
+                                        paddingTop: 0.5,
+                                      }}
+                                    >
+                                      <Box
+                                        onClick={handleCreateNewOwner}
+                                        sx={{
+                                          display: 'flex',
+                                          alignItems: 'center',
+                                          gap: 1.5,
+                                          padding: '12px 16px',
+                                          cursor: 'pointer',
+                                          '&:hover': {
+                                            backgroundColor: '#f6f8fa',
+                                          },
+                                        }}
+                                      >
+                                        <PersonAddIcon
+                                          sx={{
+                                            fontSize: '20px',
+                                            color: '#2563eb',
+                                          }}
+                                        />
+                                        <Typography
+                                          sx={{
+                                            fontWeight: 600,
+                                            color: '#2563eb',
+                                            fontSize: '14px',
+                                          }}
+                                        >
+                                          Create New Owner
+                                        </Typography>
+                                      </Box>
+                                    </Box>
+                                  </>
+                                ) : (
+                                  <Box
+                                    onClick={handleCreateNewOwner}
+                                    sx={{
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      gap: 1.5,
+                                      padding: '12px 16px',
+                                      cursor: 'pointer',
+                                      '&:hover': {
+                                        backgroundColor: '#f6f8fa',
+                                      },
+                                    }}
+                                  >
+                                    <PersonAddIcon
+                                      sx={{
+                                        fontSize: '20px',
+                                        color: '#2563eb',
+                                      }}
+                                    />
+                                    <Typography
+                                      sx={{
+                                        fontWeight: 600,
+                                        color: '#2563eb',
+                                        fontSize: '14px',
+                                      }}
+                                    >
+                                      Create New Owner
+                                    </Typography>
+                                  </Box>
+                                )}
                               </Box>
-                            </MenuItem>
-                          </Select>
-                        </FormControl>
+                            )}
+                        </Box>
                         {field.state.meta.errors.length > 0 && (
                           <Typography
                             sx={{
@@ -360,6 +604,8 @@ function NewPet() {
                           setShowNewOwnerForm(false);
                           form.setFieldValue('ownerId', '');
                           setNewOwnerData(null);
+                          setOwnerSearchValue('');
+                          setSelectedOwner(null);
                           ownerForm.reset();
                         }}
                         sx={{
@@ -811,48 +1057,29 @@ function NewPet() {
                         </ownerForm.Field>
                       </Box>
 
-                      {/* Save Owner Button */}
-                      <Button
-                        variant="contained"
-                        onClick={() => {
-                          ownerForm.handleSubmit();
-                        }}
+                      {/* Info message about owner creation */}
+                      <Box
                         sx={{
-                          textTransform: 'none',
-                          backgroundColor: '#2563eb',
-                          '&:hover': {
-                            backgroundColor: '#1d4ed8',
-                          },
+                          padding: 2,
+                          backgroundColor: '#dbeafe',
+                          border: '1px solid #2563eb',
+                          borderRadius: '6px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 1,
                         }}
                       >
-                        Save Owner
-                      </Button>
-
-                      {newOwnerData && (
-                        <Box
+                        <Typography
                           sx={{
-                            padding: 2,
-                            backgroundColor: '#d1fae5',
-                            border: '1px solid #10b981',
-                            borderRadius: '6px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 1,
+                            fontSize: '14px',
+                            color: '#1e40af',
+                            fontWeight: 500,
                           }}
                         >
-                          <Typography
-                            sx={{
-                              fontSize: '14px',
-                              color: '#065f46',
-                              fontWeight: 500,
-                            }}
-                          >
-                            ✓ Owner "{newOwnerData.firstName}{' '}
-                            {newOwnerData.lastName}" will be created with this
-                            pet
-                          </Typography>
-                        </Box>
-                      )}
+                          ℹ️ This owner will be created automatically when you
+                          save the pet—no separate action needed.
+                        </Typography>
+                      </Box>
                     </Box>
                   </Paper>
                 )}

@@ -497,6 +497,7 @@ function OwnerProfile() {
                       height: 48,
                       backgroundColor: getOrganizationColor(owner.organization),
                       fontSize: '18px',
+                      borderRadius: '8px',
                     }}
                   >
                     {owner.organization === 'johndoe'

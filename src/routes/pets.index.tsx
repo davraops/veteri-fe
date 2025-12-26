@@ -215,6 +215,7 @@ function Pets() {
                             ? '#10b981'
                             : '#f97316',
                       fontSize: '14px',
+                      borderRadius: '8px',
                     }}
                   >
                     {pet.organization === 'johndoe'
