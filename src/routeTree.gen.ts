@@ -14,15 +14,19 @@ import { Route as OwnersRouteImport } from './routes/owners'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ConsultantRouteImport } from './routes/consultant'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as VademecumIndexRouteImport } from './routes/vademecum.index'
+import { Route as SurgeriesIndexRouteImport } from './routes/surgeries.index'
 import { Route as PetsIndexRouteImport } from './routes/pets.index'
 import { Route as OwnersIndexRouteImport } from './routes/owners.index'
 import { Route as OrganizationIndexRouteImport } from './routes/organization.index'
 import { Route as AppointmentsIndexRouteImport } from './routes/appointments.index'
+import { Route as SurgeriesSurgeryIdRouteImport } from './routes/surgeries.$surgeryId'
 import { Route as PetsNewRouteImport } from './routes/pets.new'
 import { Route as PetsPetIdRouteImport } from './routes/pets.$petId'
 import { Route as OwnersNewRouteImport } from './routes/owners.new'
 import { Route as OwnersOwnerIdRouteImport } from './routes/owners.$ownerId'
 import { Route as OrganizationOrganizationIdRouteImport } from './routes/organization.$organizationId'
+import { Route as AppointmentsAppointmentIdRouteImport } from './routes/appointments.$appointmentId'
 import { Route as PetsNewIndexRouteImport } from './routes/pets.new.index'
 import { Route as OwnersNewIndexRouteImport } from './routes/owners.new.index'
 import { Route as PetsNewVerifyRouteImport } from './routes/pets.new.verify'
@@ -55,6 +59,16 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VademecumIndexRoute = VademecumIndexRouteImport.update({
+  id: '/vademecum/',
+  path: '/vademecum/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SurgeriesIndexRoute = SurgeriesIndexRouteImport.update({
+  id: '/surgeries/',
+  path: '/surgeries/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PetsIndexRoute = PetsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -73,6 +87,11 @@ const OrganizationIndexRoute = OrganizationIndexRouteImport.update({
 const AppointmentsIndexRoute = AppointmentsIndexRouteImport.update({
   id: '/appointments/',
   path: '/appointments/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SurgeriesSurgeryIdRoute = SurgeriesSurgeryIdRouteImport.update({
+  id: '/surgeries/$surgeryId',
+  path: '/surgeries/$surgeryId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PetsNewRoute = PetsNewRouteImport.update({
@@ -99,6 +118,12 @@ const OrganizationOrganizationIdRoute =
   OrganizationOrganizationIdRouteImport.update({
     id: '/organization/$organizationId',
     path: '/organization/$organizationId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AppointmentsAppointmentIdRoute =
+  AppointmentsAppointmentIdRouteImport.update({
+    id: '/appointments/$appointmentId',
+    path: '/appointments/$appointmentId',
     getParentRoute: () => rootRouteImport,
   } as any)
 const PetsNewIndexRoute = PetsNewIndexRouteImport.update({
@@ -139,15 +164,19 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/owners': typeof OwnersRouteWithChildren
   '/pets': typeof PetsRouteWithChildren
+  '/appointments/$appointmentId': typeof AppointmentsAppointmentIdRoute
   '/organization/$organizationId': typeof OrganizationOrganizationIdRouteWithChildren
   '/owners/$ownerId': typeof OwnersOwnerIdRoute
   '/owners/new': typeof OwnersNewRouteWithChildren
   '/pets/$petId': typeof PetsPetIdRouteWithChildren
   '/pets/new': typeof PetsNewRouteWithChildren
+  '/surgeries/$surgeryId': typeof SurgeriesSurgeryIdRoute
   '/appointments': typeof AppointmentsIndexRoute
   '/organization': typeof OrganizationIndexRoute
   '/owners/': typeof OwnersIndexRoute
   '/pets/': typeof PetsIndexRoute
+  '/surgeries': typeof SurgeriesIndexRoute
+  '/vademecum': typeof VademecumIndexRoute
   '/organization/$organizationId/edit': typeof OrganizationOrganizationIdEditRoute
   '/owners/new/verify': typeof OwnersNewVerifyRoute
   '/pets/$petId/history': typeof PetsPetIdHistoryRoute
@@ -159,13 +188,17 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/consultant': typeof ConsultantRoute
   '/login': typeof LoginRoute
+  '/appointments/$appointmentId': typeof AppointmentsAppointmentIdRoute
   '/organization/$organizationId': typeof OrganizationOrganizationIdRouteWithChildren
   '/owners/$ownerId': typeof OwnersOwnerIdRoute
   '/pets/$petId': typeof PetsPetIdRouteWithChildren
+  '/surgeries/$surgeryId': typeof SurgeriesSurgeryIdRoute
   '/appointments': typeof AppointmentsIndexRoute
   '/organization': typeof OrganizationIndexRoute
   '/owners': typeof OwnersIndexRoute
   '/pets': typeof PetsIndexRoute
+  '/surgeries': typeof SurgeriesIndexRoute
+  '/vademecum': typeof VademecumIndexRoute
   '/organization/$organizationId/edit': typeof OrganizationOrganizationIdEditRoute
   '/owners/new/verify': typeof OwnersNewVerifyRoute
   '/pets/$petId/history': typeof PetsPetIdHistoryRoute
@@ -180,15 +213,19 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/owners': typeof OwnersRouteWithChildren
   '/pets': typeof PetsRouteWithChildren
+  '/appointments/$appointmentId': typeof AppointmentsAppointmentIdRoute
   '/organization/$organizationId': typeof OrganizationOrganizationIdRouteWithChildren
   '/owners/$ownerId': typeof OwnersOwnerIdRoute
   '/owners/new': typeof OwnersNewRouteWithChildren
   '/pets/$petId': typeof PetsPetIdRouteWithChildren
   '/pets/new': typeof PetsNewRouteWithChildren
+  '/surgeries/$surgeryId': typeof SurgeriesSurgeryIdRoute
   '/appointments/': typeof AppointmentsIndexRoute
   '/organization/': typeof OrganizationIndexRoute
   '/owners/': typeof OwnersIndexRoute
   '/pets/': typeof PetsIndexRoute
+  '/surgeries/': typeof SurgeriesIndexRoute
+  '/vademecum/': typeof VademecumIndexRoute
   '/organization/$organizationId/edit': typeof OrganizationOrganizationIdEditRoute
   '/owners/new/verify': typeof OwnersNewVerifyRoute
   '/pets/$petId/history': typeof PetsPetIdHistoryRoute
@@ -204,15 +241,19 @@ export interface FileRouteTypes {
     | '/login'
     | '/owners'
     | '/pets'
+    | '/appointments/$appointmentId'
     | '/organization/$organizationId'
     | '/owners/$ownerId'
     | '/owners/new'
     | '/pets/$petId'
     | '/pets/new'
+    | '/surgeries/$surgeryId'
     | '/appointments'
     | '/organization'
     | '/owners/'
     | '/pets/'
+    | '/surgeries'
+    | '/vademecum'
     | '/organization/$organizationId/edit'
     | '/owners/new/verify'
     | '/pets/$petId/history'
@@ -224,13 +265,17 @@ export interface FileRouteTypes {
     | '/'
     | '/consultant'
     | '/login'
+    | '/appointments/$appointmentId'
     | '/organization/$organizationId'
     | '/owners/$ownerId'
     | '/pets/$petId'
+    | '/surgeries/$surgeryId'
     | '/appointments'
     | '/organization'
     | '/owners'
     | '/pets'
+    | '/surgeries'
+    | '/vademecum'
     | '/organization/$organizationId/edit'
     | '/owners/new/verify'
     | '/pets/$petId/history'
@@ -244,15 +289,19 @@ export interface FileRouteTypes {
     | '/login'
     | '/owners'
     | '/pets'
+    | '/appointments/$appointmentId'
     | '/organization/$organizationId'
     | '/owners/$ownerId'
     | '/owners/new'
     | '/pets/$petId'
     | '/pets/new'
+    | '/surgeries/$surgeryId'
     | '/appointments/'
     | '/organization/'
     | '/owners/'
     | '/pets/'
+    | '/surgeries/'
+    | '/vademecum/'
     | '/organization/$organizationId/edit'
     | '/owners/new/verify'
     | '/pets/$petId/history'
@@ -267,9 +316,13 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   OwnersRoute: typeof OwnersRouteWithChildren
   PetsRoute: typeof PetsRouteWithChildren
+  AppointmentsAppointmentIdRoute: typeof AppointmentsAppointmentIdRoute
   OrganizationOrganizationIdRoute: typeof OrganizationOrganizationIdRouteWithChildren
+  SurgeriesSurgeryIdRoute: typeof SurgeriesSurgeryIdRoute
   AppointmentsIndexRoute: typeof AppointmentsIndexRoute
   OrganizationIndexRoute: typeof OrganizationIndexRoute
+  SurgeriesIndexRoute: typeof SurgeriesIndexRoute
+  VademecumIndexRoute: typeof VademecumIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -309,6 +362,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/vademecum/': {
+      id: '/vademecum/'
+      path: '/vademecum'
+      fullPath: '/vademecum'
+      preLoaderRoute: typeof VademecumIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/surgeries/': {
+      id: '/surgeries/'
+      path: '/surgeries'
+      fullPath: '/surgeries'
+      preLoaderRoute: typeof SurgeriesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pets/': {
       id: '/pets/'
       path: '/'
@@ -335,6 +402,13 @@ declare module '@tanstack/react-router' {
       path: '/appointments'
       fullPath: '/appointments'
       preLoaderRoute: typeof AppointmentsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/surgeries/$surgeryId': {
+      id: '/surgeries/$surgeryId'
+      path: '/surgeries/$surgeryId'
+      fullPath: '/surgeries/$surgeryId'
+      preLoaderRoute: typeof SurgeriesSurgeryIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pets/new': {
@@ -370,6 +444,13 @@ declare module '@tanstack/react-router' {
       path: '/organization/$organizationId'
       fullPath: '/organization/$organizationId'
       preLoaderRoute: typeof OrganizationOrganizationIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/appointments/$appointmentId': {
+      id: '/appointments/$appointmentId'
+      path: '/appointments/$appointmentId'
+      fullPath: '/appointments/$appointmentId'
+      preLoaderRoute: typeof AppointmentsAppointmentIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pets/new/': {
@@ -505,9 +586,13 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   OwnersRoute: OwnersRouteWithChildren,
   PetsRoute: PetsRouteWithChildren,
+  AppointmentsAppointmentIdRoute: AppointmentsAppointmentIdRoute,
   OrganizationOrganizationIdRoute: OrganizationOrganizationIdRouteWithChildren,
+  SurgeriesSurgeryIdRoute: SurgeriesSurgeryIdRoute,
   AppointmentsIndexRoute: AppointmentsIndexRoute,
   OrganizationIndexRoute: OrganizationIndexRoute,
+  SurgeriesIndexRoute: SurgeriesIndexRoute,
+  VademecumIndexRoute: VademecumIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

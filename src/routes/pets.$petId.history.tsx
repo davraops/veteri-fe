@@ -13,6 +13,8 @@ import {
   CalendarToday as CalendarIcon,
   AccessTime as TimeIcon,
   Person as PersonIcon,
+  Event as EventIcon,
+  Warning as WarningIcon,
 } from '@mui/icons-material';
 import { Topbar } from '@/components/Topbar';
 import { Sidebar } from '@/components/Sidebar';
@@ -156,6 +158,61 @@ function PetMedicalHistory() {
     return timeString;
   };
 
+  // Calculate summary statistics
+  const totalEntries = sortedHistory.length;
+  const lastVisit = sortedHistory[0];
+  const upcomingFollowUps = sortedHistory
+    .filter((entry) => entry.followUp)
+    .map((entry) => ({
+      ...entry,
+      followUpDate: new Date(entry.followUp!.date),
+    }))
+    .filter((entry) => entry.followUpDate >= new Date())
+    .sort((a, b) => a.followUpDate.getTime() - b.followUpDate.getTime());
+
+  // Get active medications (from recent entries)
+  const activeMedications = sortedHistory
+    .filter((entry) => entry.medications && entry.medications.length > 0)
+    .slice(0, 3)
+    .flatMap((entry) =>
+      entry.medications!.map((med) => ({
+        ...med,
+        entryDate: entry.date,
+        entryTitle: entry.title,
+      }))
+    );
+
+  // Get recent diagnoses
+  const recentDiagnoses = sortedHistory
+    .filter((entry) => entry.diagnosis)
+    .slice(0, 3)
+    .map((entry) => ({
+      diagnosis: entry.diagnosis!,
+      date: entry.date,
+      type: entry.type,
+    }));
+
+  // Get all surgeries
+  const overallSurgeries = sortedHistory
+    .filter((entry) => entry.type === 'surgery')
+    .map((entry) => ({
+      title: entry.title,
+      date: entry.date,
+      diagnosis: entry.diagnosis,
+      professional: entry.professional.name,
+    }));
+
+  // Get all treatments
+  const overallTreatments = sortedHistory
+    .filter((entry) => entry.type === 'treatment')
+    .map((entry) => ({
+      title: entry.title,
+      date: entry.date,
+      diagnosis: entry.diagnosis,
+      followUpDate: entry.followUp?.date,
+      professional: entry.professional.name,
+    }));
+
   if (!pet) {
     return (
       <Box
@@ -232,6 +289,566 @@ function PetMedicalHistory() {
               {pet.name} {pet.lastName} • {pet.type} • {pet.breed}
             </Typography>
           </Box>
+
+          {/* Summary Card */}
+          {sortedHistory.length > 0 && (
+            <Paper
+              sx={{
+                padding: 3,
+                backgroundColor: '#ffffff',
+                border: '1px solid #d0d7de',
+                borderRadius: '8px',
+                marginBottom: 3,
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: '14px',
+                  fontWeight: 600,
+                  color: '#57606a',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px',
+                  marginBottom: 2,
+                }}
+              >
+                Quick Summary
+              </Typography>
+
+              <Box
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: {
+                    xs: '1fr',
+                    sm: 'repeat(2, 1fr)',
+                    md: 'repeat(4, 1fr)',
+                  },
+                  gap: 2,
+                  marginBottom: 3,
+                }}
+              >
+                {/* Total Entries */}
+                <Box
+                  sx={{
+                    padding: 2,
+                    backgroundColor: '#f6f8fa',
+                    borderRadius: '6px',
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 1,
+                      marginBottom: 0.5,
+                    }}
+                  >
+                    <EventIcon sx={{ fontSize: '18px', color: '#57606a' }} />
+                    <Typography
+                      sx={{
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        color: '#57606a',
+                        textTransform: 'uppercase',
+                      }}
+                    >
+                      Total Visits
+                    </Typography>
+                  </Box>
+                  <Typography
+                    sx={{
+                      fontSize: '24px',
+                      fontWeight: 700,
+                      color: '#24292f',
+                    }}
+                  >
+                    {totalEntries}
+                  </Typography>
+                </Box>
+
+                {/* Last Visit */}
+                {lastVisit && (
+                  <Box
+                    sx={{
+                      padding: 2,
+                      backgroundColor: '#f6f8fa',
+                      borderRadius: '6px',
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 1,
+                        marginBottom: 0.5,
+                      }}
+                    >
+                      <CalendarIcon
+                        sx={{ fontSize: '18px', color: '#57606a' }}
+                      />
+                      <Typography
+                        sx={{
+                          fontSize: '12px',
+                          fontWeight: 600,
+                          color: '#57606a',
+                          textTransform: 'uppercase',
+                        }}
+                      >
+                        Last Visit
+                      </Typography>
+                    </Box>
+                    <Typography
+                      sx={{
+                        fontSize: '16px',
+                        fontWeight: 600,
+                        color: '#24292f',
+                        marginBottom: 0.5,
+                      }}
+                    >
+                      {formatDate(lastVisit.date)}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: '13px',
+                        color: '#57606a',
+                      }}
+                    >
+                      {lastVisit.title}
+                    </Typography>
+                  </Box>
+                )}
+
+                {/* Upcoming Follow-ups */}
+                <Box
+                  sx={{
+                    padding: 2,
+                    backgroundColor: '#fff4e6',
+                    borderRadius: '6px',
+                    border: '1px solid #ffd89b',
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 1,
+                      marginBottom: 0.5,
+                    }}
+                  >
+                    <WarningIcon sx={{ fontSize: '18px', color: '#f59e0b' }} />
+                    <Typography
+                      sx={{
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        color: '#f59e0b',
+                        textTransform: 'uppercase',
+                      }}
+                    >
+                      Follow-ups
+                    </Typography>
+                  </Box>
+                  <Typography
+                    sx={{
+                      fontSize: '24px',
+                      fontWeight: 700,
+                      color: '#78350f',
+                    }}
+                  >
+                    {upcomingFollowUps.length}
+                  </Typography>
+                  {upcomingFollowUps.length > 0 && (
+                    <Typography
+                      sx={{
+                        fontSize: '12px',
+                        color: '#92400e',
+                        marginTop: 0.5,
+                      }}
+                    >
+                      Next: {formatDate(upcomingFollowUps[0].followUp!.date)}
+                    </Typography>
+                  )}
+                </Box>
+
+                {/* Active Medications */}
+                <Box
+                  sx={{
+                    padding: 2,
+                    backgroundColor: '#f6f8fa',
+                    borderRadius: '6px',
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 1,
+                      marginBottom: 0.5,
+                    }}
+                  >
+                    <MedicationIcon
+                      sx={{ fontSize: '18px', color: '#57606a' }}
+                    />
+                    <Typography
+                      sx={{
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        color: '#57606a',
+                        textTransform: 'uppercase',
+                      }}
+                    >
+                      Medications
+                    </Typography>
+                  </Box>
+                  <Typography
+                    sx={{
+                      fontSize: '24px',
+                      fontWeight: 700,
+                      color: '#24292f',
+                    }}
+                  >
+                    {activeMedications.length}
+                  </Typography>
+                  {activeMedications.length > 0 && (
+                    <Typography
+                      sx={{
+                        fontSize: '12px',
+                        color: '#57606a',
+                        marginTop: 0.5,
+                      }}
+                    >
+                      Currently active
+                    </Typography>
+                  )}
+                </Box>
+              </Box>
+
+              {/* Recent Diagnoses */}
+              {recentDiagnoses.length > 0 && (
+                <Box sx={{ marginTop: 2 }}>
+                  <Typography
+                    sx={{
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      color: '#57606a',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.5px',
+                      marginBottom: 1.5,
+                    }}
+                  >
+                    Recent Diagnoses
+                  </Typography>
+                  <Box
+                    sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}
+                  >
+                    {recentDiagnoses.map((item, idx) => (
+                      <Box
+                        key={idx}
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 2,
+                          padding: 1.5,
+                          backgroundColor: '#f6f8fa',
+                          borderRadius: '6px',
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            width: 32,
+                            height: 32,
+                            borderRadius: '6px',
+                            backgroundColor: `${getTypeColor(item.type)}15`,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: getTypeColor(item.type),
+                            flexShrink: 0,
+                          }}
+                        >
+                          {getTypeIcon(item.type)}
+                        </Box>
+                        <Box sx={{ flexGrow: 1, minWidth: 0 }}>
+                          <Typography
+                            sx={{
+                              fontSize: '14px',
+                              fontWeight: 600,
+                              color: '#24292f',
+                            }}
+                          >
+                            {item.diagnosis}
+                          </Typography>
+                          <Typography
+                            sx={{
+                              fontSize: '12px',
+                              color: '#57606a',
+                            }}
+                          >
+                            {formatDate(item.date)}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    ))}
+                  </Box>
+                </Box>
+              )}
+
+              {/* Active Medications List */}
+              {activeMedications.length > 0 && (
+                <Box sx={{ marginTop: 2 }}>
+                  <Typography
+                    sx={{
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      color: '#57606a',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.5px',
+                      marginBottom: 1.5,
+                    }}
+                  >
+                    Active Medications
+                  </Typography>
+                  <Box
+                    sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}
+                  >
+                    {activeMedications.slice(0, 3).map((med, idx) => (
+                      <Box
+                        key={idx}
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 2,
+                          padding: 1.5,
+                          backgroundColor: '#f0f9ff',
+                          borderRadius: '6px',
+                          border: '1px solid #bae6fd',
+                        }}
+                      >
+                        <MedicationIcon
+                          sx={{
+                            fontSize: '20px',
+                            color: '#06b6d4',
+                            flexShrink: 0,
+                          }}
+                        />
+                        <Box sx={{ flexGrow: 1, minWidth: 0 }}>
+                          <Typography
+                            sx={{
+                              fontSize: '14px',
+                              fontWeight: 600,
+                              color: '#24292f',
+                            }}
+                          >
+                            {med.name}
+                          </Typography>
+                          <Typography
+                            sx={{
+                              fontSize: '12px',
+                              color: '#57606a',
+                            }}
+                          >
+                            {med.dosage} • {med.frequency}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    ))}
+                  </Box>
+                </Box>
+              )}
+
+              {/* Overall Surgeries */}
+              {overallSurgeries.length > 0 && (
+                <Box sx={{ marginTop: 2 }}>
+                  <Typography
+                    sx={{
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      color: '#57606a',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.5px',
+                      marginBottom: 1.5,
+                    }}
+                  >
+                    Overall Surgeries ({overallSurgeries.length})
+                  </Typography>
+                  <Box
+                    sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}
+                  >
+                    {overallSurgeries.map((surgery, idx) => (
+                      <Box
+                        key={idx}
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 2,
+                          padding: 1.5,
+                          backgroundColor: '#fef2f2',
+                          borderRadius: '6px',
+                          border: '1px solid #fecaca',
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            width: 32,
+                            height: 32,
+                            borderRadius: '6px',
+                            backgroundColor: '#ef444415',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: '#ef4444',
+                            flexShrink: 0,
+                          }}
+                        >
+                          <HealingIcon sx={{ fontSize: '18px' }} />
+                        </Box>
+                        <Box sx={{ flexGrow: 1, minWidth: 0 }}>
+                          <Typography
+                            sx={{
+                              fontSize: '14px',
+                              fontWeight: 600,
+                              color: '#24292f',
+                            }}
+                          >
+                            {surgery.title}
+                          </Typography>
+                          {surgery.diagnosis && (
+                            <Typography
+                              sx={{
+                                fontSize: '12px',
+                                color: '#57606a',
+                                marginTop: 0.25,
+                              }}
+                            >
+                              {surgery.diagnosis}
+                            </Typography>
+                          )}
+                          <Typography
+                            sx={{
+                              fontSize: '12px',
+                              color: '#991b1b',
+                              marginTop: 0.25,
+                            }}
+                          >
+                            {formatDate(surgery.date)} • {surgery.professional}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    ))}
+                  </Box>
+                </Box>
+              )}
+
+              {/* Overall Treatments */}
+              {overallTreatments.length > 0 && (
+                <Box sx={{ marginTop: 2 }}>
+                  <Typography
+                    sx={{
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      color: '#57606a',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.5px',
+                      marginBottom: 1.5,
+                    }}
+                  >
+                    Overall Treatments ({overallTreatments.length})
+                  </Typography>
+                  <Box
+                    sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}
+                  >
+                    {overallTreatments.map((treatment, idx) => (
+                      <Box
+                        key={idx}
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 2,
+                          padding: 1.5,
+                          backgroundColor: '#f0fdf4',
+                          borderRadius: '6px',
+                          border: '1px solid #bbf7d0',
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            width: 32,
+                            height: 32,
+                            borderRadius: '6px',
+                            backgroundColor: '#10b98115',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: '#10b981',
+                            flexShrink: 0,
+                          }}
+                        >
+                          <HealingIcon sx={{ fontSize: '18px' }} />
+                        </Box>
+                        <Box sx={{ flexGrow: 1, minWidth: 0 }}>
+                          <Typography
+                            sx={{
+                              fontSize: '14px',
+                              fontWeight: 600,
+                              color: '#24292f',
+                            }}
+                          >
+                            {treatment.title}
+                          </Typography>
+                          {treatment.diagnosis && (
+                            <Typography
+                              sx={{
+                                fontSize: '12px',
+                                color: '#57606a',
+                                marginTop: 0.25,
+                              }}
+                            >
+                              {treatment.diagnosis}
+                            </Typography>
+                          )}
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: 1,
+                              marginTop: 0.5,
+                              flexWrap: 'wrap',
+                            }}
+                          >
+                            <Typography
+                              sx={{
+                                fontSize: '12px',
+                                color: '#57606a',
+                              }}
+                            >
+                              {formatDate(treatment.date)}
+                            </Typography>
+                            {treatment.followUpDate && (
+                              <Typography
+                                sx={{
+                                  fontSize: '12px',
+                                  color: '#065f46',
+                                }}
+                              >
+                                • Follow-up:{' '}
+                                {formatDate(treatment.followUpDate)}
+                              </Typography>
+                            )}
+                            <Typography
+                              sx={{
+                                fontSize: '12px',
+                                color: '#57606a',
+                              }}
+                            >
+                              • {treatment.professional}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      </Box>
+                    ))}
+                  </Box>
+                </Box>
+              )}
+            </Paper>
+          )}
 
           {/* Timeline */}
           {sortedHistory.length === 0 ? (
