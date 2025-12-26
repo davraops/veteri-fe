@@ -10,7 +10,6 @@ import {
   Select,
   MenuItem,
   Chip,
-  Grid,
   Alert,
   Button,
 } from '@mui/material';
@@ -252,107 +251,107 @@ function Inventory() {
           {selectedOrganization && (
             <>
               {/* Statistics Cards */}
-              <Grid
-                container
-                spacing={2}
-                sx={{ marginBottom: 3, width: '100%' }}
+              <Box
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: {
+                    xs: '1fr',
+                    sm: 'repeat(2, 1fr)',
+                    md: 'repeat(4, 1fr)',
+                  },
+                  gap: 2,
+                  marginBottom: 3,
+                  width: '100%',
+                }}
               >
-                <Grid item xs={12} sm={6} md={3} sx={{ display: 'flex' }}>
-                  <Paper
+                <Paper
+                  sx={{
+                    padding: 2,
+                    backgroundColor: '#ffffff',
+                    border: '1px solid #d0d7de',
+                    width: '100%',
+                  }}
+                >
+                  <Typography
+                    variant="body2"
+                    sx={{ color: '#57606a', marginBottom: 1 }}
+                  >
+                    Total Items
+                  </Typography>
+                  <Typography
+                    variant="h4"
+                    sx={{ fontWeight: 600, color: '#24292f' }}
+                  >
+                    {stats.totalItems}
+                  </Typography>
+                </Paper>
+                <Paper
+                  sx={{
+                    padding: 2,
+                    backgroundColor: '#ffffff',
+                    border: '1px solid #d0d7de',
+                    width: '100%',
+                  }}
+                >
+                  <Typography
+                    variant="body2"
+                    sx={{ color: '#57606a', marginBottom: 1 }}
+                  >
+                    Total Value
+                  </Typography>
+                  <Typography
+                    variant="h4"
+                    sx={{ fontWeight: 600, color: '#24292f' }}
+                  >
+                    ${stats.totalValue.toFixed(2)}
+                  </Typography>
+                </Paper>
+                <Paper
+                  sx={{
+                    padding: 2,
+                    backgroundColor: '#ffffff',
+                    border: '1px solid #d0d7de',
+                    width: '100%',
+                  }}
+                >
+                  <Typography
+                    variant="body2"
+                    sx={{ color: '#57606a', marginBottom: 1 }}
+                  >
+                    Low Stock Items
+                  </Typography>
+                  <Typography
+                    variant="h4"
                     sx={{
-                      padding: 2,
-                      backgroundColor: '#ffffff',
-                      border: '1px solid #d0d7de',
-                      width: '100%',
+                      fontWeight: 600,
+                      color: stats.lowStockCount > 0 ? '#dc2626' : '#24292f',
                     }}
                   >
-                    <Typography
-                      variant="body2"
-                      sx={{ color: '#57606a', marginBottom: 1 }}
-                    >
-                      Total Items
-                    </Typography>
-                    <Typography
-                      variant="h4"
-                      sx={{ fontWeight: 600, color: '#24292f' }}
-                    >
-                      {stats.totalItems}
-                    </Typography>
-                  </Paper>
-                </Grid>
-                <Grid item xs={12} sm={6} md={3} sx={{ display: 'flex' }}>
-                  <Paper
-                    sx={{
-                      padding: 2,
-                      backgroundColor: '#ffffff',
-                      border: '1px solid #d0d7de',
-                      width: '100%',
-                    }}
+                    {stats.lowStockCount}
+                  </Typography>
+                </Paper>
+                <Paper
+                  sx={{
+                    padding: 2,
+                    backgroundColor: '#ffffff',
+                    border: '1px solid #d0d7de',
+                    width: '100%',
+                  }}
+                >
+                  <Typography
+                    variant="body2"
+                    sx={{ color: '#57606a', marginBottom: 1 }}
                   >
-                    <Typography
-                      variant="body2"
-                      sx={{ color: '#57606a', marginBottom: 1 }}
-                    >
-                      Total Value
-                    </Typography>
-                    <Typography
-                      variant="h4"
-                      sx={{ fontWeight: 600, color: '#24292f' }}
-                    >
-                      ${stats.totalValue.toFixed(2)}
-                    </Typography>
-                  </Paper>
-                </Grid>
-                <Grid item xs={12} sm={6} md={3} sx={{ display: 'flex' }}>
-                  <Paper
-                    sx={{
-                      padding: 2,
-                      backgroundColor: '#ffffff',
-                      border: '1px solid #d0d7de',
-                      width: '100%',
-                    }}
+                    Categories
+                  </Typography>
+                  <Typography
+                    variant="h4"
+                    sx={{ fontWeight: 600, color: '#24292f' }}
                   >
-                    <Typography
-                      variant="body2"
-                      sx={{ color: '#57606a', marginBottom: 1 }}
-                    >
-                      Low Stock Items
-                    </Typography>
-                    <Typography
-                      variant="h4"
-                      sx={{
-                        fontWeight: 600,
-                        color: stats.lowStockCount > 0 ? '#dc2626' : '#24292f',
-                      }}
-                    >
-                      {stats.lowStockCount}
-                    </Typography>
-                  </Paper>
-                </Grid>
-                <Grid item xs={12} sm={6} md={3} sx={{ display: 'flex' }}>
-                  <Paper
-                    sx={{
-                      padding: 2,
-                      backgroundColor: '#ffffff',
-                      border: '1px solid #d0d7de',
-                      width: '100%',
-                    }}
-                  >
-                    <Typography
-                      variant="body2"
-                      sx={{ color: '#57606a', marginBottom: 1 }}
-                    >
-                      Categories
-                    </Typography>
-                    <Typography
-                      variant="h4"
-                      sx={{ fontWeight: 600, color: '#24292f' }}
-                    >
-                      {stats.categoriesCount}
-                    </Typography>
-                  </Paper>
-                </Grid>
-              </Grid>
+                    {stats.categoriesCount}
+                  </Typography>
+                </Paper>
+              </Box>
 
               {/* Low Stock Alert */}
               {lowStockItems.length > 0 && (

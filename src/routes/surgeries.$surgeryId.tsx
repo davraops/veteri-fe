@@ -1,14 +1,6 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
-import {
-  Box,
-  Typography,
-  Paper,
-  Avatar,
-  Button,
-  Chip,
-  Grid,
-} from '@mui/material';
+import { Box, Typography, Paper, Avatar, Button, Chip } from '@mui/material';
 import {
   ArrowBack as ArrowBackIcon,
   CalendarToday as CalendarTodayIcon,
@@ -316,9 +308,16 @@ function SurgeryDetail() {
           </Paper>
 
           {/* Main Content Grid */}
-          <Grid container spacing={2} sx={{ width: '100%' }}>
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: { xs: '1fr', md: '2fr 1fr' },
+              gap: 2,
+              width: '100%',
+            }}
+          >
             {/* First Row: Schedule (larger) and Organization (smaller) */}
-            <Grid item xs={12} md={8} sx={{ display: 'flex' }}>
+            <Box sx={{ display: 'flex' }}>
               <Paper
                 sx={{
                   padding: 2.5,
@@ -354,8 +353,14 @@ function SurgeryDetail() {
                     Schedule
                   </Typography>
                 </Box>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={4}>
+                <Box
+                  sx={{
+                    display: 'grid',
+                    gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, 1fr)' },
+                    gap: 2,
+                  }}
+                >
+                  <Box>
                     <Box>
                       <Typography
                         sx={{
@@ -384,66 +389,62 @@ function SurgeryDetail() {
                         {startDateTime.time}
                       </Typography>
                     </Box>
-                  </Grid>
-                  <Grid item xs={12} sm={4}>
-                    <Box>
-                      <Typography
-                        sx={{
-                          fontSize: '12px',
-                          color: '#57606a',
-                          marginBottom: 0.5,
-                        }}
-                      >
-                        End
-                      </Typography>
-                      <Typography
-                        sx={{
-                          fontSize: '15px',
-                          fontWeight: 600,
-                          color: '#24292f',
-                        }}
-                      >
-                        {endDateTime.date}
-                      </Typography>
-                      <Typography
-                        sx={{
-                          fontSize: '13px',
-                          color: '#57606a',
-                        }}
-                      >
-                        {endDateTime.time}
-                      </Typography>
-                    </Box>
-                  </Grid>
-                  <Grid item xs={12} sm={4}>
-                    <Box>
-                      <Typography
-                        sx={{
-                          fontSize: '12px',
-                          color: '#57606a',
-                          marginBottom: 0.5,
-                        }}
-                      >
-                        Duration
-                      </Typography>
-                      <Typography
-                        sx={{
-                          fontSize: '15px',
-                          fontWeight: 600,
-                          color: '#24292f',
-                        }}
-                      >
-                        {durationHours > 0
-                          ? `${durationHours} hour${durationHours > 1 ? 's' : ''} ${durationMins > 0 ? `and ${durationMins} minute${durationMins > 1 ? 's' : ''}` : ''}`
-                          : `${durationMins} minute${durationMins > 1 ? 's' : ''}`}
-                      </Typography>
-                    </Box>
-                  </Grid>
-                </Grid>
+                  </Box>
+                  <Box>
+                    <Typography
+                      sx={{
+                        fontSize: '12px',
+                        color: '#57606a',
+                        marginBottom: 0.5,
+                      }}
+                    >
+                      End
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: '15px',
+                        fontWeight: 600,
+                        color: '#24292f',
+                      }}
+                    >
+                      {endDateTime.date}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: '13px',
+                        color: '#57606a',
+                      }}
+                    >
+                      {endDateTime.time}
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <Typography
+                      sx={{
+                        fontSize: '12px',
+                        color: '#57606a',
+                        marginBottom: 0.5,
+                      }}
+                    >
+                      Duration
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: '15px',
+                        fontWeight: 600,
+                        color: '#24292f',
+                      }}
+                    >
+                      {durationHours > 0
+                        ? `${durationHours} hour${durationHours > 1 ? 's' : ''} ${durationMins > 0 ? `and ${durationMins} minute${durationMins > 1 ? 's' : ''}` : ''}`
+                        : `${durationMins} minute${durationMins > 1 ? 's' : ''}`}
+                    </Typography>
+                  </Box>
+                </Box>
               </Paper>
-            </Grid>
+            </Box>
 
-            <Grid item xs={12} md={4} sx={{ display: 'flex' }}>
+            <Box sx={{ display: 'flex' }}>
               {organization && (
                 <Paper
                   sx={{
@@ -534,10 +535,10 @@ function SurgeryDetail() {
                   </Box>
                 </Paper>
               )}
-            </Grid>
+            </Box>
 
             {/* Second Row: Surgical Team - Full Width */}
-            <Grid item xs={12}>
+            <Box sx={{ gridColumn: { xs: '1', md: '1 / -1' } }}>
               <Paper
                 sx={{
                   padding: 2.5,
@@ -568,9 +569,19 @@ function SurgeryDetail() {
                     {assignedTeam.length !== 1 ? 's' : ''})
                   </Typography>
                 </Box>
-                <Grid container spacing={2}>
+                <Box
+                  sx={{
+                    display: 'grid',
+                    gridTemplateColumns: {
+                      xs: '1fr',
+                      sm: 'repeat(2, 1fr)',
+                      md: 'repeat(3, 1fr)',
+                    },
+                    gap: 2,
+                  }}
+                >
                   {assignedTeam.map((member, index) => (
-                    <Grid item xs={12} sm={6} md={4} key={member.userId}>
+                    <Box key={member.userId}>
                       <Box
                         sx={{
                           padding: 2,
@@ -628,15 +639,15 @@ function SurgeryDetail() {
                           {member.email}
                         </Typography>
                       </Box>
-                    </Grid>
+                    </Box>
                   ))}
-                </Grid>
+                </Box>
               </Paper>
-            </Grid>
+            </Box>
 
             {/* Third Row: Pet and Owner Information */}
             {pet && (
-              <Grid item xs={12} md={6} sx={{ display: 'flex' }}>
+              <Box sx={{ display: 'flex', gridColumn: { xs: '1', md: '1' } }}>
                 <Paper
                   sx={{
                     padding: 2.5,
@@ -719,11 +730,11 @@ function SurgeryDetail() {
                     </Box>
                   </Box>
                 </Paper>
-              </Grid>
+              </Box>
             )}
 
             {owner && (
-              <Grid item xs={12} md={6} sx={{ display: 'flex' }}>
+              <Box sx={{ display: 'flex', gridColumn: { xs: '1', md: '2' } }}>
                 <Paper
                   sx={{
                     padding: 2.5,
@@ -825,12 +836,12 @@ function SurgeryDetail() {
                     </Box>
                   )}
                 </Paper>
-              </Grid>
+              </Box>
             )}
 
             {/* Fourth Row: Notes - Full Width */}
             {surgery.notes && (
-              <Grid item xs={12}>
+              <Box sx={{ gridColumn: { xs: '1', md: '1 / -1' } }}>
                 <Paper
                   sx={{
                     padding: 2.5,
@@ -871,9 +882,9 @@ function SurgeryDetail() {
                     {surgery.notes}
                   </Typography>
                 </Paper>
-              </Grid>
+              </Box>
             )}
-          </Grid>
+          </Box>
         </Box>
       </Box>
     </Box>

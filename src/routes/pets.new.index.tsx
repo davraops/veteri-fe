@@ -47,7 +47,9 @@ function NewPet() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedOrganization, setSelectedOrganization] = useState<string>('');
   const [showNewOwnerForm, setShowNewOwnerForm] = useState(false);
-  const [newOwnerData, setNewOwnerData] = useState<Owner | null>(null);
+  const [newOwnerData, setNewOwnerData] = useState<Owner | undefined>(
+    undefined
+  );
   const [ownerSearchValue, setOwnerSearchValue] = useState('');
   const [ownerSearchFocused, setOwnerSearchFocused] = useState(false);
   const [selectedOwner, setSelectedOwner] = useState<Owner | null>(null);
@@ -89,19 +91,24 @@ function NewPet() {
           return;
         }
         // Store owner data for next time and use it now
-        setNewOwnerData(ownerFormValue);
-        ownerDataToInclude = ownerFormValue;
+        // Create a temporary Owner object with placeholder id and empty pets array
+        const tempOwner: Owner = {
+          ...ownerFormValue,
+          id: -1, // Temporary ID, will be assigned when owner is created
+          pets: [],
+        };
+        setNewOwnerData(tempOwner);
+        ownerDataToInclude = tempOwner;
       }
 
-      const searchParams: PetFormValues & { newOwnerData?: Owner } = {
+      const searchParams = {
         ...value,
+        ...(ownerDataToInclude && { newOwnerData: ownerDataToInclude }),
       };
-      if (ownerDataToInclude) {
-        searchParams.newOwnerData = ownerDataToInclude;
-      }
       // Navigate to verification page with form data
       navigate({
         to: '/pets/new/verify',
+        // @ts-expect-error - newOwnerData is optional but route expects it when provided
         search: searchParams,
       });
     },
@@ -134,7 +141,13 @@ function NewPet() {
         return;
       }
       // Store owner data
-      setNewOwnerData(value);
+      // Create a temporary Owner object with placeholder id and empty pets array
+      const tempOwner: Owner = {
+        ...value,
+        id: -1, // Temporary ID, will be assigned when owner is created
+        pets: [],
+      };
+      setNewOwnerData(tempOwner);
       // Set ownerId to 'new' to indicate new owner
       form.setFieldValue('ownerId', 'new');
     },
@@ -603,7 +616,7 @@ function NewPet() {
                         onClick={() => {
                           setShowNewOwnerForm(false);
                           form.setFieldValue('ownerId', '');
-                          setNewOwnerData(null);
+                          setNewOwnerData(undefined);
                           setOwnerSearchValue('');
                           setSelectedOwner(null);
                           ownerForm.reset();

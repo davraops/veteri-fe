@@ -904,7 +904,7 @@ function Vademecum() {
   const paginatedMedications = filteredMedications.slice(startIndex, endIndex);
 
   // Form for adding new medication
-  const medicationForm = useForm<MedicationFormValues>({
+  const medicationForm = useForm({
     defaultValues: {
       name: '',
       activeIngredient: '',
@@ -917,7 +917,7 @@ function Vademecum() {
       sideEffects: [],
       presentation: '',
       manufacturer: '',
-    },
+    } as MedicationFormValues,
     onSubmit: async ({ value }) => {
       const newMedication: Medication = {
         id: String(medications.length + 1),

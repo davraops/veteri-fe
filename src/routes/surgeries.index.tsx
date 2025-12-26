@@ -8,7 +8,6 @@ import {
   Chip,
   Card,
   CardContent,
-  Grid,
   Avatar,
 } from '@mui/material';
 import {
@@ -501,7 +500,13 @@ function Surgeries() {
               Upcoming Surgeries (Next 7 Days)
             </Typography>
             {upcomingSurgeries.length > 0 ? (
-              <Grid container spacing={2}>
+              <Box
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' },
+                  gap: 2,
+                }}
+              >
                 {upcomingSurgeries.map((appointment) => {
                   const { pet, organization } = getAppointmentInfo(appointment);
                   const orgColor = getOrganizationColor(
@@ -513,7 +518,7 @@ function Surgeries() {
                   const timeRemaining = getTimeRemaining(appointment.startTime);
 
                   return (
-                    <Grid item xs={12} md={6} key={appointment.id}>
+                    <Box key={appointment.id}>
                       <Card
                         sx={{
                           border: '1px solid #d0d7de',
@@ -742,10 +747,10 @@ function Surgeries() {
                           )}
                         </CardContent>
                       </Card>
-                    </Grid>
+                    </Box>
                   );
                 })}
-              </Grid>
+              </Box>
             ) : (
               <Paper
                 sx={{
