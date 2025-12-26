@@ -35,6 +35,7 @@ jobs:
   deploy:
     needs: checks
     runs-on: ubuntu-latest
+    environment: DEV
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -54,10 +55,11 @@ jobs:
         run: |
           if [ -z "${{ secrets.AWS_ACCESS_KEY_ID_DEV }}" ] || [ -z "${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}" ] || [ -z "${{ secrets.AWS_S3_BUCKET_DEV }}" ]; then
             echo "❌ Error: AWS secrets no están configurados en GitHub"
-            echo "Por favor, configura los siguientes secrets en Settings > Secrets and variables > Actions:"
+            echo "Por favor, configura los siguientes secrets como Environment Secrets en el environment 'DEV':"
             echo "  - AWS_ACCESS_KEY_ID_DEV"
             echo "  - AWS_SECRET_ACCESS_KEY_DEV"
             echo "  - AWS_S3_BUCKET_DEV"
+            echo "Ve a Settings > Environments > DEV > Secrets and variables"
             echo "Ver .github/SECRETS.md para más información"
             exit 1
           fi
