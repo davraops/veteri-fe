@@ -8,88 +8,378 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as ConsultantRouteImport } from './routes/consultant'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as rootRouteImport } from './routes/__root';
+import { Route as PetsRouteImport } from './routes/pets';
+import { Route as OwnersRouteImport } from './routes/owners';
+import { Route as LoginRouteImport } from './routes/login';
+import { Route as ConsultantRouteImport } from './routes/consultant';
+import { Route as IndexRouteImport } from './routes/index';
+import { Route as PetsIndexRouteImport } from './routes/pets.index';
+import { Route as OwnersIndexRouteImport } from './routes/owners.index';
+import { Route as PetsNewRouteImport } from './routes/pets.new';
+import { Route as PetsPetIdRouteImport } from './routes/pets.$petId';
+import { Route as OwnersNewRouteImport } from './routes/owners.new';
+import { Route as OwnersOwnerIdRouteImport } from './routes/owners.$ownerId';
+import { Route as PetsNewIndexRouteImport } from './routes/pets.new.index';
+import { Route as OwnersNewIndexRouteImport } from './routes/owners.new.index';
+import { Route as PetsNewVerifyRouteImport } from './routes/pets.new.verify';
+import { Route as OwnersNewVerifyRouteImport } from './routes/owners.new.verify';
 
+const PetsRoute = PetsRouteImport.update({
+  id: '/pets',
+  path: '/pets',
+  getParentRoute: () => rootRouteImport,
+} as any);
+const OwnersRoute = OwnersRouteImport.update({
+  id: '/owners',
+  path: '/owners',
+  getParentRoute: () => rootRouteImport,
+} as any);
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const ConsultantRoute = ConsultantRouteImport.update({
   id: '/consultant',
   path: '/consultant',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
+const PetsIndexRoute = PetsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PetsRoute,
+} as any);
+const OwnersIndexRoute = OwnersIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => OwnersRoute,
+} as any);
+const PetsNewRoute = PetsNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => PetsRoute,
+} as any);
+const PetsPetIdRoute = PetsPetIdRouteImport.update({
+  id: '/$petId',
+  path: '/$petId',
+  getParentRoute: () => PetsRoute,
+} as any);
+const OwnersNewRoute = OwnersNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => OwnersRoute,
+} as any);
+const OwnersOwnerIdRoute = OwnersOwnerIdRouteImport.update({
+  id: '/$ownerId',
+  path: '/$ownerId',
+  getParentRoute: () => OwnersRoute,
+} as any);
+const PetsNewIndexRoute = PetsNewIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PetsNewRoute,
+} as any);
+const OwnersNewIndexRoute = OwnersNewIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => OwnersNewRoute,
+} as any);
+const PetsNewVerifyRoute = PetsNewVerifyRouteImport.update({
+  id: '/verify',
+  path: '/verify',
+  getParentRoute: () => PetsNewRoute,
+} as any);
+const OwnersNewVerifyRoute = OwnersNewVerifyRouteImport.update({
+  id: '/verify',
+  path: '/verify',
+  getParentRoute: () => OwnersNewRoute,
+} as any);
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/consultant': typeof ConsultantRoute
-  '/login': typeof LoginRoute
+  '/': typeof IndexRoute;
+  '/consultant': typeof ConsultantRoute;
+  '/login': typeof LoginRoute;
+  '/owners': typeof OwnersRouteWithChildren;
+  '/pets': typeof PetsRouteWithChildren;
+  '/owners/$ownerId': typeof OwnersOwnerIdRoute;
+  '/owners/new': typeof OwnersNewRouteWithChildren;
+  '/pets/$petId': typeof PetsPetIdRoute;
+  '/pets/new': typeof PetsNewRouteWithChildren;
+  '/owners/': typeof OwnersIndexRoute;
+  '/pets/': typeof PetsIndexRoute;
+  '/owners/new/verify': typeof OwnersNewVerifyRoute;
+  '/pets/new/verify': typeof PetsNewVerifyRoute;
+  '/owners/new/': typeof OwnersNewIndexRoute;
+  '/pets/new/': typeof PetsNewIndexRoute;
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/consultant': typeof ConsultantRoute
-  '/login': typeof LoginRoute
+  '/': typeof IndexRoute;
+  '/consultant': typeof ConsultantRoute;
+  '/login': typeof LoginRoute;
+  '/owners/$ownerId': typeof OwnersOwnerIdRoute;
+  '/pets/$petId': typeof PetsPetIdRoute;
+  '/owners': typeof OwnersIndexRoute;
+  '/pets': typeof PetsIndexRoute;
+  '/owners/new/verify': typeof OwnersNewVerifyRoute;
+  '/pets/new/verify': typeof PetsNewVerifyRoute;
+  '/owners/new': typeof OwnersNewIndexRoute;
+  '/pets/new': typeof PetsNewIndexRoute;
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/consultant': typeof ConsultantRoute
-  '/login': typeof LoginRoute
+  __root__: typeof rootRouteImport;
+  '/': typeof IndexRoute;
+  '/consultant': typeof ConsultantRoute;
+  '/login': typeof LoginRoute;
+  '/owners': typeof OwnersRouteWithChildren;
+  '/pets': typeof PetsRouteWithChildren;
+  '/owners/$ownerId': typeof OwnersOwnerIdRoute;
+  '/owners/new': typeof OwnersNewRouteWithChildren;
+  '/pets/$petId': typeof PetsPetIdRoute;
+  '/pets/new': typeof PetsNewRouteWithChildren;
+  '/owners/': typeof OwnersIndexRoute;
+  '/pets/': typeof PetsIndexRoute;
+  '/owners/new/verify': typeof OwnersNewVerifyRoute;
+  '/pets/new/verify': typeof PetsNewVerifyRoute;
+  '/owners/new/': typeof OwnersNewIndexRoute;
+  '/pets/new/': typeof PetsNewIndexRoute;
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/consultant' | '/login'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/consultant' | '/login'
-  id: '__root__' | '/' | '/consultant' | '/login'
-  fileRoutesById: FileRoutesById
+  fileRoutesByFullPath: FileRoutesByFullPath;
+  fullPaths:
+    | '/'
+    | '/consultant'
+    | '/login'
+    | '/owners'
+    | '/pets'
+    | '/owners/$ownerId'
+    | '/owners/new'
+    | '/pets/$petId'
+    | '/pets/new'
+    | '/owners/'
+    | '/pets/'
+    | '/owners/new/verify'
+    | '/pets/new/verify'
+    | '/owners/new/'
+    | '/pets/new/';
+  fileRoutesByTo: FileRoutesByTo;
+  to:
+    | '/'
+    | '/consultant'
+    | '/login'
+    | '/owners/$ownerId'
+    | '/pets/$petId'
+    | '/owners'
+    | '/pets'
+    | '/owners/new/verify'
+    | '/pets/new/verify'
+    | '/owners/new'
+    | '/pets/new';
+  id:
+    | '__root__'
+    | '/'
+    | '/consultant'
+    | '/login'
+    | '/owners'
+    | '/pets'
+    | '/owners/$ownerId'
+    | '/owners/new'
+    | '/pets/$petId'
+    | '/pets/new'
+    | '/owners/'
+    | '/pets/'
+    | '/owners/new/verify'
+    | '/pets/new/verify'
+    | '/owners/new/'
+    | '/pets/new/';
+  fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  ConsultantRoute: typeof ConsultantRoute
-  LoginRoute: typeof LoginRoute
+  IndexRoute: typeof IndexRoute;
+  ConsultantRoute: typeof ConsultantRoute;
+  LoginRoute: typeof LoginRoute;
+  OwnersRoute: typeof OwnersRouteWithChildren;
+  PetsRoute: typeof PetsRouteWithChildren;
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/pets': {
+      id: '/pets';
+      path: '/pets';
+      fullPath: '/pets';
+      preLoaderRoute: typeof PetsRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    '/owners': {
+      id: '/owners';
+      path: '/owners';
+      fullPath: '/owners';
+      preLoaderRoute: typeof OwnersRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+      id: '/login';
+      path: '/login';
+      fullPath: '/login';
+      preLoaderRoute: typeof LoginRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/consultant': {
-      id: '/consultant'
-      path: '/consultant'
-      fullPath: '/consultant'
-      preLoaderRoute: typeof ConsultantRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+      id: '/consultant';
+      path: '/consultant';
+      fullPath: '/consultant';
+      preLoaderRoute: typeof ConsultantRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+      id: '/';
+      path: '/';
+      fullPath: '/';
+      preLoaderRoute: typeof IndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    '/pets/': {
+      id: '/pets/';
+      path: '/';
+      fullPath: '/pets/';
+      preLoaderRoute: typeof PetsIndexRouteImport;
+      parentRoute: typeof PetsRoute;
+    };
+    '/owners/': {
+      id: '/owners/';
+      path: '/';
+      fullPath: '/owners/';
+      preLoaderRoute: typeof OwnersIndexRouteImport;
+      parentRoute: typeof OwnersRoute;
+    };
+    '/pets/new': {
+      id: '/pets/new';
+      path: '/new';
+      fullPath: '/pets/new';
+      preLoaderRoute: typeof PetsNewRouteImport;
+      parentRoute: typeof PetsRoute;
+    };
+    '/pets/$petId': {
+      id: '/pets/$petId';
+      path: '/$petId';
+      fullPath: '/pets/$petId';
+      preLoaderRoute: typeof PetsPetIdRouteImport;
+      parentRoute: typeof PetsRoute;
+    };
+    '/owners/new': {
+      id: '/owners/new';
+      path: '/new';
+      fullPath: '/owners/new';
+      preLoaderRoute: typeof OwnersNewRouteImport;
+      parentRoute: typeof OwnersRoute;
+    };
+    '/owners/$ownerId': {
+      id: '/owners/$ownerId';
+      path: '/$ownerId';
+      fullPath: '/owners/$ownerId';
+      preLoaderRoute: typeof OwnersOwnerIdRouteImport;
+      parentRoute: typeof OwnersRoute;
+    };
+    '/pets/new/': {
+      id: '/pets/new/';
+      path: '/';
+      fullPath: '/pets/new/';
+      preLoaderRoute: typeof PetsNewIndexRouteImport;
+      parentRoute: typeof PetsNewRoute;
+    };
+    '/owners/new/': {
+      id: '/owners/new/';
+      path: '/';
+      fullPath: '/owners/new/';
+      preLoaderRoute: typeof OwnersNewIndexRouteImport;
+      parentRoute: typeof OwnersNewRoute;
+    };
+    '/pets/new/verify': {
+      id: '/pets/new/verify';
+      path: '/verify';
+      fullPath: '/pets/new/verify';
+      preLoaderRoute: typeof PetsNewVerifyRouteImport;
+      parentRoute: typeof PetsNewRoute;
+    };
+    '/owners/new/verify': {
+      id: '/owners/new/verify';
+      path: '/verify';
+      fullPath: '/owners/new/verify';
+      preLoaderRoute: typeof OwnersNewVerifyRouteImport;
+      parentRoute: typeof OwnersNewRoute;
+    };
   }
 }
+
+interface OwnersNewRouteChildren {
+  OwnersNewVerifyRoute: typeof OwnersNewVerifyRoute;
+  OwnersNewIndexRoute: typeof OwnersNewIndexRoute;
+}
+
+const OwnersNewRouteChildren: OwnersNewRouteChildren = {
+  OwnersNewVerifyRoute: OwnersNewVerifyRoute,
+  OwnersNewIndexRoute: OwnersNewIndexRoute,
+};
+
+const OwnersNewRouteWithChildren = OwnersNewRoute._addFileChildren(
+  OwnersNewRouteChildren
+);
+
+interface OwnersRouteChildren {
+  OwnersOwnerIdRoute: typeof OwnersOwnerIdRoute;
+  OwnersNewRoute: typeof OwnersNewRouteWithChildren;
+  OwnersIndexRoute: typeof OwnersIndexRoute;
+}
+
+const OwnersRouteChildren: OwnersRouteChildren = {
+  OwnersOwnerIdRoute: OwnersOwnerIdRoute,
+  OwnersNewRoute: OwnersNewRouteWithChildren,
+  OwnersIndexRoute: OwnersIndexRoute,
+};
+
+const OwnersRouteWithChildren =
+  OwnersRoute._addFileChildren(OwnersRouteChildren);
+
+interface PetsNewRouteChildren {
+  PetsNewVerifyRoute: typeof PetsNewVerifyRoute;
+  PetsNewIndexRoute: typeof PetsNewIndexRoute;
+}
+
+const PetsNewRouteChildren: PetsNewRouteChildren = {
+  PetsNewVerifyRoute: PetsNewVerifyRoute,
+  PetsNewIndexRoute: PetsNewIndexRoute,
+};
+
+const PetsNewRouteWithChildren =
+  PetsNewRoute._addFileChildren(PetsNewRouteChildren);
+
+interface PetsRouteChildren {
+  PetsPetIdRoute: typeof PetsPetIdRoute;
+  PetsNewRoute: typeof PetsNewRouteWithChildren;
+  PetsIndexRoute: typeof PetsIndexRoute;
+}
+
+const PetsRouteChildren: PetsRouteChildren = {
+  PetsPetIdRoute: PetsPetIdRoute,
+  PetsNewRoute: PetsNewRouteWithChildren,
+  PetsIndexRoute: PetsIndexRoute,
+};
+
+const PetsRouteWithChildren = PetsRoute._addFileChildren(PetsRouteChildren);
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ConsultantRoute: ConsultantRoute,
   LoginRoute: LoginRoute,
-}
+  OwnersRoute: OwnersRouteWithChildren,
+  PetsRoute: PetsRouteWithChildren,
+};
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+  ._addFileTypes<FileRouteTypes>();

@@ -1,43 +1,26 @@
-import {
-  createFileRoute,
-  Link,
-  useLocation,
-  useNavigate,
-} from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { mockPets } from '@/data/mockPets';
 import { useState } from 'react';
 import React from 'react';
 import {
   Box,
-  AppBar,
-  Toolbar,
-  IconButton,
-  InputBase,
-  Badge,
-  Avatar,
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
   Divider,
   Menu,
   MenuItem,
   Typography,
   Button,
   Link as MuiLink,
+  Avatar,
+  InputBase,
+  IconButton,
+  ListItemIcon,
+  ListItemText,
 } from '@mui/material';
+import { Topbar } from '@/components/Topbar';
+import { Sidebar } from '@/components/Sidebar';
 import {
-  Menu as MenuIcon,
-  Search as SearchIcon,
-  Notifications as NotificationsIcon,
   Add as AddIcon,
   ArrowDropDown as ArrowDropDownIcon,
-  Home as HomeIcon,
-  Pets as PetsIcon,
-  People as PeopleIcon,
-  Business as BusinessIcon,
-  LocalHospital as LocalHospitalIcon,
   Check as CheckIcon,
   Settings as SettingsIcon,
   AttachFile as AttachFileIcon,
@@ -45,26 +28,20 @@ import {
   UploadFile as UploadFileIcon,
   Send as SendIcon,
   Lock as LockIcon,
-  Close as CloseIcon,
+  Search as SearchIcon,
+  Pets as PetsIcon,
 } from '@mui/icons-material';
-import logo from '@/assets/logo.png';
 
 export const Route = createFileRoute('/')({
   component: Dashboard,
 });
 
 function Dashboard() {
-  const location = useLocation();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [createMenuAnchor, setCreateMenuAnchor] = useState<null | HTMLElement>(
-    null
-  );
   const [userMenuAnchor, setUserMenuAnchor] = useState<null | HTMLElement>(
     null
   );
-  const [searchFocused, setSearchFocused] = useState(false);
-  const [searchValue, setSearchValue] = useState('');
   const [currentDashboard, setCurrentDashboard] = useState('personal');
   const [petSearchValue, setPetSearchValue] = useState('');
   const [attachMenuAnchor, setAttachMenuAnchor] = useState<null | HTMLElement>(
@@ -196,91 +173,9 @@ function Dashboard() {
       timestamp: '1 week ago',
     },
   ];
-  const searchRef = React.useRef<HTMLDivElement>(null);
 
-  // Mock pets data
-  const pets = [
-    {
-      id: 1,
-      name: 'Max',
-      organization: 'johndoe',
-      assignedTo: 'johndoe',
-      type: 'Dog',
-      breed: 'Golden Retriever',
-    },
-    {
-      id: 2,
-      name: 'Luna',
-      organization: 'johndoe',
-      assignedTo: 'johndoe',
-      type: 'Cat',
-      breed: 'Persian',
-    },
-    {
-      id: 3,
-      name: 'Bella',
-      organization: 'johndoe',
-      assignedTo: 'johndoe',
-      type: 'Dog',
-      breed: 'Labrador',
-    },
-    {
-      id: 4,
-      name: 'Charlie',
-      organization: 'johndoe',
-      assignedTo: 'johndoe',
-      type: 'Dog',
-      breed: 'Beagle',
-    },
-    {
-      id: 5,
-      name: 'Milo',
-      organization: 'johndoe',
-      assignedTo: 'johndoe',
-      type: 'Cat',
-      breed: 'Siamese',
-    },
-    {
-      id: 6,
-      name: 'Daisy',
-      organization: 'johndoe',
-      assignedTo: 'johndoe',
-      type: 'Dog',
-      breed: 'Bulldog',
-    },
-    {
-      id: 7,
-      name: 'Rocky',
-      organization: 'mr-pet',
-      assignedTo: 'mr-pet',
-      type: 'Dog',
-      breed: 'German Shepherd',
-    },
-    {
-      id: 8,
-      name: 'Coco',
-      organization: 'mr-pet',
-      assignedTo: 'mr-pet',
-      type: 'Dog',
-      breed: 'Poodle',
-    },
-    {
-      id: 9,
-      name: 'Simba',
-      organization: 'vete-amigos',
-      assignedTo: 'vete-amigos',
-      type: 'Cat',
-      breed: 'Maine Coon',
-    },
-    {
-      id: 10,
-      name: 'Oreo',
-      organization: 'vete-amigos',
-      assignedTo: 'vete-amigos',
-      type: 'Cat',
-      breed: 'British Shorthair',
-    },
-  ];
+  // Use shared mock pets data
+  const pets = mockPets;
 
   const filteredPets = pets.filter(
     (pet) =>
@@ -290,14 +185,6 @@ function Dashboard() {
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
-  };
-
-  const handleCreateMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setCreateMenuAnchor(event.currentTarget);
-  };
-
-  const handleCreateMenuClose = () => {
-    setCreateMenuAnchor(null);
   };
 
   const handleUserMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -334,375 +221,10 @@ function Dashboard() {
     handleModelMenuClose();
   };
 
-  const searchSuggestions = [
-    { label: 'Pets', icon: <PetsIcon fontSize="small" /> },
-    { label: 'Owners', icon: <PeopleIcon fontSize="small" /> },
-    { label: 'Inventory', icon: <BusinessIcon fontSize="small" /> },
-    { label: 'Vademecum', icon: <LocalHospitalIcon fontSize="small" /> },
-  ];
-
-  const menuItems = [
-    { text: 'Home', icon: <HomeIcon />, path: '/' },
-    { text: 'Pets', icon: <PetsIcon />, path: '/pets' },
-    { text: 'Owners', icon: <PeopleIcon />, path: '/owners' },
-    { text: 'Organization', icon: <BusinessIcon />, path: '/organization' },
-    { text: 'Treatments', icon: <LocalHospitalIcon />, path: '/treatments' },
-  ];
-
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      {/* Topbar */}
-      <AppBar
-        position="static"
-        elevation={0}
-        sx={{
-          backgroundColor: '#ffffff',
-          borderBottom: '1px solid #d0d7de',
-          color: '#24292f',
-        }}
-      >
-        <Toolbar sx={{ gap: 2 }}>
-          {/* Hamburger Menu */}
-          <IconButton
-            edge="start"
-            onClick={toggleSidebar}
-            sx={{
-              color: '#24292f',
-              '&:hover': {
-                backgroundColor: '#f6f8fa',
-              },
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
-
-          {/* Logo and Dashboard Text */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-            <Box
-              component="img"
-              src={logo}
-              alt="Veteri"
-              sx={{
-                height: 32,
-                width: 'auto',
-              }}
-            />
-            <Typography
-              sx={{
-                fontSize: '16px',
-                fontWeight: 600,
-                color: '#24292f',
-              }}
-            >
-              Dashboard
-            </Typography>
-          </Box>
-
-          {/* Spacer */}
-          <Box sx={{ flexGrow: 1 }} />
-
-          {/* Search Bar */}
-          <Box
-            ref={searchRef}
-            sx={{
-              position: 'relative',
-              marginRight: 2,
-            }}
-          >
-            <Box
-              sx={{
-                position: 'relative',
-                borderRadius: '6px',
-                backgroundColor: searchFocused ? '#ffffff' : '#f6f8fa',
-                border: '1px solid',
-                borderColor: searchFocused ? '#2563eb' : '#d0d7de',
-                display: 'flex',
-                alignItems: 'center',
-                width: searchFocused ? 400 : 200,
-                transition: 'width 0.2s ease-in-out',
-                boxShadow: searchFocused
-                  ? '0 0 0 3px rgba(37, 99, 235, 0.1)'
-                  : 'none',
-                '&:hover': {
-                  borderColor: '#2563eb',
-                  backgroundColor: '#ffffff',
-                },
-              }}
-            >
-              <Box
-                sx={{
-                  padding: '0 8px',
-                  height: '100%',
-                  position: 'absolute',
-                  pointerEvents: 'none',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#57606a',
-                }}
-              >
-                <SearchIcon fontSize="small" />
-              </Box>
-              <InputBase
-                placeholder="Search..."
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
-                onFocus={() => setSearchFocused(true)}
-                onBlur={(e) => {
-                  // Delay to allow clicking on suggestions
-                  setTimeout(() => {
-                    if (!searchRef.current?.contains(e.relatedTarget as Node)) {
-                      setSearchFocused(false);
-                    }
-                  }, 200);
-                }}
-                sx={{
-                  color: '#24292f',
-                  padding: '8px 8px 8px 40px',
-                  width: '100%',
-                  fontSize: '14px',
-                  '& .MuiInputBase-input': {
-                    '&::placeholder': {
-                      color: '#57606a',
-                      opacity: 1,
-                    },
-                  },
-                }}
-              />
-            </Box>
-
-            {/* Search Suggestions Dropdown */}
-            {searchFocused && (
-              <Box
-                sx={{
-                  position: 'absolute',
-                  top: '100%',
-                  left: 0,
-                  right: 0,
-                  marginTop: 1,
-                  backgroundColor: '#ffffff',
-                  border: '1px solid #d0d7de',
-                  borderRadius: '6px',
-                  boxShadow: '0 8px 24px rgba(140, 149, 159, 0.2)',
-                  zIndex: 1000,
-                  maxHeight: 300,
-                  overflow: 'auto',
-                }}
-                onMouseDown={(e) => e.preventDefault()}
-              >
-                <Box sx={{ padding: 1 }}>
-                  <Typography
-                    sx={{
-                      fontSize: '12px',
-                      fontWeight: 600,
-                      color: '#57606a',
-                      padding: '8px 12px',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.5px',
-                    }}
-                  >
-                    Suggestions
-                  </Typography>
-                  {searchSuggestions.map((suggestion) => (
-                    <Box
-                      key={suggestion.label}
-                      onClick={() => {
-                        setSearchValue(suggestion.label);
-                        setSearchFocused(false);
-                      }}
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 2,
-                        padding: '8px 12px',
-                        cursor: 'pointer',
-                        borderRadius: '4px',
-                        '&:hover': {
-                          backgroundColor: '#f6f8fa',
-                        },
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          color: '#57606a',
-                          display: 'flex',
-                          alignItems: 'center',
-                        }}
-                      >
-                        {suggestion.icon}
-                      </Box>
-                      <Typography
-                        sx={{
-                          fontSize: '14px',
-                          color: '#24292f',
-                        }}
-                      >
-                        {suggestion.label}
-                      </Typography>
-                    </Box>
-                  ))}
-                </Box>
-              </Box>
-            )}
-          </Box>
-
-          {/* Create New Menu */}
-          <IconButton
-            onClick={handleCreateMenuOpen}
-            sx={{
-              color: '#24292f',
-              '&:hover': {
-                backgroundColor: '#f6f8fa',
-              },
-            }}
-          >
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-              <AddIcon />
-              <ArrowDropDownIcon fontSize="small" />
-            </Box>
-          </IconButton>
-          <Menu
-            anchorEl={createMenuAnchor}
-            open={Boolean(createMenuAnchor)}
-            onClose={handleCreateMenuClose}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'right',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-          >
-            <MenuItem onClick={handleCreateMenuClose}>New Pet</MenuItem>
-            <MenuItem onClick={handleCreateMenuClose}>New Owner</MenuItem>
-            <MenuItem onClick={handleCreateMenuClose}>New Appointment</MenuItem>
-            <MenuItem onClick={handleCreateMenuClose}>New Treatment</MenuItem>
-          </Menu>
-
-          {/* Notifications */}
-          <IconButton
-            sx={{
-              color: '#24292f',
-              '&:hover': {
-                backgroundColor: '#f6f8fa',
-              },
-            }}
-          >
-            <Badge badgeContent={3} color="error">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-
-          {/* Profile Avatar */}
-          <IconButton
-            sx={{
-              padding: 0,
-              '&:hover': {
-                opacity: 0.8,
-              },
-            }}
-          >
-            <Avatar
-              sx={{
-                width: 32,
-                height: 32,
-                backgroundColor: '#2563eb',
-                fontSize: '14px',
-              }}
-            >
-              U
-            </Avatar>
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-
-      {/* Sidebar */}
-      <Drawer
-        anchor="left"
-        open={sidebarOpen}
-        onClose={toggleSidebar}
-        sx={{
-          '& .MuiDrawer-paper': {
-            width: 260,
-            boxSizing: 'border-box',
-            borderRight: '1px solid #d0d7de',
-            backgroundColor: '#ffffff',
-          },
-        }}
-      >
-        <Toolbar
-          sx={{
-            borderBottom: '1px solid #d0d7de',
-            minHeight: '64px !important',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <Box
-            component="img"
-            src={logo}
-            alt="Veteri"
-            sx={{
-              height: 32,
-              width: 'auto',
-            }}
-          />
-          <IconButton
-            onClick={toggleSidebar}
-            sx={{
-              color: '#57606a',
-              '&:hover': {
-                backgroundColor: '#f6f8fa',
-                color: '#24292f',
-              },
-            }}
-          >
-            <CloseIcon />
-          </IconButton>
-        </Toolbar>
-        <List sx={{ paddingTop: 2 }}>
-          {menuItems.map((item) => (
-            <ListItem key={item.text} disablePadding>
-              <ListItemButton
-                component={Link}
-                to={item.path}
-                selected={location.pathname === item.path}
-                sx={{
-                  paddingY: 1.5,
-                  paddingX: 3,
-                  '&:hover': {
-                    backgroundColor: '#f6f8fa',
-                  },
-                  '&.Mui-selected': {
-                    backgroundColor: '#f6f8fa',
-                    borderLeft: '3px solid #2563eb',
-                    paddingLeft: '21px',
-                  },
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    color: '#57606a',
-                    minWidth: 40,
-                  }}
-                >
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText
-                  primary={item.text}
-                  primaryTypographyProps={{
-                    fontSize: '14px',
-                    fontWeight: 500,
-                    color: '#24292f',
-                  }}
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
+      <Topbar pageTitle="Dashboard" onToggleSidebar={toggleSidebar} />
+      <Sidebar open={sidebarOpen} onClose={toggleSidebar} />
 
       {/* Main Content */}
       <Box
@@ -994,7 +516,7 @@ function Dashboard() {
                 variant="contained"
                 startIcon={<AddIcon />}
                 onClick={() => {
-                  // TODO: Navigate to new pet
+                  navigate({ to: '/pets/new' });
                 }}
                 sx={{
                   fontSize: '12px',
@@ -1066,9 +588,16 @@ function Dashboard() {
 
             {/* Pets List */}
             <Box sx={{ flex: 1, overflowY: 'auto', minHeight: 0 }}>
-              {filteredPets.map((pet) => (
+              {filteredPets.slice(0, 5).map((pet) => (
                 <Box
                   key={pet.id}
+                  onClick={() => {
+                    navigate({
+                      to: '/pets/$petId',
+                      params: { petId: String(pet.id) },
+                      search: {},
+                    });
+                  }}
                   sx={{
                     display: 'flex',
                     alignItems: 'center',
@@ -1119,7 +648,7 @@ function Dashboard() {
                         whiteSpace: 'nowrap',
                       }}
                     >
-                      {pet.name}
+                      {pet.name} {pet.lastName}
                     </Typography>
                     <Typography
                       sx={{
@@ -1147,6 +676,24 @@ function Dashboard() {
                   </Box>
                 </Box>
               ))}
+              {filteredPets.length > 5 && (
+                <Box sx={{ padding: '8px', textAlign: 'center' }}>
+                  <Button
+                    size="small"
+                    onClick={() => navigate({ to: '/pets' })}
+                    sx={{
+                      fontSize: '12px',
+                      textTransform: 'none',
+                      color: '#2563eb',
+                      '&:hover': {
+                        backgroundColor: '#f6f8fa',
+                      },
+                    }}
+                  >
+                    View more ({filteredPets.length - 5} more)
+                  </Button>
+                </Box>
+              )}
             </Box>
           </Box>
         </Box>

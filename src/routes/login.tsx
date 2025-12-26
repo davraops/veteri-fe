@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useState } from 'react';
+import { useForm } from '@tanstack/react-form';
 import {
   Box,
   TextField,
@@ -17,26 +17,22 @@ export const Route = createFileRoute('/login')({
 
 function LoginPage() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setIsLoading(true);
-
-    // Bypass API - redirect to dashboard
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      navigate({ to: '/' });
-    } catch {
-      setError('Error signing in. Please check your credentials.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const form = useForm({
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+    onSubmit: async () => {
+      // Bypass API - redirect to dashboard
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        navigate({ to: '/' });
+      } catch {
+        throw new Error('Error signing in. Please check your credentials.');
+      }
+    },
+  });
 
   return (
     <Box
@@ -98,7 +94,7 @@ function LoginPage() {
           }}
         >
           {/* Error Alert */}
-          {error && (
+          {form.state.errors.length > 0 && (
             <Alert
               severity="error"
               sx={{
@@ -111,125 +107,164 @@ function LoginPage() {
                   color: '#cf222e',
                 },
               }}
-              onClose={() => setError('')}
+              onClose={() => {
+                form.reset();
+              }}
             >
-              {error}
+              {form.state.errors[0] || 'An error occurred'}
             </Alert>
           )}
 
           {/* Login Form */}
-          <Box component="form" onSubmit={handleSubmit} noValidate>
-            <Box sx={{ mb: 2 }}>
-              <Typography
-                component="label"
-                htmlFor="username"
-                sx={{
-                  display: 'block',
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  color: '#24292f',
-                  mb: 0.5,
-                }}
-              >
-                Username or email address
-              </Typography>
-              <TextField
-                fullWidth
-                id="username"
-                type="text"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                autoComplete="username"
-                autoFocus
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    fontSize: '14px',
-                    backgroundColor: '#ffffff',
-                    '& fieldset': {
-                      borderColor: '#d0d7de',
-                    },
-                    '&:hover fieldset': {
-                      borderColor: '#2563eb',
-                    },
-                    '&.Mui-focused fieldset': {
-                      borderColor: '#2563eb',
-                      borderWidth: '1px',
-                    },
-                  },
-                }}
-              />
-            </Box>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              form.handleSubmit();
+            }}
+            noValidate
+          >
+            <form.Field
+              name="email"
+              validators={{
+                onChange: ({ value }) =>
+                  !value ? 'Username or email address is required' : undefined,
+              }}
+            >
+              {(field) => (
+                <Box sx={{ mb: 2 }}>
+                  <Typography
+                    component="label"
+                    htmlFor="username"
+                    sx={{
+                      display: 'block',
+                      fontSize: '14px',
+                      fontWeight: 600,
+                      color: '#24292f',
+                      mb: 0.5,
+                    }}
+                  >
+                    Username or email address
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    id="username"
+                    type="text"
+                    value={field.state.value}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    onBlur={field.handleBlur}
+                    error={!!field.state.meta.errors.length}
+                    helperText={field.state.meta.errors[0]}
+                    required
+                    autoComplete="username"
+                    autoFocus
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        fontSize: '14px',
+                        backgroundColor: '#ffffff',
+                        '& fieldset': {
+                          borderColor: '#d0d7de',
+                        },
+                        '&:hover fieldset': {
+                          borderColor: '#2563eb',
+                        },
+                        '&.Mui-focused fieldset': {
+                          borderColor: '#2563eb',
+                          borderWidth: '1px',
+                        },
+                      },
+                    }}
+                  />
+                </Box>
+              )}
+            </form.Field>
 
-            <Box sx={{ mb: 3 }}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  mb: 0.5,
-                }}
-              >
-                <Typography
-                  component="label"
-                  htmlFor="password"
-                  sx={{
-                    display: 'block',
-                    fontSize: '14px',
-                    fontWeight: 600,
-                    color: '#24292f',
-                  }}
-                >
-                  Password
-                </Typography>
-                <Link
-                  href="#"
-                  sx={{
-                    fontSize: '12px',
-                    color: '#2563eb',
-                    textDecoration: 'none',
-                    '&:hover': {
-                      textDecoration: 'underline',
-                      color: '#1d4ed8',
-                    },
-                  }}
-                >
-                  Forgot password?
-                </Link>
-              </Box>
-              <TextField
-                fullWidth
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                autoComplete="current-password"
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    fontSize: '14px',
-                    backgroundColor: '#ffffff',
-                    '& fieldset': {
-                      borderColor: '#d0d7de',
-                    },
-                    '&:hover fieldset': {
-                      borderColor: '#2563eb',
-                    },
-                    '&.Mui-focused fieldset': {
-                      borderColor: '#2563eb',
-                      borderWidth: '1px',
-                    },
-                  },
-                }}
-              />
-            </Box>
+            <form.Field
+              name="password"
+              validators={{
+                onChange: ({ value }) =>
+                  !value ? 'Password is required' : undefined,
+              }}
+            >
+              {(field) => (
+                <Box sx={{ mb: 3 }}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      mb: 0.5,
+                    }}
+                  >
+                    <Typography
+                      component="label"
+                      htmlFor="password"
+                      sx={{
+                        display: 'block',
+                        fontSize: '14px',
+                        fontWeight: 600,
+                        color: '#24292f',
+                      }}
+                    >
+                      Password
+                    </Typography>
+                    <Link
+                      href="#"
+                      sx={{
+                        fontSize: '12px',
+                        color: '#2563eb',
+                        textDecoration: 'none',
+                        '&:hover': {
+                          textDecoration: 'underline',
+                          color: '#1d4ed8',
+                        },
+                      }}
+                    >
+                      Forgot password?
+                    </Link>
+                  </Box>
+                  <TextField
+                    fullWidth
+                    id="password"
+                    type="password"
+                    value={field.state.value}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    onBlur={field.handleBlur}
+                    error={!!field.state.meta.errors.length}
+                    helperText={field.state.meta.errors[0]}
+                    required
+                    autoComplete="current-password"
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        fontSize: '14px',
+                        backgroundColor: '#ffffff',
+                        '& fieldset': {
+                          borderColor: '#d0d7de',
+                        },
+                        '&:hover fieldset': {
+                          borderColor: '#2563eb',
+                        },
+                        '&.Mui-focused fieldset': {
+                          borderColor: '#2563eb',
+                          borderWidth: '1px',
+                        },
+                      },
+                    }}
+                  />
+                </Box>
+              )}
+            </form.Field>
 
             {/* Submit Button */}
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              disabled={isLoading || !email || !password}
+              disabled={
+                form.state.isSubmitting ||
+                !form.state.values.email ||
+                !form.state.values.password
+              }
               sx={{
                 py: 1.25,
                 fontSize: '14px',
@@ -252,13 +287,13 @@ function LoginPage() {
                 },
               }}
             >
-              {isLoading ? (
+              {form.state.isSubmitting ? (
                 <CircularProgress size={20} color="inherit" />
               ) : (
                 'Sign in'
               )}
             </Button>
-          </Box>
+          </form>
         </Box>
 
         {/* Sign Up Link */}
