@@ -16,7 +16,10 @@ import {
   Business as BusinessIcon,
   LocalHospital as LocalHospitalIcon,
   CalendarToday as CalendarTodayIcon,
+  MenuBook as MenuBookIcon,
   Close as CloseIcon,
+  Healing as SurgeryIcon,
+  Logout as LogoutIcon,
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from '@tanstack/react-router';
 import logo from '@/assets/logo.png';
@@ -39,8 +42,10 @@ export function Sidebar({ open, onClose }: SidebarProps) {
       icon: <CalendarTodayIcon />,
       path: '/appointments',
     },
+    { text: 'Surgeries', icon: <SurgeryIcon />, path: '/surgeries' },
     { text: 'Organization', icon: <BusinessIcon />, path: '/organization' },
     { text: 'Treatments', icon: <LocalHospitalIcon />, path: '/treatments' },
+    { text: 'Vademecum', icon: <MenuBookIcon />, path: '/vademecum' },
   ];
 
   return (
@@ -87,34 +92,76 @@ export function Sidebar({ open, onClose }: SidebarProps) {
           <CloseIcon />
         </IconButton>
       </Toolbar>
-      <List sx={{ paddingTop: 2 }}>
-        {menuItems.map((item) => (
-          <ListItem key={item.text} disablePadding>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: 'calc(100vh - 64px)',
+          justifyContent: 'space-between',
+        }}
+      >
+        <List sx={{ paddingTop: 2, flexGrow: 1, overflow: 'auto' }}>
+          {menuItems.map((item) => (
+            <ListItem key={item.text} disablePadding>
+              <ListItemButton
+                onClick={() => {
+                  navigate({ to: item.path });
+                  onClose();
+                }}
+                selected={
+                  location.pathname === item.path ||
+                  (item.path === '/organization' &&
+                    location.pathname.startsWith('/organization')) ||
+                  (item.path === '/appointments' &&
+                    location.pathname.startsWith('/appointments')) ||
+                  (item.path === '/surgeries' &&
+                    location.pathname.startsWith('/surgeries')) ||
+                  (item.path === '/vademecum' &&
+                    location.pathname.startsWith('/vademecum'))
+                }
+                sx={{
+                  '&.Mui-selected': {
+                    backgroundColor: '#f6f8fa',
+                    borderLeft: '3px solid #2563eb',
+                  },
+                }}
+              >
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+
+        {/* Logout Button */}
+        <Box
+          sx={{
+            borderTop: '1px solid #d0d7de',
+            padding: 0,
+            flexShrink: 0,
+          }}
+        >
+          <ListItem disablePadding>
             <ListItemButton
               onClick={() => {
-                navigate({ to: item.path });
+                navigate({ to: '/login' });
                 onClose();
               }}
-              selected={
-                location.pathname === item.path ||
-                (item.path === '/organization' &&
-                  location.pathname.startsWith('/organization')) ||
-                (item.path === '/appointments' &&
-                  location.pathname.startsWith('/appointments'))
-              }
               sx={{
-                '&.Mui-selected': {
-                  backgroundColor: '#f6f8fa',
-                  borderLeft: '3px solid #2563eb',
+                color: '#ef4444',
+                '&:hover': {
+                  backgroundColor: '#fef2f2',
                 },
               }}
             >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
+              <ListItemIcon sx={{ color: '#ef4444' }}>
+                <LogoutIcon />
+              </ListItemIcon>
+              <ListItemText primary="Logout" />
             </ListItemButton>
           </ListItem>
-        ))}
-      </List>
+        </Box>
+      </Box>
     </Drawer>
   );
 }
